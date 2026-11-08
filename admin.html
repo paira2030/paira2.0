@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paira Lisboa — Painel de Administração ADM & developers.mypos</title>
+  <link rel="icon" href="assets/images/branding/favicon.svg" type="image/svg+xml" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            tinta: '#141414',
+            linho: '#FAFAF9',
+            papel: '#F4F4F2',
+            costura: '#E6E6E3',
+            grafite: '#6E6E6B',
+            oliva: '#4A5A3A',
+            ouro: '#C9A050',
+            sucesso: '#3D6B4F',
+            erro: '#A63D2F'
+          },
+          fontFamily: {
+            display: ['Cormorant Garamond', 'Georgia', 'serif'],
+            body: ['Plus Jakarta Sans', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body class="bg-linho text-tinta min-h-screen">
+
+  <!-- ==========================================
+       GATE DE AUTENTICAÇÃO RESTcolumns DE ACESSO ADM
+       ========================================== -->
+  <div id="auth-gate" class="fixed inset-0 bg-linho z-50 flex items-center justify-center p-6">
+    <div class="w-full max-w-md bg-white border border-costura p-8 shadow-xl space-y-6 text-center">
+      <span class="font-display text-3xl tracking-[0.18em] font-normal uppercase text-tinta block mx-auto select-none">PAIRA</span>
+      <div>
+        <span class="etiqueta etiqueta-oliva">Acesso Restrito</span>
+        <h1 class="font-display text-2xl text-tinta mt-2">Área Administrativa</h1>
+        <p class="text-xs text-grafite mt-1">Introduza a chave mestre para aceder à gestão de produtos e configuração do gateway developers.mypos.</p>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <input 
+            type="password" 
+            id="admin-pin-input" 
+            placeholder="Palavra-passe / PIN ADM (Padrão: paira2026)" 
+            class="w-full p-3 border border-costura bg-papel text-xs text-center tracking-widest font-mono focus:border-tinta outline-none"
+            onkeydown="if(event.key==='Enter') Admin.login()"
+          />
+          <p id="login-error" class="text-xs text-erro mt-2 hidden"></p>
+        </div>
+
+        <button onclick="Admin.login()" class="w-full btn-editorial text-xs py-3">
+          Entrar no Painel ADM
+        </button>
+
+        <a href="index.html" class="block text-xs text-grafite hover:text-tinta pt-2">
+          &larr; Voltar à Loja Paira
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       DASHBOARD ADM (DESBLOQUEADO APÓS LOGIN)
+       ========================================== -->
+  <div id="admin-dashboard" class="hidden">
+    
+    <!-- Topbar ADM -->
+    <header class="bg-tinta text-linho border-b border-costura/20 sticky top-0 z-40">
+      <div class="mx-auto max-w-[1440px] px-6 h-16 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <a href="index.html" class="flex items-center">
+            <span class="font-display text-xl tracking-[0.16em] font-normal uppercase text-linho block select-none">PAIRA</span>
+          </a>
+          <span class="hidden sm:inline-block text-[11px] font-mono bg-white/10 px-2.5 py-0.5 rounded text-linho/80">
+            PAINEL DE CONTROLO ADM
+          </span>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <a href="index.html" class="text-xs text-linho/70 hover:text-white transition-colors flex items-center gap-1.5">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
+            Ver Loja Online
+          </a>
+          <button onclick="Admin.logout()" class="text-xs text-erro hover:text-white bg-white/5 hover:bg-erro/30 px-3 py-1.5 rounded transition-all">
+            Terminar Sessão
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Sub-Header com Abas de Navegação -->
+    <div class="bg-white border-b border-costura">
+      <div class="mx-auto max-w-[1440px] px-6 flex items-center justify-between">
+        <nav class="flex gap-8 text-xs font-semibold uppercase tracking-wider">
+          <button data-tab="produtos" class="admin-nav-btn py-4 border-b-2 border-tinta text-tinta transition-all flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+            Catálogo de Produtos
+          </button>
+          <button data-tab="mypos" class="admin-nav-btn py-4 text-grafite hover:text-tinta transition-all flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/></svg>
+            Plugin developers.mypos
+          </button>
+        </nav>
+
+        <div class="flex items-center gap-2 py-2">
+          <button onclick="Admin.exportCatalogJson()" class="btn-editorial-outline text-[11px] px-3.5 py-1.5" title="Descarregar backup do catálogo em JSON">
+            Exportar JSON
+          </button>
+          <button onclick="Admin.openAddProductModal()" class="btn-editorial text-[11px] px-4 py-1.5 flex items-center gap-1.5 bg-oliva border-oliva hover:bg-tinta">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/></svg>
+            Nova Peça
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Conteúdo Principal -->
+    <main class="mx-auto max-w-[1440px] px-6 py-8">
+      
+      <!-- ==========================================
+           ABA 1: GESTÃO DO CATÁLOGO DE PRODUTOS
+           ========================================== -->
+      <div id="tab-produtos" class="space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="font-display text-3xl text-tinta">Inventário de Peças</h2>
+            <p id="admin-total-count" class="text-xs text-grafite mt-1">A carregar produtos...</p>
+          </div>
+        </div>
+
+        <!-- Tabela Responsiva de Produtos -->
+        <div class="bg-white border border-costura overflow-x-auto shadow-sm">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-papel border-b border-costura text-[11px] font-semibold text-grafite uppercase tracking-wider">
+                <th class="py-3 px-4">Ref</th>
+                <th class="py-3 px-4">Imagem</th>
+                <th class="py-3 px-4">Título da Peça</th>
+                <th class="py-3 px-4">Categoria</th>
+                <th class="py-3 px-4">Preço (€)</th>
+                <th class="py-3 px-4">Stock</th>
+                <th class="py-3 px-4">Etiqueta</th>
+                <th class="py-3 px-4">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="admin-products-tbody">
+              <!-- Preenchido via admin.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           ABA 2: CONFIGURAÇÃO DEVELOPERS.MYPOS
+           ========================================== -->
+      <div id="tab-mypos" style="display:none;" class="space-y-8 max-w-4xl">
+        <div>
+          <span class="etiqueta etiqueta-oliva">Gateway Certificado</span>
+          <h2 class="font-display text-3xl text-tinta mt-2">Configuração developers.mypos</h2>
+          <p class="text-xs text-grafite mt-1 leading-relaxed">
+            Configure as credenciais criptográficas e parâmetros do terminal de pagamento <strong>myPOS Checkout (IPC API)</strong> para aceitação de Multibanco, MB WAY e Cartões de Crédito/Débito em Portugal.
+          </p>
+        </div>
+
+        <div class="bg-white border border-costura p-6 sm:p-8 space-y-6 shadow-sm">
+          
+          <!-- Seção de Ambiente -->
+          <div class="border-b border-costura pb-6">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-tinta mb-4">1. Ambiente de Operação</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+              <div>
+                <label class="block font-medium text-grafite mb-1">Modo do Gateway *</label>
+                <select id="mypos-mode" class="w-full bg-papel border border-costura p-2.5 focus:border-tinta outline-none font-semibold">
+                  <option value="sandbox">Sandbox / Modo de Testes (developers.mypos.com)</option>
+                  <option value="live">Produção / Live (Transações Reais myPOS)</option>
+                </select>
+                <p class="text-[11px] text-grafite mt-1">Em Sandbox, as transações são simuladas sem débito real.</p>
+              </div>
+
+              <div>
+                <label class="block font-medium text-grafite mb-1">Moeda de Liquidação (Portugal) *</label>
+                <input type="text" id="mypos-currency" value="EUR" readonly class="w-full bg-papel/50 border border-costura p-2.5 font-mono text-grafite" />
+                <p class="text-[11px] text-grafite mt-1">Conformidade com o Banco de Portugal e União Europeia (EUR €).</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Seção de Identificadores myPOS -->
+          <div class="border-b border-costura pb-6">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-tinta mb-4">2. Credenciais da Conta myPOS</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+              <div>
+                <label class="block font-medium text-grafite mb-1">Store ID (SID) *</label>
+                <input type="text" id="mypos-store-id" value="00000012" class="w-full bg-papel border border-costura p-2.5 font-mono focus:border-tinta outline-none" />
+                <p class="text-[10px] text-grafite mt-1">Obtido no Portal do Comerciante myPOS.</p>
+              </div>
+
+              <div>
+                <label class="block font-medium text-grafite mb-1">Client Number / Carteira *</label>
+                <input type="text" id="mypos-client-number" value="60001234" class="w-full bg-papel border border-costura p-2.5 font-mono focus:border-tinta outline-none" />
+                <p class="text-[10px] text-grafite mt-1">Número do cliente / IBAN myPOS.</p>
+              </div>
+
+              <div>
+                <label class="block font-medium text-grafite mb-1">Key Index *</label>
+                <input type="number" id="mypos-key-index" value="1" class="w-full bg-papel border border-costura p-2.5 font-mono focus:border-tinta outline-none" />
+                <p class="text-[10px] text-grafite mt-1">Índice da chave ativa (padrão: 1).</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Seção de Chaves Criptográficas RSA -->
+          <div class="border-b border-costura pb-6 space-y-4">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-tinta">3. Chaves Criptográficas (SHA-256 with RSA)</h3>
+            
+            <div class="text-xs">
+              <label class="block font-medium text-grafite mb-1">Chave Privada do Comerciante (Merchant Private Key PEM) *</label>
+              <textarea id="mypos-private-key" rows="4" class="w-full bg-papel border border-costura p-2.5 font-mono text-[11px] focus:border-tinta outline-none"></textarea>
+              <p class="text-[10px] text-grafite mt-1">Utilizada para assinar as requisições de checkout enviadas para o myPOS.</p>
+            </div>
+
+            <div class="text-xs">
+              <label class="block font-medium text-grafite mb-1">Certificado Público myPOS (myPOS Public Certificate PEM) *</label>
+              <textarea id="mypos-public-cert" rows="4" class="w-full bg-papel border border-costura p-2.5 font-mono text-[11px] focus:border-tinta outline-none"></textarea>
+              <p class="text-[10px] text-grafite mt-1">Utilizado para validar a autenticidade dos webhooks e confirmações recebidas.</p>
+            </div>
+          </div>
+
+          <!-- Seção de URLs de Retorno e Webhook -->
+          <div class="border-b border-costura pb-6 space-y-3">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-tinta">4. URLs de Notificação e Retorno</h3>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+              <div>
+                <label class="block font-medium text-grafite mb-1">URL Webhook (IPN / Notify)</label>
+                <input type="url" id="mypos-webhook" class="w-full bg-papel border border-costura p-2.5 text-xs font-mono" />
+              </div>
+              <div>
+                <label class="block font-medium text-grafite mb-1">URL OK (Sucesso)</label>
+                <input type="url" id="mypos-url-ok" class="w-full bg-papel border border-costura p-2.5 text-xs font-mono" />
+              </div>
+              <div>
+                <label class="block font-medium text-grafite mb-1">URL Cancel (Cancelado)</label>
+                <input type="url" id="mypos-url-cancel" class="w-full bg-papel border border-costura p-2.5 text-xs font-mono" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Métodos de Pagamento Nativos para Portugal -->
+          <div class="border-b border-costura pb-6">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-tinta mb-3">5. Meios de Pagamento Ativos na Loja</h3>
+            <div class="flex flex-wrap gap-6 text-xs">
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" id="mypos-method-mbway" checked class="accent-oliva w-4 h-4" />
+                <span class="font-semibold text-tinta">MB WAY (Portugal)</span>
+              </label>
+
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" id="mypos-method-multibanco" checked class="accent-oliva w-4 h-4" />
+                <span class="font-semibold text-tinta">Multibanco (Entidade / Referência)</span>
+              </label>
+
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" id="mypos-method-cards" checked class="accent-oliva w-4 h-4" />
+                <span class="font-semibold text-tinta">Cartão de Crédito / Débito (3DS2)</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Resultado do Teste de Conexão -->
+          <div id="mypos-test-result" style="display:none;"></div>
+
+          <!-- Ações de Configuração -->
+          <div class="flex flex-wrap items-center justify-between gap-4 pt-2">
+            <button type="button" onclick="Admin.testMyPosConnection()" class="btn-editorial-outline text-xs px-6 py-3 flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+              Testar Conexão com developers.mypos
+            </button>
+
+            <button type="button" onclick="Admin.saveMyPosConfig()" class="btn-editorial text-xs px-8 py-3 bg-oliva border-oliva hover:bg-tinta">
+              Guardar Configurações myPOS
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ==========================================
+       MODAL DE ADICIONAR / EDITAR PRODUTO
+       ========================================== -->
+  <div id="product-edit-modal" class="modal-backdrop">
+    <div class="modal-content relative p-6 sm:p-8 max-w-2xl">
+      <button onclick="Admin.closeProductEditModal()" class="absolute right-4 top-4 p-2 text-grafite hover:text-tinta">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+
+      <div class="mb-6 border-b border-costura pb-3">
+        <span class="etiqueta etiqueta-oliva">Gestão de Catálogo</span>
+        <h3 id="modal-product-title-heading" class="font-display text-2xl text-tinta mt-1">Adicionar Nova Peça</h3>
+      </div>
+
+      <form onsubmit="Admin.saveProductForm(event)" class="space-y-4 text-xs">
+        <input type="hidden" id="prod-form-index" value="-1" />
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-medium text-grafite mb-1">Referência (SKU) *</label>
+            <input type="text" id="prod-form-id" required class="w-full bg-papel border border-costura p-2.5 font-mono focus:border-tinta outline-none" />
+          </div>
+
+          <div>
+            <label class="block font-medium text-grafite mb-1">Categoria *</label>
+            <select id="prod-form-category" class="w-full bg-papel border border-costura p-2.5 focus:border-tinta outline-none">
+              <option value="vestidos">Vestidos</option>
+              <option value="casacos">Casacos & Blazers</option>
+              <option value="tops">Tops & Blusas</option>
+              <option value="conjuntos">Conjuntos & Saias</option>
+            </select>
+          </div>
+
+          <div class="sm:col-span-2">
+            <label class="block font-medium text-grafite mb-1">Título da Peça *</label>
+            <input type="text" id="prod-form-title" required class="w-full bg-papel border border-costura p-2.5 focus:border-tinta outline-none" />
+          </div>
+
+          <div>
+            <label class="block font-medium text-grafite mb-1">Preço de Venda em Euros (€) *</label>
+            <input type="number" step="0.01" id="prod-form-price" required class="w-full bg-papel border border-costura p-2.5 font-semibold focus:border-tinta outline-none" />
+          </div>
+
+          <div>
+            <label class="block font-medium text-grafite mb-1">Preço Anterior (€) (Opcional p/ Saldos)</label>
+            <input type="number" step="0.01" id="prod-form-old-price" class="w-full bg-papel border border-costura p-2.5 focus:border-tinta outline-none" />
+          </div>
+
+          <div>
+            <label class="block font-medium text-grafite mb-1">Unidades em Stock *</label>
+            <input type="number" id="prod-form-stock" required class="w-full bg-papel border border-costura p-2.5 focus:border-tinta outline-none" />
+          </div>
+
+          <div>
+            <label class="block font-medium text-grafite mb-1">Etiqueta de Destaque</label>
+            <input type="text" id="prod-form-tag" placeholder="Ex: Best-seller, Novo, Edição Limitada" class="w-full bg-papel border border-costura p-2.5 focus:border-tinta outline-none" />
+          </div>
+
+          <div class="sm:col-span-2">
+            <label class="block font-medium text-grafite mb-1">Caminho da Imagem *</label>
+            <input type="text" id="prod-form-image" required class="w-full bg-papel border border-costura p-2.5 font-mono text-xs focus:border-tinta outline-none" />
+            <p class="text-[10px] text-grafite mt-1">Exemplo: assets/images/produtos/vestidos/rona-v-neck-cutout-sleeveless-maxi-dress.webp</p>
+          </div>
+
+          <div class="sm:col-span-2">
+            <label class="block font-medium text-grafite mb-1">Descrição & Composição da Peça</label>
+            <textarea id="prod-form-desc" rows="3" class="w-full bg-papel border border-costura p-2.5 focus:border-tinta outline-none"></textarea>
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-costura flex justify-end gap-3">
+          <button type="button" onclick="Admin.closeProductEditModal()" class="btn-editorial-outline text-xs px-6 py-2.5">
+            Cancelar
+          </button>
+          <button type="submit" class="btn-editorial text-xs px-8 py-2.5 bg-oliva border-oliva hover:bg-tinta">
+            Guardar Peça
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="assets/js/admin.js"></script>
+</body>
+</html>

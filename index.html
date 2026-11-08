@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paira — Moda Feminina Editorial | Lisboa</title>
+  <meta name="description" content="Moda feminina Paira Lisboa: vestidos, tops, casacos e conjuntos com estilo editorial. Portes grátis a partir de 49,90 € e devoluções em 30 dias." />
+  <link rel="icon" href="assets/images/branding/favicon.svg" type="image/svg+xml" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            tinta: '#141414',
+            linho: '#FAFAF9',
+            papel: '#F4F4F2',
+            costura: '#E6E6E3',
+            grafite: '#6E6E6B',
+            oliva: '#4A5A3A',
+            ouro: '#C9A050'
+          },
+          fontFamily: {
+            display: ['Cormorant Garamond', 'Georgia', 'serif'],
+            body: ['Plus Jakarta Sans', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body class="bg-linho text-tinta antialiased">
+
+  <!-- ==========================================
+       BARRA DE ANÚNCIO (TOP BANNER)
+       ========================================== -->
+  <div id="announcement-bar" class="relative bg-tinta text-linho py-2 px-6 text-center text-xs tracking-wider transition-all duration-300">
+    <p>Portes grátis em Portugal a partir de 49,90 € • Devoluções simples em 30 dias</p>
+    <button onclick="document.getElementById('announcement-bar').style.display='none'" class="absolute right-4 top-1/2 -translate-y-1/2 text-linho/70 hover:text-linho p-1" aria-label="Fechar anúncio">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </button>
+  </div>
+
+      <!-- ==========================================
+       HEADER FIXO (STICKY HEADER COM MEGA-MENUS PAYRA)
+       ========================================== -->
+  <header class="sticky top-0 z-40 bg-linho/95 backdrop-blur-md border-b border-costura transition-all duration-200">
+    <div class="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-6 lg:px-12">
+      
+      <!-- Lado Esquerdo: Mobile Menu + Logotipo PAIRA -->
+      <div class="flex items-center gap-4">
+        <button type="button" onclick="Store.openMobileMenu()" class="p-2 lg:hidden text-tinta hover:text-oliva" aria-label="Abrir menu">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+        </button>
+        <a aria-label="Paira - Voltar ao Início" href="index.html" onclick="Store.goHome(event)" class="cursor-pointer flex items-center text-tinta select-none transition-opacity hover:opacity-75" title="Paira - Início">
+          <span class="font-display text-2xl lg:text-[1.85rem] tracking-[0.16em] font-normal uppercase text-tinta leading-none">PAIRA</span>
+        </a>
+      </div>
+
+      <!-- Navegacao Desktop (8 Departamentos Identicos a Payra) -->
+      <nav aria-label="Departamentos" class="hidden lg:block">
+        <ul class="flex items-center gap-7 lg:gap-8">
+          <li class="py-5" onmouseenter="Store.openMegaMenu('verao')" onmouseleave="Store.closeMegaMenu()">
+            <button onclick="Store.filterCategory('verao')" class="label-etiqueta transition-colors duration-200 hover:text-oliva">VER&Atilde;O</button>
+          </li>
+          <li class="py-5" onmouseenter="Store.openMegaMenu('novidades')" onmouseleave="Store.closeMegaMenu()">
+            <button onclick="Store.filterCategory('novidades')" class="label-etiqueta transition-colors duration-200 hover:text-oliva">NOVIDADES</button>
+          </li>
+          <li class="py-5" onmouseenter="Store.openMegaMenu('vestidos')" onmouseleave="Store.closeMegaMenu()">
+            <button onclick="Store.filterCategory('vestidos')" class="label-etiqueta transition-colors duration-200 hover:text-oliva">VESTIDOS</button>
+          </li>
+          <li class="py-5" onmouseenter="Store.openMegaMenu('roupa')" onmouseleave="Store.closeMegaMenu()">
+            <button onclick="Store.filterCategory('tops')" class="label-etiqueta transition-colors duration-200 hover:text-oliva">ROUPA</button>
+          </li>
+          <li class="py-5" onmouseenter="Store.openMegaMenu('casacos')" onmouseleave="Store.closeMegaMenu()">
+            <button onclick="Store.filterCategory('casacos')" class="label-etiqueta transition-colors duration-200 hover:text-oliva">CASACOS</button>
+          </li>
+          <li class="py-5" onmouseenter="Store.openMegaMenu('conjuntos')" onmouseleave="Store.closeMegaMenu()">
+            <button onclick="Store.filterCategory('conjuntos')" class="label-etiqueta transition-colors duration-200 hover:text-oliva">CONJUNTOS</button>
+          </li>
+          <li class="py-5" onmouseenter="Store.openMegaMenu('acessorios')" onmouseleave="Store.closeMegaMenu()">
+            <button onclick="Store.filterCategory('acessorios')" class="label-etiqueta transition-colors duration-200 hover:text-oliva">ACESS&Oacute;RIOS</button>
+          </li>
+          <li class="py-5" onmouseenter="Store.openMegaMenu('saldos')" onmouseleave="Store.closeMegaMenu()">
+            <button onclick="Store.filterCategory('saldos')" class="label-etiqueta transition-colors duration-200 text-promo">SALDOS</button>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Acoes do Header a Direita (Pesquisa, Conta/ADM, Wishlist, Carrinho) -->
+      <div class="flex items-center gap-1 sm:gap-2">
+        <button type="button" onclick="Store.openSearchModal()" aria-label="Pesquisar (atalho: /)" class="p-2 text-tinta transition-colors hover:text-oliva">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+        </button>
+        <a href="admin.html" aria-label="A minha conta / ADM" class="hidden sm:block p-2 text-tinta transition-colors hover:text-oliva" title="Acesso ADM & myPOS">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        </a>
+        <button type="button" onclick="Store.filterCategory('all'); Store.showToast('Visualizando pecas favoritas!');" aria-label="Favoritos" class="hidden sm:block relative p-2 text-tinta transition-colors hover:text-oliva">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
+          <span class="wishlist-count-badge absolute top-1 right-1 w-4 h-4 rounded-full bg-oliva text-white text-[9px] font-bold hidden items-center justify-center">0</span>
+        </button>
+        <button type="button" onclick="Store.openCart()" aria-label="Carrinho" class="relative p-2 text-tinta transition-colors hover:text-oliva">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><path d="M3 6h18"></path><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+          <span class="cart-count-badge absolute top-1 right-1 w-4 h-4 rounded-full bg-tinta text-linho text-[9px] font-bold hidden items-center justify-center">0</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Barra de Pesquisa Expansivel (Drop-down) -->
+    <div id="search-overlay-bar" class="search-overlay">
+      <div class="mx-auto max-w-[1440px] flex items-center gap-4">
+        <svg class="text-grafite shrink-0" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+        <input 
+          type="text" 
+          id="overlay-search-input" 
+          placeholder="Pesquisar vestidos, blusas, casacos, conjuntos..." 
+          class="flex-1 bg-transparent text-sm sm:text-base border-none outline-none font-body placeholder:text-grafite/60 text-tinta"
+        />
+        <button onclick="Store.closeSearchModal()" class="p-1 text-grafite hover:text-tinta" aria-label="Fechar pesquisa">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         MEGA-MENUS (EXATAMENTE COMO NA PAYRA)
+         ========================================== -->
+
+    <!-- 1. MEGA-MENU VERAO -->
+    <div id="megamenu-verao" class="megamenu-panel" onmouseenter="Store.keepMegaMenuOpen()" onmouseleave="Store.closeMegaMenu()">
+      <div class="mx-auto grid max-w-[1440px] grid-cols-[1fr_auto] gap-12 px-6 lg:px-12 py-10">
+        <div class="flex flex-wrap gap-12 lg:gap-16">
+          <div>
+            <p class="label-etiqueta mb-4 text-grafite">A edi&ccedil;&atilde;o da esta&ccedil;&atilde;o</p>
+            <ul class="space-y-2.5">
+              <li><button onclick="Store.filterByOption('verao', '', 'Toda a Colecao Verao')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Toda a Cole&ccedil;&atilde;o Ver&atilde;o</button></li>
+              <li><button onclick="Store.filterByOption('vestidos', 'verao', 'Vestidos de Verao')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Vestidos de Ver&atilde;o</button></li>
+              <li><button onclick="Store.filterByOption('conjuntos', 'verao', 'Conjuntos de Verao')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Conjuntos de Ver&atilde;o</button></li>
+              <li><button onclick="Store.filterByOption('tops', 'verao', 'Tops de Verao')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Tops de Ver&atilde;o</button></li>
+              <li><button onclick="Store.filterByOption('verao', 'praia', 'Intimo e Praia')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">&Iacute;ntimo e praia</button></li>
+            </ul>
+          </div>
+
+          <div>
+            <p class="label-etiqueta mb-4 text-grafite">Por cor</p>
+            <ul class="space-y-2.5">
+              <li><button onclick="Store.filterByColor('Preto')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#1C1B16"></span>Preto</button></li>
+              <li><button onclick="Store.filterByColor('Branco')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#F4F2EC"></span>Branco / Cru</button></li>
+              <li><button onclick="Store.filterByColor('Bege')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#D8C9AF"></span>Bege / Camel</button></li>
+              <li><button onclick="Store.filterByColor('Rosa')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#E5B8C2"></span>Rosa</button></li>
+              <li><button onclick="Store.filterByColor('Azul')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#5B7A9E"></span>Azul</button></li>
+              <li><button onclick="Store.filterByColor('Vermelho')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#B03A2E"></span>Vermelho / Bord&ocirc;</button></li>
+            </ul>
+          </div>
+
+          <div>
+            <p class="label-etiqueta mb-4 text-grafite">Por pre&ccedil;o</p>
+            <ul class="space-y-2.5">
+              <li><button onclick="Store.filterByPrice(40, 'Verao ate 40 &euro;')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">At&eacute; 40 &euro;</button></li>
+              <li><button onclick="Store.filterByPrice(50, 'Verao ate 50 &euro;')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">At&eacute; 50 &euro;</button></li>
+              <li><button onclick="Store.filterByPrice(70, 'Verao ate 70 &euro;')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">At&eacute; 70 &euro;</button></li>
+              <li><button onclick="Store.filterCategory('saldos')" class="group/link inline-flex items-center gap-2 text-sm font-semibold text-promo transition-colors duration-200 hover:underline">Em saldo (-50%)</button></li>
+            </ul>
+          </div>
+        </div>
+
+        <div onclick="Store.filterCategory('verao')" class="group block w-56 cursor-pointer">
+          <div class="relative aspect-[4/5] overflow-hidden bg-linho shadow-sm">
+            <img alt="A edicao da estacao" src="assets/images/hero/hero-colecao-mobile.jpg" class="h-full w-full object-cover transition-transform duration-500 ease-editorial group-hover:scale-[1.03]" />
+          </div>
+          <p class="mt-3 font-display italic text-base text-tinta">A edi&ccedil;&atilde;o da esta&ccedil;&atilde;o</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. MEGA-MENU NOVIDADES -->
+    <div id="megamenu-novidades" class="megamenu-panel" onmouseenter="Store.keepMegaMenuOpen()" onmouseleave="Store.closeMegaMenu()">
+      <div class="mx-auto grid max-w-[1440px] grid-cols-[1fr_auto] gap-12 px-6 lg:px-12 py-10">
+        <div class="flex flex-wrap gap-12 lg:gap-16">
+          <div>
+            <p class="label-etiqueta mb-4 text-grafite">Acabou de chegar</p>
+            <ul class="space-y-2.5">
+              <li><button onclick="Store.filterCategory('novidades')" class="group/link inline-flex items-center gap-2 text-sm font-semibold text-tinta transition-colors duration-200 hover:text-oliva">Ver tudo</button></li>
+              <li><button onclick="Store.filterByOption('vestidos', 'vestido', 'Vestidos Novos')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Vestidos novos</button></li>
+              <li><button onclick="Store.filterByOption('conjuntos', 'conjunto', 'Conjuntos Novos')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Conjuntos novos</button></li>
+              <li><button onclick="Store.filterByOption('casacos', 'casaco', 'Casacos Novos')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Casacos novos</button></li>
+              <li><button onclick="Store.filterByOption('all', 'best-seller', 'Best-sellers')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Best-sellers</button></li>
+            </ul>
+          </div>
+
+          <div>
+            <p class="label-etiqueta mb-4 text-grafite">Por cor</p>
+            <ul class="space-y-2.5">
+              <li><button onclick="Store.filterByColor('Preto')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#1C1B16"></span>Preto</button></li>
+              <li><button onclick="Store.filterByColor('Branco')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#F4F2EC"></span>Branco / Cru</button></li>
+              <li><button onclick="Store.filterByColor('Bege')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#D8C9AF"></span>Bege / Camel</button></li>
+              <li><button onclick="Store.filterByColor('Rosa')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#E5B8C2"></span>Rosa</button></li>
+              <li><button onclick="Store.filterByColor('Azul')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#5B7A9E"></span>Azul</button></li>
+              <li><button onclick="Store.filterByColor('Vermelho')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#B03A2E"></span>Vermelho / Bord&ocirc;</button></li>
+            </ul>
+          </div>
+
+          <div>
+            <p class="label-etiqueta mb-4 text-grafite">Por pre&ccedil;o</p>
+            <ul class="space-y-2.5">
+              <li><button onclick="Store.filterByPrice(40, 'Novidades ate 40 &euro;')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">At&eacute; 40 &euro;</button></li>
+              <li><button onclick="Store.filterByPrice(50, 'Novidades ate 50 &euro;')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">At&eacute; 50 &euro;</button></li>
+              <li><button onclick="Store.filterByPrice(70, 'Novidades ate 70 &euro;')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">At&eacute; 70 &euro;</button></li>
+            </ul>
+          </div>
+        </div>
+
+        <div onclick="Store.filterCategory('novidades')" class="group block w-56 cursor-pointer">
+          <div class="relative aspect-[4/5] overflow-hidden bg-linho shadow-sm">
+            <img alt="A colecao desta semana" src="assets/images/colecoes/vestidos.jpg" class="h-full w-full object-cover transition-transform duration-500 ease-editorial group-hover:scale-[1.03]" />
+          </div>
+          <p class="mt-3 font-display italic text-base text-tinta">A cole&ccedil;&atilde;o desta semana</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. MEGA-MENU VESTIDOS -->
+    <div id="megamenu-vestidos" class="megamenu-panel" onmouseenter="Store.keepMegaMenuOpen()" onmouseleave="Store.closeMegaMenu()">
+      <div class="mx-auto grid max-w-[1440px] grid-cols-[1fr_auto] gap-12 px-6 lg:px-12 py-10">
+        <div class="flex flex-wrap gap-12 lg:gap-16">
+          <div>
+            <p class="label-etiqueta mb-4 text-grafite">Por estilo</p>
+            <ul class="space-y-2.5">
+              <li><button onclick="Store.filterByOption('vestidos', 'maxi', 'Vestidos Maxi')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Vestidos maxi <span class="text-xs text-grafite">(274)</span></button></li>
+              <li><button onclick="Store.filterByOption('vestidos', 'midi', 'Vestidos Midi')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Vestidos midi <span class="text-xs text-grafite">(76)</span></button></li>
+              <li><button onclick="Store.filterByOption('vestidos', 'mini', 'Vestidos Mini')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Vestidos mini <span class="text-xs text-grafite">(241)</span></button></li>
+              <li><button onclick="Store.filterByOption('vestidos', 'festa', 'Vestidos de Festa')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Vestidos de festa <span class="text-xs text-grafite">(50)</span></button></li>
+              <li><button onclick="Store.filterByOption('vestidos', 'casual', 'Vestidos Casuais')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Vestidos casual <span class="text-xs text-grafite">(45)</span></button></li>
+              <li><button onclick="Store.filterCategory('vestidos')" class="group/link inline-flex items-center gap-2 text-sm font-semibold text-tinta transition-colors duration-200 hover:text-oliva">Ver tudo <span class="text-xs text-grafite">(686)</span></button></li>
+            </ul>
+          </div>
+
+          <div>
+            <p class="label-etiqueta mb-4 text-grafite">Por cor</p>
+            <ul class="space-y-2.5">
+              <li><button onclick="Store.filterByColor('Preto')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#1C1B16"></span>Preto</button></li>
+              <li><button onclick="Store.filterByColor('Branco')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#F4F2EC"></span>Branco / Cru</button></li>
+              <li><button onclick="Store.filterByColor('Bege')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#D8C9AF"></span>Bege / Camel</button></li>
+              <li><button onclick="Store.filterByColor('Rosa')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#E5B8C2"></span>Rosa</button></li>
+              <li><button onclick="Store.filterByColor('Azul')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#5B7A9E"></span>Azul</button></li>
+              <li><button onclick="Store.filterByColor('Vermelho')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#B03A2E"></span>Vermelho / Bord&ocirc;</button></li>
+            </ul>
+          </div>
+
+          <div>
+            <p class="label-etiqueta mb-4 text-grafite">Por pre&ccedil;o</p>
+            <ul class="space-y-2.5">
+              <li><button onclick="Store.filterByPrice(40, 'Vestidos ate 40 &euro;')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">At&eacute; 40 &euro;</button></li>
+              <li><button onclick="Store.filterByPrice(50, 'Vestidos ate 50 &euro;')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">At&eacute; 50 &euro;</button></li>
+              <li><button onclick="Store.filterByPrice(70, 'Vestidos ate 70 &euro;')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">At&eacute; 70 &euro;</button></li>
+              <li><button onclick="Store.filterCategory('saldos')" class="group/link inline-flex items-center gap-2 text-sm font-semibold text-promo transition-colors duration-200 hover:underline">Em saldo (-50%)</button></li>
+            </ul>
+          </div>
+        </div>
+
+        <div onclick="Store.filterCategory('vestidos')" class="group block w-56 cursor-pointer">
+          <div class="relative aspect-[4/5] overflow-hidden bg-linho shadow-sm">
+            <img alt="O vestido certo existe" src="assets/images/colecoes/vestidos.jpg" class="h-full w-full object-cover transition-transform duration-500 ease-editorial group-hover:scale-[1.03]" />
+          </div>
+          <p class="mt-3 font-display italic text-base text-tinta">O vestido certo existe</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. MEGA-MENU ROUPA -->
+    <div id="megamenu-roupa" class="megamenu-panel" onmouseenter="Store.keepMegaMenuOpen()" onmouseleave="Store.closeMegaMenu()">
+      <div class="mx-auto grid max-w-[1440px] grid-cols-[1fr_auto] gap-12 px-6 lg:px-12 py-10">
+        <div class="flex flex-wrap gap-12 lg:gap-16">
+          <div>
+            <p class="label-etiqueta mb-4 text-grafite">Pe&ccedil;as de cima</p>
+            <ul class="space-y-2.5">
+              <li><button onclick="Store.filterByOption('tops', 'top', 'Tops de Alcas')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Tops</button></li>
+              <li><button onclick="Store.filterByOption('tops', 'blusa', 'Blusas e Camisas')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Blusas e camisas</button></li>
+              <li><button onclick="Store.filterByOption('tops', 'malha', 'Malhas')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Malhas</button></li>
+            </ul>
+          </div>
+
+          <div>
+            <p class="label-etiqueta mb-4 text-grafite">Pe&ccedil;as de baixo</p>
+            <ul class="space-y-2.5">
+              <li><button onclick="Store.filterByOption('conjuntos', 'calcas', 'Calcas')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Cal&ccedil;as</button></li>
+              <li><button onclick="Store.filterByOption('conjuntos', 'calcoes', 'Calcoes')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Cal&ccedil;&otilde;es</button></li>
+              <li><button onclick="Store.filterByOption('conjuntos', 'saia', 'Saias')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Saias</button></li>
+              <li><button onclick="Store.filterByOption('conjuntos', 'macacao', 'Macacoes')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Macac&otilde;es</button></li>
+              <li><button onclick="Store.filterByOption('tops', 'praia', 'Intimo e Praia')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">&Iacute;ntimo e praia</button></li>
+            </ul>
+          </div>
+
+          <div>
+            <p class="label-etiqueta mb-4 text-grafite">Por cor</p>
+            <ul class="space-y-2.5">
+              <li><button onclick="Store.filterByColor('Preto')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#1C1B16"></span>Preto</button></li>
+              <li><button onclick="Store.filterByColor('Branco')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#F4F2EC"></span>Branco / Cru</button></li>
+              <li><button onclick="Store.filterByColor('Bege')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#D8C9AF"></span>Bege / Camel</button></li>
+              <li><button onclick="Store.filterByColor('Rosa')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#E5B8C2"></span>Rosa</button></li>
+              <li><button onclick="Store.filterByColor('Azul')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#5B7A9E"></span>Azul</button></li>
+              <li><button onclick="Store.filterByColor('Vermelho')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#B03A2E"></span>Vermelho / Bord&ocirc;</button></li>
+            </ul>
+          </div>
+        </div>
+
+        <div onclick="Store.filterCategory('tops')" class="group block w-56 cursor-pointer">
+          <div class="relative aspect-[4/5] overflow-hidden bg-linho shadow-sm">
+            <img alt="Basicos que nao sao basicos" src="assets/images/colecoes/tops.jpg" class="h-full w-full object-cover transition-transform duration-500 ease-editorial group-hover:scale-[1.03]" />
+          </div>
+          <p class="mt-3 font-display italic text-base text-tinta">B&aacute;sicos que n&atilde;o s&atilde;o b&aacute;sicos</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. MEGA-MENU CASACOS -->
+    <div id="megamenu-casacos" class="megamenu-panel" onmouseenter="Store.keepMegaMenuOpen()" onmouseleave="Store.closeMegaMenu()">
+      <div class="mx-auto grid max-w-[1440px] grid-cols-[1fr_auto] gap-12 px-6 lg:px-12 py-10">
+        <div class="flex flex-wrap gap-12 lg:gap-16">
+          <div>
+            <p class="label-etiqueta mb-4 text-grafite">Por tipo</p>
+            <ul class="space-y-2.5">
+              <li><button onclick="Store.filterByOption('casacos', 'blazer', 'Blazers Estruturados')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Blazers <span class="text-xs text-grafite">(91)</span></button></li>
+              <li><button onclick="Store.filterByOption('casacos', 'jaqueta', 'Jaquetas e Blusoes')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Jaquetas e blus&otilde;es <span class="text-xs text-grafite">(263)</span></button></li>
+              <li><button onclick="Store.filterByOption('casacos', 'sobretudo', 'Sobretudos e Compridos')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Sobretudos e compridos <span class="text-xs text-grafite">(1)</span></button></li>
+              <li><button onclick="Store.filterByOption('casacos', 'kimono', 'Casacos Classicos e Quimonos')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Cl&aacute;ssicos <span class="text-xs text-grafite">(13)</span></button></li>
+              <li><button onclick="Store.filterCategory('casacos')" class="group/link inline-flex items-center gap-2 text-sm font-semibold text-tinta transition-colors duration-200 hover:text-oliva">Ver tudo <span class="text-xs text-grafite">(368)</span></button></li>
+            </ul>
+          </div>
+
+          <div>
+            <p class="label-etiqueta mb-4 text-grafite">Por cor</p>
+            <ul class="space-y-2.5">
+              <li><button onclick="Store.filterByColor('Preto')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#1C1B16"></span>Preto</button></li>
+              <li><button onclick="Store.filterByColor('Branco')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#F4F2EC"></span>Branco / Cru</button></li>
+              <li><button onclick="Store.filterByColor('Bege')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#D8C9AF"></span>Bege / Camel</button></li>
+              <li><button onclick="Store.filterByColor('Rosa')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#E5B8C2"></span>Rosa</button></li>
+              <li><button onclick="Store.filterByColor('Azul')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#5B7A9E"></span>Azul</button></li>
+              <li><button onclick="Store.filterByColor('Vermelho')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#B03A2E"></span>Vermelho / Bord&ocirc;</button></li>
+            </ul>
+          </div>
+
+          <div>
+            <p class="label-etiqueta mb-4 text-grafite">Por pre&ccedil;o</p>
+            <ul class="space-y-2.5">
+              <li><button onclick="Store.filterByPrice(40, 'Casacos ate 40 &euro;')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">At&eacute; 40 &euro;</button></li>
+              <li><button onclick="Store.filterByPrice(50, 'Casacos ate 50 &euro;')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">At&eacute; 50 &euro;</button></li>
+              <li><button onclick="Store.filterByPrice(70, 'Casacos ate 70 &euro;')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">At&eacute; 70 &euro;</button></li>
+              <li><button onclick="Store.filterCategory('saldos')" class="group/link inline-flex items-center gap-2 text-sm font-semibold text-promo transition-colors duration-200 hover:underline">Em saldo (-50%)</button></li>
+            </ul>
+          </div>
+        </div>
+
+        <div onclick="Store.filterCategory('casacos')" class="group block w-56 cursor-pointer">
+          <div class="relative aspect-[4/5] overflow-hidden bg-linho shadow-sm">
+            <img alt="A camada que faz o look" src="assets/images/colecoes/casacos.jpg" class="h-full w-full object-cover transition-transform duration-500 ease-editorial group-hover:scale-[1.03]" />
+          </div>
+          <p class="mt-3 font-display italic text-base text-tinta">A camada que faz o look</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. MEGA-MENU CONJUNTOS (EXATAMENTE COMO NA IMAGEM 2) -->
+    <div id="megamenu-conjuntos" class="megamenu-panel" onmouseenter="Store.keepMegaMenuOpen()" onmouseleave="Store.closeMegaMenu()">
+      <div class="mx-auto grid max-w-[1440px] grid-cols-[1fr_auto] gap-12 px-6 lg:px-12 py-10">
+        <div class="flex flex-wrap gap-12 lg:gap-16">
+          <div>
+            <p class="label-etiqueta mb-4 text-grafite">Por tipo</p>
+            <ul class="space-y-2.5">
+              <li><button onclick="Store.filterByOption('conjuntos', 'saia', 'Conjuntos com Saia')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Com saia <span class="text-xs text-grafite">(91)</span></button></li>
+              <li><button onclick="Store.filterByOption('conjuntos', 'calcoes', 'Conjuntos com Calcoes')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Com cal&ccedil;&otilde;es <span class="text-xs text-grafite">(72)</span></button></li>
+              <li><button onclick="Store.filterByOption('conjuntos', 'calcas', 'Conjuntos com Calcas')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Com cal&ccedil;as <span class="text-xs text-grafite">(22)</span></button></li>
+              <li><button onclick="Store.filterByOption('conjuntos', 'coordenado', 'Coordenados Elegantes')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Coordenados <span class="text-xs text-grafite">(62)</span></button></li>
+              <li><button onclick="Store.filterCategory('conjuntos')" class="group/link inline-flex items-center gap-2 text-sm font-semibold text-tinta transition-colors duration-200 hover:text-oliva">Ver tudo <span class="text-xs text-grafite">(247)</span></button></li>
+            </ul>
+          </div>
+
+          <div>
+            <p class="label-etiqueta mb-4 text-grafite">Por cor</p>
+            <ul class="space-y-2.5">
+              <li><button onclick="Store.filterByColor('Preto')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#1C1B16"></span>Preto</button></li>
+              <li><button onclick="Store.filterByColor('Branco')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#F4F2EC"></span>Branco / Cru</button></li>
+              <li><button onclick="Store.filterByColor('Bege')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#D8C9AF"></span>Bege / Camel</button></li>
+              <li><button onclick="Store.filterByColor('Rosa')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#E5B8C2"></span>Rosa</button></li>
+              <li><button onclick="Store.filterByColor('Azul')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#5B7A9E"></span>Azul</button></li>
+              <li><button onclick="Store.filterByColor('Vermelho')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#B03A2E"></span>Vermelho / Bord&ocirc;</button></li>
+            </ul>
+          </div>
+
+          <div>
+            <p class="label-etiqueta mb-4 text-grafite">Por pre&ccedil;o</p>
+            <ul class="space-y-2.5">
+              <li><button onclick="Store.filterByPrice(40, 'Conjuntos ate 40 &euro;')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">At&eacute; 40 &euro;</button></li>
+              <li><button onclick="Store.filterByPrice(50, 'Conjuntos ate 50 &euro;')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">At&eacute; 50 &euro;</button></li>
+              <li><button onclick="Store.filterByPrice(70, 'Conjuntos ate 70 &euro;')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">At&eacute; 70 &euro;</button></li>
+              <li><button onclick="Store.filterCategory('saldos')" class="group/link inline-flex items-center gap-2 text-sm font-semibold text-promo transition-colors duration-200 hover:underline">Em saldo (-50%)</button></li>
+            </ul>
+          </div>
+        </div>
+
+        <div onclick="Store.filterCategory('conjuntos')" class="group block w-56 cursor-pointer">
+          <div class="relative aspect-[4/5] overflow-hidden bg-linho shadow-sm">
+            <img alt="Look completo, zero esforco" src="assets/images/colecoes/conjuntos.jpg" class="h-full w-full object-cover transition-transform duration-500 ease-editorial group-hover:scale-[1.03]" />
+          </div>
+          <p class="mt-3 font-display italic text-base text-tinta">Look completo, zero esfor&ccedil;o</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. MEGA-MENU ACESSORIOS -->
+    <div id="megamenu-acessorios" class="megamenu-panel" onmouseenter="Store.keepMegaMenuOpen()" onmouseleave="Store.closeMegaMenu()">
+      <div class="mx-auto grid max-w-[1440px] grid-cols-[1fr_auto] gap-12 px-6 lg:px-12 py-10">
+        <div class="flex flex-wrap gap-12 lg:gap-16">
+          <div>
+            <p class="label-etiqueta mb-4 text-grafite">Malas</p>
+            <ul class="space-y-2.5">
+              <li><button onclick="Store.filterByOption('acessorios', 'mala', 'Malas de Mao')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Malas de m&atilde;o</button></li>
+              <li><button onclick="Store.filterByOption('acessorios', 'carteira', 'Carteiras de Pele')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Carteiras</button></li>
+              <li><button onclick="Store.filterCategory('acessorios')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Todas as malas</button></li>
+            </ul>
+          </div>
+
+          <div>
+            <p class="label-etiqueta mb-4 text-grafite">Mais</p>
+            <ul class="space-y-2.5">
+              <li><button onclick="Store.filterByOption('acessorios', 'sapatos', 'Sapatos de Pele')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Sapatos</button></li>
+              <li><button onclick="Store.filterByOption('acessorios', 'oculos', 'Oculos de Sol')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">&Oacute;culos de sol</button></li>
+              <li><button onclick="Store.filterByOption('acessorios', 'chapeu', 'Chapeus de Verao')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Chap&eacute;us</button></li>
+              <li><button onclick="Store.filterCategory('acessorios')" class="group/link inline-flex items-center gap-2 text-sm font-semibold text-tinta transition-colors duration-200 hover:text-oliva">Todos os acess&oacute;rios</button></li>
+            </ul>
+          </div>
+
+          <div>
+            <p class="label-etiqueta mb-4 text-grafite">Por pre&ccedil;o</p>
+            <ul class="space-y-2.5">
+              <li><button onclick="Store.filterByPrice(40, 'Acessorios ate 40 &euro;')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">At&eacute; 40 &euro;</button></li>
+              <li><button onclick="Store.filterByPrice(50, 'Acessorios ate 50 &euro;')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">At&eacute; 50 &euro;</button></li>
+              <li><button onclick="Store.filterByPrice(70, 'Acessorios ate 70 &euro;')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">At&eacute; 70 &euro;</button></li>
+              <li><button onclick="Store.filterCategory('saldos')" class="group/link inline-flex items-center gap-2 text-sm font-semibold text-promo transition-colors duration-200 hover:underline">Em saldo (-50%)</button></li>
+            </ul>
+          </div>
+        </div>
+
+        <div onclick="Store.filterCategory('acessorios')" class="group block w-56 cursor-pointer">
+          <div class="relative aspect-[4/5] overflow-hidden bg-linho shadow-sm">
+            <img alt="Os detalhes contam" src="assets/images/colecoes/malas.jpg" class="h-full w-full object-cover transition-transform duration-500 ease-editorial group-hover:scale-[1.03]" />
+          </div>
+          <p class="mt-3 font-display italic text-base text-tinta">Os detalhes contam</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. MEGA-MENU SALDOS -->
+    <div id="megamenu-saldos" class="megamenu-panel" onmouseenter="Store.keepMegaMenuOpen()" onmouseleave="Store.closeMegaMenu()">
+      <div class="mx-auto grid max-w-[1440px] grid-cols-[1fr_auto] gap-12 px-6 lg:px-12 py-10">
+        <div class="flex flex-wrap gap-12 lg:gap-16">
+          <div>
+            <p class="label-etiqueta mb-4 text-grafite">Saldos</p>
+            <ul class="space-y-2.5">
+              <li><button onclick="Store.filterCategory('saldos')" class="group/link inline-flex items-center gap-2 text-sm font-semibold text-promo transition-colors duration-200 hover:underline">Tudo em saldo (-50% ou mais)</button></li>
+              <li><button onclick="Store.filterByOption('vestidos', 'vestido', 'Vestidos em Saldo')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Vestidos em saldo</button></li>
+              <li><button onclick="Store.filterByOption('casacos', 'casaco', 'Casacos em Saldo')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Casacos em saldo</button></li>
+              <li><button onclick="Store.filterByOption('conjuntos', 'conjunto', 'Conjuntos em Saldo')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Conjuntos em saldo</button></li>
+              <li><button onclick="Store.filterByOption('acessorios', 'mala', 'Malas em Saldo')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Malas em saldo</button></li>
+            </ul>
+          </div>
+
+          <div>
+            <p class="label-etiqueta mb-4 text-grafite">Por cor</p>
+            <ul class="space-y-2.5">
+              <li><button onclick="Store.filterByColor('Preto')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#1C1B16"></span>Preto</button></li>
+              <li><button onclick="Store.filterByColor('Branco')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#F4F2EC"></span>Branco / Cru</button></li>
+              <li><button onclick="Store.filterByColor('Bege')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#D8C9AF"></span>Bege / Camel</button></li>
+              <li><button onclick="Store.filterByColor('Rosa')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#E5B8C2"></span>Rosa</button></li>
+              <li><button onclick="Store.filterByColor('Azul')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#5B7A9E"></span>Azul</button></li>
+              <li><button onclick="Store.filterByColor('Vermelho')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva"><span class="h-3 w-3 rounded-full border border-costura transition-transform duration-200 group-hover/link:scale-110" style="background-color:#B03A2E"></span>Vermelho / Bord&ocirc;</button></li>
+            </ul>
+          </div>
+
+          <div>
+            <p class="label-etiqueta mb-4 text-grafite">Por pre&ccedil;o</p>
+            <ul class="space-y-2.5">
+              <li><button onclick="Store.filterByPrice(40, 'Saldos ate 40 &euro;')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">At&eacute; 40 &euro;</button></li>
+              <li><button onclick="Store.filterByPrice(50, 'Saldos ate 50 &euro;')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">At&eacute; 50 &euro;</button></li>
+              <li><button onclick="Store.filterByPrice(70, 'Saldos ate 70 &euro;')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">At&eacute; 70 &euro;</button></li>
+            </ul>
+          </div>
+        </div>
+
+        <div onclick="Store.filterCategory('saldos')" class="group block w-56 cursor-pointer">
+          <div class="relative aspect-[4/5] overflow-hidden bg-linho shadow-sm">
+            <img alt="Ultimas unidades em saldo" src="assets/images/produtos/vestidos/rona-v-neck-cutout-sleeveless-maxi-dress.webp" class="h-full w-full object-cover transition-transform duration-500 ease-editorial group-hover:scale-[1.03]" />
+          </div>
+          <p class="mt-3 font-display italic text-base text-tinta">&Uacute;ltimas unidades</p>
+        </div>
+      </div>
+    </div>
+
+  </header>
+
+  <!-- ==========================================
+       HERO BANNER EDITORIAL (85VH)
+       ========================================== -->
+  <section class="relative h-[85vh] min-h-[500px] w-full overflow-hidden bg-papel">
+    <picture>
+      <source media="(max-width: 768px)" srcset="assets/images/hero/hero-colecao-mobile.jpg" />
+      <img 
+        src="assets/images/hero/hero-colecao-desktop.jpg" 
+        alt="Coleção Paira Lisboa — Vestuário Feminino Contemporâneo" 
+        class="absolute inset-0 h-full w-full object-cover object-center brightness-[0.92]" 
+      />
+    </picture>
+    
+    <!-- Overlay com Gradiente Sutil -->
+    <div class="absolute inset-0 bg-gradient-to-t from-tinta/60 via-tinta/20 to-transparent"></div>
+
+    <div class="relative mx-auto flex h-full max-w-[1440px] flex-col justify-end px-6 pb-16 lg:px-12 lg:pb-24 text-white">
+      <div class="max-w-2xl space-y-4">
+        <span class="etiqueta bg-white/20 backdrop-blur-md text-white border border-white/30">Edição Lisboa 2026</span>
+        <h1 class="font-display text-4xl sm:text-5xl lg:text-7xl font-normal leading-[1.08] tracking-tight">
+          O que a estação pede: fluidez e alfaiataria nobre.
+        </h1>
+        <p class="font-body text-sm sm:text-base text-linho/90 max-w-lg font-light leading-relaxed">
+          Peças esculpidas em linho natural, cetins fluidos e rendas refinadas. Inspiradas na luz intemporal de Lisboa.
+        </p>
+        <div class="pt-4 flex flex-wrap gap-4">
+          <button onclick="Store.filterCategory('all')" class="btn-editorial bg-linho text-tinta border-linho hover:bg-oliva hover:border-oliva hover:text-white">
+            Explorar Catálogo Completo
+          </button>
+          <button onclick="Store.filterCategory('novidades')" class="btn-editorial-outline text-white border-white hover:bg-white hover:text-tinta">
+            Ver Novidades
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       CATEGORIAS VISUAIS EM DESTAQUE (MOSAICO)
+       ========================================== -->
+  <section class="mt-16 lg:mt-24 mx-auto max-w-[1440px] px-6 lg:px-12">
+    <div class="mb-8 flex items-end justify-between">
+      <div>
+        <span class="etiqueta">Departamentos</span>
+        <h2 class="mt-2 font-display text-3xl lg:text-4xl">Comprar por Categoria</h2>
+      </div>
+      <button onclick="Store.filterCategory('all')" class="text-xs font-semibold tracking-wider uppercase link-editorial text-tinta">
+        Ver Todas
+      </button>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
+      
+      <!-- Card Vestidos -->
+      <div onclick="Store.filterCategory('vestidos')" class="group relative aspect-fashion overflow-hidden bg-papel cursor-pointer">
+        <img src="assets/images/produtos/vestidos/rona-v-neck-cutout-sleeveless-maxi-dress.webp" alt="Vestidos" class="w-full h-full object-cover transition-transform duration-700 ease-editorial group-hover:scale-105" />
+        <div class="absolute inset-0 bg-gradient-to-t from-tinta/70 via-transparent to-transparent flex items-end p-5">
+          <div>
+            <h3 class="font-display text-2xl text-linho">Vestidos</h3>
+            <p class="text-[11px] text-linho/80 tracking-widest uppercase">Maxi, Midi & Mini</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card Casacos -->
+      <div onclick="Store.filterCategory('casacos')" class="group relative aspect-fashion overflow-hidden bg-papel cursor-pointer">
+        <img src="assets/images/produtos/casacos-e-blazers/taylor-lace-panel-tailored-blazer.webp" alt="Casacos e Blazers" class="w-full h-full object-cover transition-transform duration-700 ease-editorial group-hover:scale-105" />
+        <div class="absolute inset-0 bg-gradient-to-t from-tinta/70 via-transparent to-transparent flex items-end p-5">
+          <div>
+            <h3 class="font-display text-2xl text-linho">Casacos</h3>
+            <p class="text-[11px] text-linho/80 tracking-widest uppercase">Blazers & Quimonos</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card Tops -->
+      <div onclick="Store.filterCategory('tops')" class="group relative aspect-fashion overflow-hidden bg-papel cursor-pointer">
+        <img src="assets/images/produtos/tops-e-blusas/audrey-polka-dot-tank-top.webp" alt="Tops e Blusas" class="w-full h-full object-cover transition-transform duration-700 ease-editorial group-hover:scale-105" />
+        <div class="absolute inset-0 bg-gradient-to-t from-tinta/70 via-transparent to-transparent flex items-end p-5">
+          <div>
+            <h3 class="font-display text-2xl text-linho">Tops & Blusas</h3>
+            <p class="text-[11px] text-linho/80 tracking-widest uppercase">Cetins & Bolinhas</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card Conjuntos -->
+      <div onclick="Store.filterCategory('conjuntos')" class="group relative aspect-fashion overflow-hidden bg-papel cursor-pointer">
+        <img src="assets/images/produtos/conjuntos-e-saias/connie-swiss-dot-ruffled-crop-top-skirt-set.webp" alt="Conjuntos e Saias" class="w-full h-full object-cover transition-transform duration-700 ease-editorial group-hover:scale-105" />
+        <div class="absolute inset-0 bg-gradient-to-t from-tinta/70 via-transparent to-transparent flex items-end p-5">
+          <div>
+            <h3 class="font-display text-2xl text-linho">Conjuntos & Saias</h3>
+            <p class="text-[11px] text-linho/80 tracking-widest uppercase">Coordenados Elegantes</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================
+       VITRINE PRINCIPAL DE PRODUTOS
+       ========================================== -->
+  <section id="vitrine-produtos" class="mt-20 lg:mt-28 mx-auto max-w-[1440px] px-6 lg:px-12 scroll-mt-24">
+    
+    <!-- Cabeçalho da Vitrine & Filtros Rápidos -->
+    <div class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-costura pb-6">
+      <div>
+        <span class="etiqueta etiqueta-oliva">Catálogo Paira</span>
+        <h2 class="mt-3 font-display text-3xl lg:text-5xl">Peças Selecionadas</h2>
+        <p id="catalog-count" class="text-xs text-grafite mt-2 tracking-wide uppercase">23 peças disponíveis</p>
+      </div>
+
+      <!-- Pílulas de Filtros Rápidos -->
+      <div class="flex flex-wrap gap-2 text-xs">
+        <button onclick="Store.filterCategory('all')" class="px-3.5 py-1.5 border border-costura bg-white text-tinta hover:border-tinta transition-all">Todos</button>
+        <button onclick="Store.filterCategory('vestidos')" class="px-3.5 py-1.5 border border-costura bg-white text-tinta hover:border-tinta transition-all">Vestidos</button>
+        <button onclick="Store.filterCategory('casacos')" class="px-3.5 py-1.5 border border-costura bg-white text-tinta hover:border-tinta transition-all">Casacos</button>
+        <button onclick="Store.filterCategory('tops')" class="px-3.5 py-1.5 border border-costura bg-white text-tinta hover:border-tinta transition-all">Tops</button>
+        <button onclick="Store.filterCategory('conjuntos')" class="px-3.5 py-1.5 border border-costura bg-white text-tinta hover:border-tinta transition-all">Conjuntos</button>
+        <button onclick="Store.filterCategory('novidades')" class="px-3.5 py-1.5 border border-costura bg-white text-tinta hover:border-tinta transition-all">Novidades</button>
+      </div>
+    </div>
+
+    <!-- Grid Responsivo de Produtos -->
+    <div id="products-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
+      <!-- Injetado dinamicamente via store.js -->
+    </div>
+  </section>
+
+  <!-- ==========================================
+       BLOCO EDITORIAL / STORYTELLING DA MARCA
+       ========================================== -->
+  <section class="mt-24 lg:mt-32 bg-papel py-16 lg:py-24 border-y border-costura">
+    <div class="mx-auto grid max-w-[1440px] items-center gap-12 px-6 lg:grid-cols-2 lg:gap-20 lg:px-12">
+      <div class="relative aspect-[4/5] w-full overflow-hidden shadow-sm">
+        <img src="assets/images/produtos/vestidos/elena-asymmetrical-lace-silk-satin-midi-dress.webp" alt="Editorial Paira Lisboa" class="h-full w-full object-cover" />
+      </div>
+
+      <div class="space-y-6">
+        <span class="etiqueta etiqueta-oliva">A Essência Paira</span>
+        <h2 class="font-display text-4xl lg:text-5xl leading-tight">
+          Alfaiataria portuguesa contemporânea, feita para perdurar.
+        </h2>
+        <p class="text-sm text-grafite leading-relaxed">
+          Nascida em Lisboa, a <strong>Paira</strong> reflete o equilíbrio perfeito entre tradição têxtil europeia e o dinamismo da mulher moderna. Cada peça é cuidadosamente desenhada valorizando cortes anatómicos, matérias-primas de toque nobre e acabamentos de precisão artesanal.
+        </p>
+        <div class="pt-2">
+          <blockquote class="border-l-2 border-oliva pl-4 italic text-sm text-tinta font-display text-lg">
+            "A verdadeira elegância reside na serenidade do corte e na nobreza dos tecidos."
+          </blockquote>
+        </div>
+        <div class="pt-4">
+          <button onclick="Store.filterCategory('novidades')" class="btn-editorial text-xs">
+            Descobrir a Nova Coleção
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       GARANTIAS E PILARES DE CONFIANÇA (PORTUGAL)
+       ========================================== -->
+  <section class="py-14 border-b border-costura bg-linho">
+    <div class="mx-auto max-w-[1440px] px-6 lg:px-12">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        
+        <!-- Pilar 1 -->
+        <div class="flex items-start gap-4">
+          <div class="text-oliva mt-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>
+          </div>
+          <div>
+            <h4 class="text-sm font-semibold uppercase tracking-wider text-tinta">Portes Grátis</h4>
+            <p class="text-xs text-grafite mt-1 leading-relaxed">Em encomendas superiores a 49,90 € para Portugal Continental e Regiões Autónomas.</p>
+          </div>
+        </div>
+
+        <!-- Pilar 2 -->
+        <div class="flex items-start gap-4">
+          <div class="text-oliva mt-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+          </div>
+          <div>
+            <h4 class="text-sm font-semibold uppercase tracking-wider text-tinta">Devoluções em 30 Dias</h4>
+            <p class="text-xs text-grafite mt-1 leading-relaxed">Experimente no conforto do seu lar com direito a troca ou reembolso total e descomplicado.</p>
+          </div>
+        </div>
+
+        <!-- Pilar 3 -->
+        <div class="flex items-start gap-4">
+          <div class="text-oliva mt-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+          </div>
+          <div>
+            <h4 class="text-sm font-semibold uppercase tracking-wider text-tinta">Pagamentos 100% Seguros</h4>
+            <p class="text-xs text-grafite mt-1 leading-relaxed">Processamento certificado pelo <strong>Banco de Portugal</strong> via MB WAY, Multibanco e myPOS.</p>
+          </div>
+        </div>
+
+        <!-- Pilar 4 -->
+        <div class="flex items-start gap-4">
+          <div class="text-oliva mt-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          </div>
+          <div>
+            <h4 class="text-sm font-semibold uppercase tracking-wider text-tinta">Apoio ao Cliente PT</h4>
+            <p class="text-xs text-grafite mt-1 leading-relaxed">Atendimento humanizado em português: dias úteis, das 9h às 18h (+351 920 198 349).</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       NEWSLETTER COM INCENTIVO (-10%)
+       ========================================== -->
+  <section class="py-16 lg:py-24 text-center bg-linho">
+    <div class="mx-auto max-w-xl px-6">
+      <span class="etiqueta">Novidades Exclusivas</span>
+      <h2 class="mt-4 font-display text-3xl lg:text-4xl text-tinta">
+        <em>-10%</em> na primeira encomenda
+      </h2>
+      <p class="mt-3 text-xs sm:text-sm text-grafite leading-relaxed">
+        Subscreva para receber lançamentos antecipados, looks editoriais da semana e convites para vendas privadas.
+      </p>
+      <form onsubmit="event.preventDefault(); Store.showToast('Subscrição confirmada! Código PAIRA10 ativado.');" class="mt-6 flex flex-col sm:flex-row gap-2 max-w-md mx-auto">
+        <input 
+          type="email" 
+          required 
+          placeholder="O seu endereço de e-mail" 
+          class="flex-1 bg-papel border border-costura px-4 py-3 text-xs focus:outline-none focus:border-tinta"
+        />
+        <button type="submit" class="btn-editorial text-xs px-6 py-3 whitespace-nowrap">
+          Subscrever
+        </button>
+      </form>
+      <p class="text-[10px] text-grafite/80 mt-3">Respeitamos a sua privacidade ao abrigo do RGPD. Cancele quando desejar.</p>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       RODAPÉ INSTITUCIONAL (PADRÃO PORTUGAL)
+       ========================================== -->
+  <footer class="bg-tinta text-linho pt-16 pb-12 border-t border-costura/20">
+    <div class="mx-auto max-w-[1440px] px-6 lg:px-12">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-white/10">
+        
+        <!-- Coluna Marca -->
+        <div class="lg:col-span-2 space-y-4">
+          <a href="index.html" onclick="Store.goHome(event)" class="cursor-pointer inline-block" title="Voltar ao Início">
+            <span class="font-display text-2xl lg:text-3xl tracking-[0.18em] font-normal uppercase text-linho hover:text-oliva transition-colors block select-none">PAIRA</span>
+          </a>
+          <p class="text-xs text-linho/70 max-w-sm leading-relaxed">
+            Moda feminina contemporânea com alma e alfaiataria portuguesa. Vestuário criado com tecidos nobres, acabamento superior e compromisso de durabilidade.
+          </p>
+          <div class="text-[11px] text-linho/60 space-y-1">
+            <p><strong>Entidade:</strong> PAIRA MODA UNIPESSOAL LDA</p>
+            <p><strong>NIF / NIPC:</strong> PT519505476</p>
+            <p><strong>Sede:</strong> Praça 5 de Outubro, n.º 4, 2770-029 Oeiras, Lisboa — Portugal</p>
+          </div>
+        </div>
+
+        <!-- Coluna Coleções -->
+        <div>
+          <h4 class="text-xs font-semibold uppercase tracking-wider text-linho mb-4">Coleções</h4>
+          <ul class="space-y-2 text-xs text-linho/70">
+            <li><button onclick="Store.filterCategory('vestidos')" class="hover:text-white transition-colors">Vestidos Compridos</button></li>
+            <li><button onclick="Store.filterCategory('casacos')" class="hover:text-white transition-colors">Casacos & Blazers</button></li>
+            <li><button onclick="Store.filterCategory('tops')" class="hover:text-white transition-colors">Blusas & Tops em Cetim</button></li>
+            <li><button onclick="Store.filterCategory('conjuntos')" class="hover:text-white transition-colors">Coordenados & Saias</button></li>
+            <li><button onclick="Store.filterCategory('novidades')" class="hover:text-white transition-colors">Lançamentos da Estação</button></li>
+          </ul>
+        </div>
+
+        <!-- Coluna Apoio ao Cliente -->
+        <div>
+          <h4 class="text-xs font-semibold uppercase tracking-wider text-linho mb-4">Apoio ao Cliente</h4>
+          <ul class="space-y-2 text-xs text-linho/70">
+            <li><a href="#" onclick="Store.showToast('Envios para Portugal em 24-48h.'); return false;" class="hover:text-white transition-colors">Envios & Devoluções</a></li>
+            <li><a href="#" onclick="Store.showToast('Tabela de medidas europeia (XS a XL).'); return false;" class="hover:text-white transition-colors">Guia de Tamanhos</a></li>
+            <li><a href="#" onclick="Store.showToast('Linha de apoio: +351 920 198 349'); return false;" class="hover:text-white transition-colors">Contactos & Suporte</a></li>
+            <li><a href="#" onclick="Store.showToast('Preços com IVA a 23% incluído.'); return false;" class="hover:text-white transition-colors">Política Fiscal (IVA 23%)</a></li>
+            <li><a href="admin.html" class="text-oliva hover:underline font-semibold flex items-center gap-1">Painel ADM / myPOS</a></li>
+          </ul>
+        </div>
+
+        <!-- Coluna Livro de Reclamações & Legal -->
+        <div class="space-y-4">
+          <h4 class="text-xs font-semibold uppercase tracking-wider text-linho mb-4">Conformidade Legal</h4>
+          <a href="https://www.livroreclamacoes.pt/" target="_blank" rel="noopener noreferrer" class="block">
+            <img src="assets/images/pagamentos/livro-reclamacoes.png" alt="Livro de Reclamações Online" class="h-10 w-auto bg-white p-1 rounded" />
+          </a>
+          <p class="text-[10px] text-linho/60 leading-relaxed">
+            Empresa registada em Portugal. Comércio eletrónico em total conformidade com o <strong>Banco de Portugal</strong> e legislação da União Europeia.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Barra Inferior do Rodapé -->
+      <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-linho/60">
+        <p>&copy; 2026 PAIRA Lisboa. Todos os direitos reservados. Todos os preços incluem IVA à taxa legal de 23%.</p>
+        
+        <!-- Ícones de Pagamento -->
+        <div class="flex items-center gap-2">
+          <img src="assets/images/pagamentos/mbway.svg" alt="MB WAY" class="h-6 w-auto bg-white/10 px-2 py-1 rounded" />
+          <img src="assets/images/pagamentos/multibanco.svg" alt="Multibanco" class="h-6 w-auto bg-white/10 px-2 py-1 rounded" />
+          <img src="assets/images/pagamentos/visa.svg" alt="Visa" class="h-6 w-auto bg-white/10 px-2 py-1 rounded" />
+          <img src="assets/images/pagamentos/mastercard.svg" alt="Mastercard" class="h-6 w-auto bg-white/10 px-2 py-1 rounded" />
+          <img src="assets/images/pagamentos/mypos.svg" alt="myPOS Checkout" class="h-6 w-auto bg-white/10 px-2 py-1 rounded" />
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================
+       DRAWER LATERAL DO CARRINHO (OFF-CANVAS)
+       ========================================== -->
+  <div id="cart-backdrop" onclick="Store.closeCart()" class="drawer-backdrop"></div>
+  <div id="cart-drawer" class="drawer-panel drawer-right">
+    
+    <!-- Cabeçalho do Carrinho -->
+    <div class="p-5 border-b border-costura flex items-center justify-between bg-white">
+      <div class="flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <h3 class="font-display text-xl text-tinta">O Seu Cesto de Compras</h3>
+      </div>
+      <button onclick="Store.closeCart()" class="p-1 text-grafite hover:text-tinta" aria-label="Fechar carrinho">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+
+    <!-- Barra Dinâmica de Portes Grátis (> 49,90 €) -->
+    <div class="p-4 bg-papel border-b border-costura space-y-2">
+      <p id="shipping-status-text" class="text-xs text-tinta leading-tight">
+        A carregar informação de portes...
+      </p>
+      <div class="shipping-progress-bg">
+        <div id="shipping-progress" class="shipping-progress-bar" style="width: 0%;"></div>
+      </div>
+    </div>
+
+    <!-- Lista de Itens do Carrinho -->
+    <div id="cart-items-list" class="flex-1 overflow-y-auto p-5 space-y-2">
+      <!-- Injetado dinamicamente -->
+    </div>
+
+    <!-- Rodapé do Carrinho com Subtotal e Checkout -->
+    <div class="p-5 border-t border-costura bg-white space-y-4">
+      <div class="flex justify-between items-center text-sm">
+        <span class="text-grafite">Subtotal (IVA incluído):</span>
+        <span id="cart-subtotal" class="font-bold text-base text-tinta">0,00 €</span>
+      </div>
+      <p class="text-[11px] text-grafite">Envios e taxas de transporte calculados no checkout.</p>
+      <button onclick="Checkout.openCheckoutModal()" class="w-full btn-editorial text-xs py-3.5 flex items-center justify-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+        Finalizar Compra Segura
+      </button>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       DRAWER DE MENU MOBILE (ESQUERDA)
+       ========================================== -->
+  <div id="mobile-backdrop" onclick="Store.closeMobileMenu()" class="drawer-backdrop"></div>
+  <div id="mobile-drawer" class="drawer-panel drawer-left">
+    <div class="p-5 border-b border-costura flex items-center justify-between bg-white">
+      <a href="index.html" onclick="Store.goHome(event)" class="cursor-pointer">
+        <span class="font-display text-2xl tracking-[0.16em] font-normal uppercase text-tinta hover:text-oliva transition-colors">PAIRA</span>
+      </a>
+      <button onclick="Store.closeMobileMenu()" class="p-1 text-grafite hover:text-tinta" aria-label="Fechar menu">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="p-6 space-y-6 flex-1 overflow-y-auto">
+      <nav class="space-y-3 text-xs font-semibold uppercase tracking-wider">
+        <button onclick="Store.closeMobileMenu(); Store.filterCategory('verao');" class="block w-full text-left py-2.5 border-b border-costura hover:text-oliva">VER&Atilde;O</button>
+        <button onclick="Store.closeMobileMenu(); Store.filterCategory('novidades');" class="block w-full text-left py-2.5 border-b border-costura hover:text-oliva">NOVIDADES</button>
+        <button onclick="Store.closeMobileMenu(); Store.filterCategory('vestidos');" class="block w-full text-left py-2.5 border-b border-costura hover:text-oliva">VESTIDOS</button>
+        <button onclick="Store.closeMobileMenu(); Store.filterCategory('tops');" class="block w-full text-left py-2.5 border-b border-costura hover:text-oliva">ROUPA</button>
+        <button onclick="Store.closeMobileMenu(); Store.filterCategory('casacos');" class="block w-full text-left py-2.5 border-b border-costura hover:text-oliva">CASACOS</button>
+        <button onclick="Store.closeMobileMenu(); Store.filterCategory('conjuntos');" class="block w-full text-left py-2.5 border-b border-costura hover:text-oliva">CONJUNTOS</button>
+        <button onclick="Store.closeMobileMenu(); Store.filterCategory('acessorios');" class="block w-full text-left py-2.5 border-b border-costura hover:text-oliva">ACESS&Oacute;RIOS</button>
+        <button onclick="Store.closeMobileMenu(); Store.filterCategory('saldos');" class="block w-full text-left py-2.5 border-b border-costura text-promo hover:underline">SALDOS</button>
+        <a href="admin.html" class="block w-full text-left py-2.5 text-oliva font-bold">Aba Restrita ADM / myPOS</a>
+      </nav>
+
+      <div class="pt-6 border-t border-costura text-xs text-grafite space-y-2">
+        <p><strong>Apoio ao Cliente:</strong> +351 920 198 349</p>
+        <p>Dias úteis, das 9h às 18h (Lisboa)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL DE PRODUTO INDIVIDUAL (PDP)
+       ========================================== -->
+  <div id="pdp-modal" class="modal-backdrop">
+    <div class="modal-content relative p-6 sm:p-10">
+      
+      <!-- Botão Fechar Modal -->
+      <button onclick="Store.closePDP()" class="absolute right-4 top-4 z-10 p-2 text-grafite hover:text-tinta bg-white/80 rounded-full" aria-label="Fechar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-start">
+        
+        <!-- Galeria / Imagem Principal -->
+        <div class="relative aspect-fashion overflow-hidden bg-papel border border-costura">
+          <img id="pdp-image" src="" alt="" class="w-full h-full object-cover"/>
+          <span id="pdp-tag" class="etiqueta etiqueta-oliva absolute left-4 top-4">Best-seller</span>
+        </div>
+
+        <!-- Informações e Ações de Compra -->
+        <div class="space-y-6">
+          <div>
+            <p id="pdp-sku" class="text-[11px] font-mono text-grafite uppercase tracking-wider">REF: PAIR-001</p>
+            <h1 id="pdp-title" class="font-display text-3xl lg:text-4xl text-tinta mt-1 leading-tight">Nome da Peça</h1>
+            
+            <div class="flex items-center gap-3 mt-3">
+              <span id="pdp-price" class="font-bold text-2xl text-tinta">49,99 €</span>
+              <span id="pdp-old-price" class="text-sm text-grafite line-through">64,99 €</span>
+              <span class="text-[11px] text-sucesso font-semibold bg-sucesso/10 px-2 py-0.5 rounded">IVA incluído</span>
+            </div>
+          </div>
+
+          <!-- Seleção de Tamanho -->
+          <div class="space-y-2">
+            <div class="flex justify-between items-center text-xs">
+              <span class="font-semibold uppercase tracking-wider text-tinta">Tamanho:</span>
+              <button onclick="Store.showToast('Guia de Tamanhos: XS (34), S (36), M (38), L (40), XL (42)')" class="text-grafite underline hover:text-oliva">Guia de Tamanhos</button>
+            </div>
+            <div id="pdp-sizes" class="flex flex-wrap gap-2">
+              <!-- Pílulas de tamanho -->
+            </div>
+          </div>
+
+          <!-- Seleção de Cores -->
+          <div class="space-y-2">
+            <span class="text-xs font-semibold uppercase tracking-wider text-tinta">Cores Disponíveis:</span>
+            <div id="pdp-colors" class="flex flex-wrap gap-2">
+              <!-- Opções de cor -->
+            </div>
+          </div>
+
+          <!-- Botões de Ação -->
+          <div class="space-y-3 pt-2">
+            <button id="pdp-add-btn" class="w-full btn-editorial text-xs py-4 flex items-center justify-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+              Adicionar ao Cesto de Compras
+            </button>
+          </div>
+
+          <!-- Acordeão Informativo -->
+          <div class="pt-4 border-t border-costura space-y-1">
+            <div class="accordion-item open">
+              <button type="button" class="accordion-header">
+                <span>Descrição & Caimento</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+              <div class="accordion-body">
+                <p id="pdp-description"></p>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button type="button" class="accordion-header">
+                <span>Composição & Cuidados</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+              <div class="accordion-body">
+                <p id="pdp-composition"></p>
+                <p class="mt-2 text-xs">Lavar à mão ou a seco. Não usar lixívia. Passar a ferro em temperatura suave.</p>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <button type="button" class="accordion-header">
+                <span>Envios & Devoluções em Portugal</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+              <div class="accordion-body">
+                <p>• Portugal Continental: Entrega em 24h a 48h úteis via transportadora com tracking direto.<br/>
+                • Ilhas (Madeira e Açores): 3 a 5 dias úteis.<br/>
+                • Devoluções gratuitas nos primeiros 30 dias após receção da encomenda.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL DE CHECKOUT & PAGAMENTOS (MYPOS / BANCO DE PORTUGAL)
+       ========================================== -->
+  <div id="checkout-modal" class="modal-backdrop">
+    <div id="checkout-modal-content" class="modal-content relative p-6 sm:p-10 max-w-3xl">
+      
+      <button onclick="Checkout.closeCheckoutModal()" class="absolute right-4 top-4 p-2 text-grafite hover:text-tinta" aria-label="Fechar checkout">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+
+      <div class="mb-6 border-b border-costura pb-4">
+        <span class="etiqueta etiqueta-oliva">Checkout Seguro</span>
+        <h2 class="font-display text-3xl text-tinta mt-1">Finalização de Encomenda</h2>
+        <p class="text-xs text-grafite">Pagamentos auditados e em conformidade com as normas do Banco de Portugal.</p>
+      </div>
+
+      <form id="checkout-form" onsubmit="Checkout.processOrder(event)" class="space-y-6">
+        
+        <!-- Passo 1: Morada e Dados de Envio -->
+        <div>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-tinta mb-3 flex items-center gap-2">
+            <span class="w-5 h-5 rounded-full bg-tinta text-linho flex items-center justify-center text-[10px]">1</span>
+            Dados de Contacto e Envio (Portugal)
+          </h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div>
+              <label class="block font-medium text-grafite mb-1">Nome Completo *</label>
+              <input type="text" id="cust-name" required value="Maria Fernandes Silva" class="w-full bg-papel border border-costura p-2.5 focus:border-tinta outline-none" />
+            </div>
+            <div>
+              <label class="block font-medium text-grafite mb-1">E-mail *</label>
+              <input type="email" id="cust-email" required value="maria.silva@exemplo.pt" class="w-full bg-papel border border-costura p-2.5 focus:border-tinta outline-none" />
+            </div>
+            <div>
+              <label class="block font-medium text-grafite mb-1">Telemóvel (PT +351) *</label>
+              <input type="tel" id="cust-phone" required value="920 198 349" class="w-full bg-papel border border-costura p-2.5 focus:border-tinta outline-none" />
+            </div>
+            <div>
+              <label class="block font-medium text-grafite mb-1">NIF (Opcional p/ Fatura)</label>
+              <input type="text" id="cust-nif" placeholder="Ex: 519505476" class="w-full bg-papel border border-costura p-2.5 focus:border-tinta outline-none" />
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block font-medium text-grafite mb-1">Morada de Entrega *</label>
+              <input type="text" id="cust-address" required value="Avenida da Liberdade, nº 120, 3º Dto" class="w-full bg-papel border border-costura p-2.5 focus:border-tinta outline-none" />
+            </div>
+            <div>
+              <label class="block font-medium text-grafite mb-1">Código Postal (XXXX-XXX) *</label>
+              <input type="text" id="cust-postal" required pattern="[0-9]{4}-[0-9]{3}" value="1250-146" class="w-full bg-papel border border-costura p-2.5 focus:border-tinta outline-none" />
+            </div>
+            <div>
+              <label class="block font-medium text-grafite mb-1">Localidade / Concelho *</label>
+              <input type="text" id="cust-city" required value="Lisboa" class="w-full bg-papel border border-costura p-2.5 focus:border-tinta outline-none" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Passo 2: Seleção do Método de Pagamento -->
+        <div>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-tinta mb-3 flex items-center gap-2">
+            <span class="w-5 h-5 rounded-full bg-tinta text-linho flex items-center justify-center text-[10px]">2</span>
+            Método de Pagamento Certificado
+          </h3>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            
+            <!-- Opção MB WAY -->
+            <div data-method="mbway" class="payment-method-card border-2 border-tinta bg-papel p-3 cursor-pointer transition-all flex flex-col justify-between">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-xs text-tinta">MB WAY</span>
+                <img src="assets/images/pagamentos/mbway.svg" alt="MB WAY" class="h-5"/>
+              </div>
+              <p class="text-[11px] text-grafite mt-2">Pagamento instantâneo via app MB WAY.</p>
+            </div>
+
+            <!-- Opção Multibanco -->
+            <div data-method="multibanco" class="payment-method-card border border-costura p-3 cursor-pointer transition-all flex flex-col justify-between">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-xs text-tinta">Multibanco</span>
+                <img src="assets/images/pagamentos/multibanco.svg" alt="Multibanco" class="h-5"/>
+              </div>
+              <p class="text-[11px] text-grafite mt-2">Pagamento por Entidade e Referência.</p>
+            </div>
+
+            <!-- Opção Cartão / myPOS -->
+            <div data-method="mypos_card" class="payment-method-card border border-costura p-3 cursor-pointer transition-all flex flex-col justify-between">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-xs text-tinta">Cartão / myPOS</span>
+                <img src="assets/images/pagamentos/visa.svg" alt="Cartão" class="h-4"/>
+              </div>
+              <p class="text-[11px] text-grafite mt-2">Visa, Mastercard e myPOS 3DS2.</p>
+            </div>
+          </div>
+
+          <!-- Campos Específicos para MB WAY -->
+          <div id="mbway-fields" class="mt-4 p-4 bg-papel border border-costura text-xs">
+            <label class="block font-medium text-tinta mb-1">Número de Telemóvel MB WAY:</label>
+            <input type="tel" id="mbway-phone" value="920 198 349" class="w-full sm:w-64 bg-white border border-costura p-2 text-xs focus:border-tinta outline-none" />
+            <p class="text-[11px] text-grafite mt-1.5">Receberá uma notificação no seu telemóvel para autorizar a compra em segurança.</p>
+          </div>
+
+          <!-- Campos Específicos para Multibanco -->
+          <div id="multibanco-fields" style="display:none;" class="mt-4 p-4 bg-papel border border-costura text-xs">
+            <p class="text-tinta font-medium">As referências de Multibanco serão emitidas imediatamente após a confirmação da encomenda.</p>
+            <p class="text-[11px] text-grafite mt-1">Disporá de 48 horas para efetuar o pagamento num terminal Multibanco ou através do seu Homebanking.</p>
+          </div>
+
+          <!-- Campos Específicos para myPOS Cartão -->
+          <div id="mypos-fields" style="display:none;" class="mt-4 p-4 bg-papel border border-costura text-xs space-y-2">
+            <div class="grid grid-cols-2 gap-2">
+              <div class="col-span-2">
+                <label class="block font-medium text-tinta mb-1">Número do Cartão</label>
+                <input type="text" placeholder="4000 1234 5678 9010" value="4532 •••• •••• 8821" class="w-full bg-white border border-costura p-2 font-mono" />
+              </div>
+              <div>
+                <label class="block font-medium text-tinta mb-1">Validade (MM/AA)</label>
+                <input type="text" placeholder="12/28" value="09/29" class="w-full bg-white border border-costura p-2 font-mono" />
+              </div>
+              <div>
+                <label class="block font-medium text-tinta mb-1">CVC / CVV</label>
+                <input type="password" placeholder="•••" value="789" class="w-full bg-white border border-costura p-2 font-mono" />
+              </div>
+            </div>
+            <p class="text-[10px] text-grafite">Transação encriptada com certificado SSL e autenticação 3D Secure da myPOS Europe Ltd.</p>
+          </div>
+        </div>
+
+        <!-- Resumo Financeiro da Encomenda -->
+        <div class="p-4 bg-papel border border-costura space-y-2">
+          <div id="checkout-summary-items" class="space-y-1"></div>
+          <div class="pt-2 border-t border-costura text-xs space-y-1">
+            <div class="flex justify-between text-grafite">
+              <span>Subtotal:</span>
+              <span id="checkout-subtotal">0,00 €</span>
+            </div>
+            <div class="flex justify-between text-grafite">
+              <span>Portes de Envio (Portugal):</span>
+              <span id="checkout-shipping">Grátis</span>
+            </div>
+            <div class="flex justify-between text-sm font-bold text-tinta pt-1 border-t border-costura">
+              <span>Total a Pagar (com IVA):</span>
+              <span id="checkout-total">0,00 €</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botão de Submissão -->
+        <button type="submit" class="w-full btn-editorial text-xs py-4 flex items-center justify-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>
+          Confirmar e Pagar em Segurança
+        </button>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- Scripts da Aplicação -->
+  <script src="assets/js/store.js"></script>
+  <script src="assets/js/checkout.js"></script>
+</body>
+</html>
