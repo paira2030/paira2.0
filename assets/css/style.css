@@ -1,0 +1,417 @@
+/* ============================================================
+   MAELLE - DESIGN SYSTEM & EDITORIAL STYLING
+   Design System editorial minimalista e de alta-costura
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --tinta: #141414;
+  --linho: #FAFAF9;
+  --papel: #F4F4F2;
+  --costura: #E6E6E3;
+  --grafite: #6E6E6B;
+  --oliva: #4A5A3A;
+  --oliva-light: #5B6E47;
+  --oliva-dark: #3A472E;
+  --ouro: #C9A050;
+  --erro: #A63D2F;
+  --sucesso: #3D6B4F;
+  
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--linho);
+  color: var(--tinta);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Tipografia Editorial */
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
+
+/* Cores Utilitárias */
+.bg-tinta { background-color: var(--tinta); }
+.text-tinta { color: var(--tinta); }
+.bg-linho { background-color: var(--linho); }
+.text-linho { color: var(--linho); }
+.bg-papel { background-color: var(--papel); }
+.border-costura { border-color: var(--costura); }
+.text-grafite { color: var(--grafite); }
+.text-oliva { color: var(--oliva); }
+.bg-oliva { background-color: var(--oliva); }
+.border-oliva { border-color: var(--oliva); }
+
+/* Etiquetas / Badges inspiradas na referência */
+.etiqueta {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  background-color: rgba(20, 20, 20, 0.05);
+  color: var(--tinta);
+}
+
+.label-etiqueta {
+  font-size: 0.6875rem;
+  line-height: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.text-promo {
+  color: #a63d2f !important;
+}
+
+.text-promo:hover {
+  color: #8c3226 !important;
+}
+
+/* Mega-Menu Flutuante sob o Header */
+.megamenu-panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  background-color: var(--papel);
+  border-bottom: 1px solid var(--costura);
+  box-shadow: 0 8px 24px -12px rgba(22, 21, 15, 0.15);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.22s ease, transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(-3px);
+  z-index: 45;
+}
+
+.megamenu-panel.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+/* Barra de Pesquisa Expansível */
+.search-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  background-color: var(--linho);
+  border-bottom: 1px solid var(--costura);
+  padding: 1.25rem 2rem;
+  box-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.1);
+  transform: translateY(-8px);
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 46;
+}
+
+.search-overlay.active {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.etiqueta-oliva {
+  background-color: var(--oliva);
+  color: #FFFFFF;
+}
+
+.etiqueta-ouro {
+  background-color: var(--ouro);
+  color: #FFFFFF;
+}
+
+/* Transições e Animações Suaves */
+.ease-editorial {
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Proporção 3:4 perfeita para catálogo de moda */
+.aspect-fashion {
+  aspect-ratio: 3 / 4;
+}
+
+/* Cartão de Produto */
+.product-card {
+  position: relative;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.product-card:hover {
+  transform: translateY(-3px);
+}
+
+.product-card .quick-add-btn {
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+}
+
+.product-card:hover .quick-add-btn {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Botão editorial sofisticado */
+.btn-editorial {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.875rem 2rem;
+  font-size: 0.8125rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+  border: 1px solid var(--tinta);
+  background-color: var(--tinta);
+  color: var(--linho);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btn-editorial:hover {
+  background-color: var(--oliva);
+  border-color: var(--oliva);
+  color: #FFFFFF;
+}
+
+.btn-editorial-outline {
+  background-color: transparent;
+  color: var(--tinta);
+  border: 1px solid var(--tinta);
+}
+
+.btn-editorial-outline:hover {
+  background-color: var(--tinta);
+  color: var(--linho);
+}
+
+/* Drawer / Sidebar Lateral */
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(20, 20, 20, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.drawer-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.drawer-panel {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: 440px;
+  background-color: var(--linho);
+  z-index: 101;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.drawer-right {
+  right: 0;
+  transform: translateX(100%);
+}
+
+.drawer-right.active {
+  transform: translateX(0);
+}
+
+.drawer-left {
+  left: 0;
+  transform: translateX(-100%);
+}
+
+.drawer-left.active {
+  transform: translateX(0);
+}
+
+/* Modal de Produto PDP */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(20, 20, 20, 0.6);
+  backdrop-filter: blur(6px);
+  z-index: 110;
+  opacity: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  transition: opacity 0.3s ease;
+}
+
+.modal-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-content {
+  background-color: var(--linho);
+  width: 100%;
+  max-width: 980px;
+  max-height: 90vh;
+  border-radius: 2px;
+  overflow-y: auto;
+  position: relative;
+  transform: scale(0.96);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.modal-backdrop.active .modal-content {
+  transform: scale(1);
+}
+
+/* Barra de Frete Grátis com Progresso */
+.shipping-progress-bg {
+  width: 100%;
+  height: 4px;
+  background-color: var(--costura);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.shipping-progress-bar {
+  height: 100%;
+  background-color: var(--oliva);
+  transition: width 0.4s ease;
+}
+
+/* Seletor de Tamanho e Cores */
+.size-pill {
+  min-width: 2.75rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--costura);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: #FFFFFF;
+}
+
+.size-pill:hover, .size-pill.selected {
+  border-color: var(--tinta);
+  background-color: var(--tinta);
+  color: var(--linho);
+}
+
+/* Acordeão de Informações PDP */
+.accordion-item {
+  border-top: 1px solid var(--costura);
+}
+
+.accordion-header {
+  width: 100%;
+  padding: 1rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--tinta);
+}
+
+.accordion-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  font-size: 0.875rem;
+  color: var(--grafite);
+  line-height: 1.6;
+}
+
+.accordion-item.open .accordion-body {
+  max-height: 350px;
+  padding-bottom: 1.25rem;
+}
+
+/* Links Editoriais */
+.link-editorial {
+  position: relative;
+  text-decoration: none;
+  color: var(--tinta);
+  font-weight: 500;
+  padding-bottom: 2px;
+}
+
+.link-editorial::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: var(--tinta);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.link-editorial:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Barra de rolagem customizada */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--linho);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #CFCFCB;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--grafite);
+}
