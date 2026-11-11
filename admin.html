@@ -45,15 +45,16 @@
       <div>
         <span class="etiqueta etiqueta-oliva">Acesso Restrito</span>
         <h1 class="font-display text-2xl text-tinta mt-2">Área Administrativa</h1>
-        <p class="text-xs text-grafite mt-1">Introduza a chave mestre para aceder à gestão de produtos e configuração do gateway developers.mypos.</p>
+        <p class="text-xs text-grafite mt-1">Entre com o email e a palavra-passe do administrador Supabase para gerir produtos online.</p>
       </div>
 
       <div class="space-y-4">
+        <div id="supabase-email-wrapper"><input type="email" id="admin-email-input" placeholder="Email do administrador Supabase" class="w-full p-3 border border-costura bg-papel text-xs" /></div>
         <div>
           <input 
             type="password" 
             id="admin-pin-input" 
-            placeholder="Palavra-passe / PIN ADM (Padrão: maelle2026)" 
+            placeholder="Palavra-passe do Supabase (ou PIN local sem integração)" 
             class="w-full p-3 border border-costura bg-papel text-xs text-center tracking-widest font-mono focus:border-tinta outline-none"
             onkeydown="if(event.key==='Enter') Admin.login()"
           />
@@ -64,6 +65,7 @@
           Entrar no Painel ADM
         </button>
 
+        <button type="button" onclick="Admin.requestPasswordReset()" class="block mx-auto text-xs underline text-grafite hover:text-tinta">Esqueci a minha senha — receber email</button>
         <a href="index.html" class="block text-xs text-grafite hover:text-tinta pt-2">
           &larr; Voltar à Loja Maelle
         </a>
@@ -113,6 +115,7 @@
             Plugin developers.mypos
           </button>
           <button data-tab="viva" class="admin-nav-btn py-4 text-grafite hover:text-tinta transition-all flex items-center gap-2">Viva.com API</button>
+          <button data-tab="seguranca" class="admin-nav-btn py-4 text-grafite hover:text-tinta transition-all flex items-center gap-2">Segurança</button>
         </nav>
 
         <div class="flex items-center gap-2 py-2">
@@ -133,6 +136,13 @@
       <!-- ==========================================
            ABA 1: GESTÃO DO CATÁLOGO DE PRODUTOS
            ========================================== -->
+      <div id="tab-seguranca" class="hidden space-y-5 max-w-xl">
+        <h2 class="font-display text-3xl">Segurança da conta</h2>
+        <p class="text-sm text-grafite">Para mudar a senha sem informar a anterior, enviaremos um link de confirmação para o email da tua conta Supabase. Só depois de abrir esse link poderás definir uma nova senha.</p>
+        <button type="button" onclick="Admin.requestPasswordReset(true)" class="btn-editorial text-xs px-5 py-3">Enviar link para alterar senha</button>
+        <p id="security-message" class="text-xs" role="status" aria-live="polite"></p>
+      </div>
+
       <div id="tab-produtos" class="space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
@@ -374,7 +384,7 @@
           <div class="sm:col-span-2">
             <label class="block font-medium text-grafite mb-1">Fotografias do produto</label>
             <input type="file" id="prod-form-files" accept="image/png,image/jpeg,image/webp" multiple onchange="Admin.handleProductImages(this.files)" class="w-full bg-papel border border-costura p-2.5 text-xs" />
-            <p class="text-[10px] text-grafite mt-1">Escolha imagens do PC. Clique numa miniatura para a definir como principal; use Remover para a excluir. As imagens ficam guardadas apenas neste navegador até exportar/publicar o catálogo.</p>
+            <p class="text-[10px] text-grafite mt-1">Escolha imagens do PC. Clique numa miniatura para a definir como principal; use Remover para a excluir. Com o Supabase configurado, as imagens são guardadas online. Sem configuração, ficam apenas neste navegador.</p>
             <div id="prod-image-previews" class="flex flex-wrap gap-3 mt-3"></div>
             <label class="block font-medium text-grafite mt-3 mb-1">Ou caminho da imagem existente</label>
             <input type="text" id="prod-form-image" class="w-full bg-papel border border-costura p-2.5 font-mono text-xs focus:border-tinta outline-none" />
@@ -398,6 +408,20 @@
     </div>
   </div>
 
+  <div id="password-recovery-modal" class="hidden fixed inset-0 z-[100] bg-black/70 p-5 items-center justify-center" role="dialog" aria-modal="true" aria-labelledby="password-recovery-title">
+    <form id="password-recovery-form" class="bg-white w-full max-w-md p-7 space-y-4" onsubmit="event.preventDefault(); Admin.finishPasswordReset()">
+      <h2 id="password-recovery-title" class="font-display text-2xl">Definir nova senha</h2>
+      <p class="text-xs text-grafite">Link de recuperação confirmado. Escolhe uma senha nova (mínimo 12 caracteres).</p>
+      <input id="new-password" type="password" minlength="12" required autocomplete="new-password" placeholder="Nova senha" class="w-full p-3 border border-costura" />
+      <input id="confirm-password" type="password" minlength="12" required autocomplete="new-password" placeholder="Confirmar nova senha" class="w-full p-3 border border-costura" />
+      <p id="password-recovery-message" role="status" aria-live="polite" class="text-xs"></p>
+      <button type="submit" class="btn-editorial w-full py-3">Guardar nova senha</button>
+    </form>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="assets/js/supabase-config.js"></script>
+  <script src="assets/js/supabase-bridge.js"></script>
   <script src="assets/js/admin.js"></script>
 </body>
 </html>

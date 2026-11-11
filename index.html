@@ -905,6 +905,13 @@
   <!-- ==========================================
        MODAL DE PRODUTO INDIVIDUAL (PDP)
        ========================================== -->
+  <div id="maelle-photo-lightbox" class="maelle-photo-lightbox" role="dialog" aria-modal="true" aria-label="Fotografia ampliada" hidden>
+    <button type="button" class="maelle-photo-close" onclick="Store.closePhotoLightbox()" aria-label="Fechar fotografia">×</button>
+    <button type="button" class="maelle-photo-prev" onclick="Store.changePhoto(-1)" aria-label="Fotografia anterior">‹</button>
+    <img id="maelle-photo-full" alt="Fotografia do produto" />
+    <button type="button" class="maelle-photo-next" onclick="Store.changePhoto(1)" aria-label="Fotografia seguinte">›</button>
+    <span id="maelle-photo-count" class="maelle-photo-count"></span>
+  </div>
   <div id="pdp-modal" class="modal-backdrop">
     <div class="modal-content relative p-6 sm:p-10">
       
@@ -916,9 +923,9 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-start">
         
         <!-- Galeria / Imagem Principal -->
-        <div class="relative aspect-fashion overflow-hidden bg-papel border border-costura">
-          <img id="pdp-image" src="" alt="" class="w-full h-full object-cover"/>
-          <span id="pdp-tag" class="etiqueta etiqueta-oliva absolute left-4 top-4">Best-seller</span>
+        <div class="relative">
+          <div id="pdp-gallery" class="maelle-product-gallery" aria-label="Fotografias do produto"></div>
+          <span id="pdp-tag" class="etiqueta etiqueta-oliva absolute left-4 top-4 pointer-events-none">Best-seller</span>
         </div>
 
         <!-- Informações e Ações de Compra -->
@@ -1158,6 +1165,9 @@
   </div>
 
   <!-- Scripts da Aplicação -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="assets/js/supabase-config.js"></script>
+  <script src="assets/js/supabase-bridge.js"></script>
   <script src="assets/js/store.js"></script>
   <script src="assets/js/checkout.js"></script>
 </body>
