@@ -50,7 +50,7 @@ foreach ($art in $articles) {
             tag = if ($tag -ne "") { $tag } else { "Colecao Verao" }
             imageUrl = $img
             localImage = $targetPath
-            description = "Peca sofisticada com corte impecavel de alfaiataria contemporanea. Confecionada com materiais nobres para caimento perfeito e conforto superior. Edicao exclusiva Paira Lisboa."
+            description = "Peca sofisticada com corte impecavel de alfaiataria contemporanea. Confecionada com materiais nobres para caimento perfeito e conforto superior. Edicao exclusiva Maelle Lisboa."
             sizes = @("XS", "S", "M", "L", "XL")
             colors = @("Creme / Linho Natural", "Preto Noite", "Oliva Editorial")
             stock = 15

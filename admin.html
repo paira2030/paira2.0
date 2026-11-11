@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Paira Lisboa — Painel de Administração ADM & developers.mypos</title>
+  <title>Maelle Lisboa — Painel de Administração ADM & developers.mypos</title>
   <link rel="icon" href="assets/images/branding/favicon.svg" type="image/svg+xml" />
 
   <!-- Tailwind CSS CDN -->
@@ -41,7 +41,7 @@
        ========================================== -->
   <div id="auth-gate" class="fixed inset-0 bg-linho z-50 flex items-center justify-center p-6">
     <div class="w-full max-w-md bg-white border border-costura p-8 shadow-xl space-y-6 text-center">
-      <span class="font-display text-3xl tracking-[0.18em] font-normal uppercase text-tinta block mx-auto select-none">PAIRA</span>
+      <span class="font-display text-3xl tracking-[0.18em] font-normal uppercase text-tinta block mx-auto select-none">MAELLE</span>
       <div>
         <span class="etiqueta etiqueta-oliva">Acesso Restrito</span>
         <h1 class="font-display text-2xl text-tinta mt-2">Área Administrativa</h1>
@@ -53,7 +53,7 @@
           <input 
             type="password" 
             id="admin-pin-input" 
-            placeholder="Palavra-passe / PIN ADM (Padrão: paira2026)" 
+            placeholder="Palavra-passe / PIN ADM (Padrão: maelle2026)" 
             class="w-full p-3 border border-costura bg-papel text-xs text-center tracking-widest font-mono focus:border-tinta outline-none"
             onkeydown="if(event.key==='Enter') Admin.login()"
           />
@@ -65,7 +65,7 @@
         </button>
 
         <a href="index.html" class="block text-xs text-grafite hover:text-tinta pt-2">
-          &larr; Voltar à Loja Paira
+          &larr; Voltar à Loja Maelle
         </a>
       </div>
     </div>
@@ -81,7 +81,7 @@
       <div class="mx-auto max-w-[1440px] px-6 h-16 flex items-center justify-between">
         <div class="flex items-center gap-4">
           <a href="index.html" class="flex items-center">
-            <span class="font-display text-xl tracking-[0.16em] font-normal uppercase text-linho block select-none">PAIRA</span>
+            <span class="font-display text-xl tracking-[0.16em] font-normal uppercase text-linho block select-none">MAELLE</span>
           </a>
           <span class="hidden sm:inline-block text-[11px] font-mono bg-white/10 px-2.5 py-0.5 rounded text-linho/80">
             PAINEL DE CONTROLO ADM
@@ -112,6 +112,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/></svg>
             Plugin developers.mypos
           </button>
+          <button data-tab="viva" class="admin-nav-btn py-4 text-grafite hover:text-tinta transition-all flex items-center gap-2">Viva.com API</button>
         </nav>
 
         <div class="flex items-center gap-2 py-2">
@@ -165,6 +166,18 @@
       <!-- ==========================================
            ABA 2: CONFIGURAÇÃO DEVELOPERS.MYPOS
            ========================================== -->
+      <!-- Viva.com: parâmetros públicos apenas; segredos ficam no servidor -->
+      <section id="tab-viva" style="display:none" class="space-y-6 max-w-4xl">
+        <div><p class="text-xs uppercase tracking-widest text-oliva">Pagamentos</p><h2 class="font-display text-3xl text-tinta mt-2">Viva.com API</h2></div>
+        <div class="p-4 border border-costura bg-papel text-sm text-tinta"><strong>Integração pendente de backend seguro.</strong> Este projeto é estático. As credenciais Client Secret e os tokens de acesso nunca devem ser guardados no navegador. A aba abaixo guarda apenas preferências não secretas neste computador; não ativa cobranças.</div>
+        <div class="grid sm:grid-cols-2 gap-4 text-xs">
+          <label class="block">Ambiente<select id="viva-mode" class="w-full border border-costura p-3 mt-2"><option value="demo">Testes (demo)</option><option value="live">Produção (quando backend estiver pronto)</option></select></label>
+          <label class="block">Source Code (não secreto)<input id="viva-source" maxlength="4" placeholder="0000" class="w-full border border-costura p-3 mt-2" /></label>
+        </div>
+        <p class="text-xs text-grafite">Para ativar a Viva.com é necessário criar endpoints de servidor para autenticação, criação de ordens, webhooks verificados e consulta de transações. Configure Client ID e Client Secret exclusivamente como variáveis de ambiente no servidor.</p>
+        <button type="button" onclick="Admin.saveVivaConfig()" class="btn-editorial text-xs px-6 py-3">Guardar preferências</button>
+      </section>
+
       <div id="tab-mypos" style="display:none;" class="space-y-8 max-w-4xl">
         <div>
           <span class="etiqueta etiqueta-oliva">Gateway Certificado</span>
@@ -359,9 +372,12 @@
           </div>
 
           <div class="sm:col-span-2">
-            <label class="block font-medium text-grafite mb-1">Caminho da Imagem *</label>
-            <input type="text" id="prod-form-image" required class="w-full bg-papel border border-costura p-2.5 font-mono text-xs focus:border-tinta outline-none" />
-            <p class="text-[10px] text-grafite mt-1">Exemplo: assets/images/produtos/vestidos/rona-v-neck-cutout-sleeveless-maxi-dress.webp</p>
+            <label class="block font-medium text-grafite mb-1">Fotografias do produto</label>
+            <input type="file" id="prod-form-files" accept="image/png,image/jpeg,image/webp" multiple onchange="Admin.handleProductImages(this.files)" class="w-full bg-papel border border-costura p-2.5 text-xs" />
+            <p class="text-[10px] text-grafite mt-1">Escolha imagens do PC. Clique numa miniatura para a definir como principal; use Remover para a excluir. As imagens ficam guardadas apenas neste navegador até exportar/publicar o catálogo.</p>
+            <div id="prod-image-previews" class="flex flex-wrap gap-3 mt-3"></div>
+            <label class="block font-medium text-grafite mt-3 mb-1">Ou caminho da imagem existente</label>
+            <input type="text" id="prod-form-image" class="w-full bg-papel border border-costura p-2.5 font-mono text-xs focus:border-tinta outline-none" />
           </div>
 
           <div class="sm:col-span-2">

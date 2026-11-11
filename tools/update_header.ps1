@@ -7,13 +7,13 @@ $headerHtml = @'
   <header class="sticky top-0 z-40 bg-linho/95 backdrop-blur-md border-b border-costura transition-all duration-200">
     <div class="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-6 lg:px-12">
       
-      <!-- Lado Esquerdo: Mobile Menu + Logótipo PAIRA -->
+      <!-- Lado Esquerdo: Mobile Menu + Logótipo MAELLE -->
       <div class="flex items-center gap-4">
         <button type="button" onclick="Store.openMobileMenu()" class="p-2 lg:hidden text-tinta hover:text-oliva" aria-label="Abrir menu">
           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
         </button>
-        <a aria-label="Paira - página inicial" href="/" class="flex items-center text-tinta select-none transition-opacity hover:opacity-80">
-          <span class="font-display text-2xl lg:text-[1.85rem] tracking-[0.16em] font-normal uppercase text-tinta leading-none">PAIRA</span>
+        <a aria-label="Maelle - página inicial" href="/" class="flex items-center text-tinta select-none transition-opacity hover:opacity-80">
+          <span class="font-display text-2xl lg:text-[1.85rem] tracking-[0.16em] font-normal uppercase text-tinta leading-none">MAELLE</span>
         </a>
       </div>
 

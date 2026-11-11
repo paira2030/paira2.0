@@ -1,6 +1,6 @@
-# PAIRA LISBOA — E-Commerce de Moda Feminina
+# MAELLE LISBOA — E-Commerce de Moda Feminina
 
-Plataforma de comércio eletrónico de alta-costura contemporânea inspirada no layout editorial de `payra.pt`, desenvolvida com identidade própria (**Paira**), código limpo, catálogo reativo, carrinho com régua de portes grátis para Portugal, checkout transparente e **Painel ADM exclusivo com integração para developers.mypos**.
+Plataforma de comércio eletrónico de alta-costura contemporânea inspirada no layout editorial de `payra.pt`, desenvolvida com identidade própria (**Maelle**), código limpo, catálogo reativo, carrinho com régua de portes grátis para Portugal, checkout transparente e **Painel ADM exclusivo com integração para developers.mypos**.
 
 ---
 
@@ -24,7 +24,7 @@ payla/
 │   │   ├── checkout.js          # Fluxo de checkout (MB WAY, Multibanco e myPOS Cartão 3DS2)
 │   │   └── admin.js             # CRUD de produtos e painel de configuração developers.mypos
 │   └── images/
-│       ├── branding/            # Logótipos vetoriais Paira (SVG) e Favicon
+│       ├── branding/            # Logótipos vetoriais Maelle (SVG) e Favicon
 │       ├── hero/                # Fotografias de alta resolução da coleção e lifestyle
 │       ├── pagamentos/          # SVGs de MB WAY, Multibanco, Visa, Mastercard, myPOS e Livro de Reclamações
 │       └── produtos/            # PASTA DE IMAGENS DETALHADA E SEPARADA POR CATEGORIAS:
@@ -52,7 +52,7 @@ Você tem duas opções fáceis:
 ## 🔒 Acesso à Aba ADM & Configuração do Gateway
 
 * **URL de Acesso:** `http://localhost:3000/admin.html` (ou clique no link "ADM" no topo/rodapé da loja).
-* **Palavra-passe / PIN Padrão:** `paira2026`
+* **Palavra-passe / PIN Padrão:** `maelle2026`
 
 ### Recursos do Painel ADM:
 1. **Gestão do Catálogo:**

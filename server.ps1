@@ -1,4 +1,4 @@
-# PAIRA LISBOA - Servidor HTTP Local Nativo
+# MAELLE LISBOA - Servidor HTTP Local Nativo
 param([int]$port = 3000)
 
 $listener = New-Object System.Net.HttpListener
@@ -8,7 +8,7 @@ $listener.Prefixes.Add($prefix)
 try {
     $listener.Start()
     Write-Host "==========================================================" -ForegroundColor Green
-    Write-Host " PAIRA LISBOA - Loja Online Ativa em: $prefix" -ForegroundColor Yellow
+    Write-Host " MAELLE LISBOA - Loja Online Ativa em: $prefix" -ForegroundColor Yellow
     Write-Host " Painel ADM & developers.mypos: ${prefix}admin.html" -ForegroundColor Cyan
     Write-Host "==========================================================" -ForegroundColor Green
     Write-Host "Pressione Ctrl+C para encerrar o servidor."
