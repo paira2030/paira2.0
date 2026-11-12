@@ -5,7 +5,6 @@
 
 const Admin = {
   authenticated: false,
-  masterPin: 'maelle2026',
   products: [],
   editingImages: [],
   currentTab: 'produtos',
@@ -17,8 +16,8 @@ const Admin = {
     clientNumber: '60001234',
     keyIndex: 1,
     currency: 'EUR',
-    privateKey: '-----BEGIN RSA PRIVATE KEY-----\nMIIEowIBAAKCAQEA3xK7...[CHAVE PRIVADA COMERCIANTE RSA 2048]...IDAQAB\n-----END RSA PRIVATE KEY-----',
-    publicCert: '-----BEGIN CERTIFICATE-----\nMIIDdzCCAl+gAwIBAgIE...[CERTIFICADO PUBLICO MYPOS DEVELOPERS]...MA0GC\n-----END CERTIFICATE-----',
+    privateKey:
+    publicCert:
     webhookUrl: window.location.origin + '/api/mypos/webhook',
     returnOkUrl: window.location.origin + '/checkout-sucesso.html',
     returnCancelUrl: window.location.origin + '/checkout-cancelado.html',
@@ -48,8 +47,8 @@ const Admin = {
   async login() {
     const pin = document.getElementById('admin-pin-input').value;
     try {
-      if (MaelleDB.enabled) await MaelleDB.login(document.getElementById('admin-email-input').value.trim(),pin);
-      else throw new Error('Supabase não configurado. Preenche o Project URL e a Publishable Key em assets/js/supabase-config.js.');
+      if (MaelleDB.enabled) await MaelleDB.loginWithPasswordOnly(pin);
+      else throw new Error('Supabase não configurado. Verifique js/supabase-config.js.');
       await this.checkAuth();
     } catch(e) { const el=document.getElementById('login-error'); el.textContent=e.message; el.style.display='block'; }
   },

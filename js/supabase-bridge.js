@@ -15,6 +15,26 @@ const MaelleDB = {
     if (e) throw e;
     return !!data;
   },
+  async loginWithPasswordOnly(password) {
+    if (!this.enabled) throw new Error('Supabase não configurado.');
+    const response = await fetch('/api/admin-login', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      credentials: 'same-origin',
+      body: JSON.stringify({password})
+    });
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(payload.error || 'Não foi possível entrar.');
+    const {error} = await this.client.auth.setSession({
+      access_token: payload.access_token,
+      refresh_token: payload.refresh_token
+    });
+    if (error) throw error;
+    if (!(await this.isAdmin())) {
+      await this.client.auth.signOut();
+      throw new Error('Esta conta não tem permissão administrativa.');
+    }
+  },
   async login(email, password) {
     const {error} = await this.client.auth.signInWithPassword({email,password});
     if (error) throw error;
