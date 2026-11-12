@@ -1,0 +1,21 @@
+MAELLE — LOGIN SOMENTE COM SENHA
+
+1. Envie esta versão para o repositório GitHub conectado à Vercel.
+2. Em Vercel > Projeto > Settings > Environment Variables, configure:
+   SUPABASE_URL = Project URL (https://...supabase.co, sem /rest/v1/)
+   SUPABASE_PUBLISHABLE_KEY = chave sb_publishable_... do mesmo projeto
+   MAELLE_ADMIN_EMAIL = email da conta Supabase Auth que já está na tabela public.admins
+3. Selecione Production para as três variáveis e faça novo deploy.
+4. A senha digitada na tela é a senha da conta Supabase Auth associada ao email configurado.
+   Para escolher/trocar a senha, use um fluxo seguro de recuperação do Supabase Auth
+   ou o painel Supabase. Não coloque a senha em variáveis nem em arquivos do GitHub.
+5. Teste /api/admin-login somente via formulário /admin.html após o deploy.
+
+SEGURANÇA: O endpoint verifica Supabase Auth e a tabela admins com token do usuário.
+As políticas RLS existentes devem continuar habilitadas. O Supabase limita tentativas
+no Auth; para exposição pública mais robusta, configure proteção adicional contra
+força bruta no nível de borda/WAF da Vercel. A tela não exibe email, mas a conta
+Supabase continua existindo internamente para autenticação e autorização.
+
+ATENÇÃO: Este ZIP contém a estrutura de arquivos fornecida; não foi implantado nem
+testado em produção. Antes de substituir o projeto, faça backup do repositório.

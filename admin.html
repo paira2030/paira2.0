@@ -45,16 +45,15 @@
       <div>
         <span class="etiqueta etiqueta-oliva">Acesso Restrito</span>
         <h1 class="font-display text-2xl text-tinta mt-2">Área Administrativa</h1>
-        <p class="text-xs text-grafite mt-1">Entre com o email e a palavra-passe do administrador Supabase para gerir produtos online.</p>
+        <p class="text-xs text-grafite mt-1">Digite a senha administrativa para acessar o painel.</p>
       </div>
 
       <div class="space-y-4">
-        <div id="supabase-email-wrapper"><input type="email" id="admin-email-input" placeholder="Email do administrador Supabase" class="w-full p-3 border border-costura bg-papel text-xs" /></div>
         <div>
           <input 
             type="password" 
             id="admin-pin-input" 
-            placeholder="Palavra-passe do Supabase (ou PIN local sem integração)" 
+            placeholder="Senha administrativa" 
             class="w-full p-3 border border-costura bg-papel text-xs text-center tracking-widest font-mono focus:border-tinta outline-none"
             onkeydown="if(event.key==='Enter') Admin.login()"
           />
@@ -64,13 +63,6 @@
         <button onclick="Admin.login()" class="w-full btn-editorial text-xs py-3">
           Entrar no Painel ADM
         </button>
-
-        <button type="button" onclick="Admin.requestPasswordReset()" class="block mx-auto text-xs underline text-grafite hover:text-tinta">Esqueci a minha senha — receber email</button>
-        <form id="reset-email-form" class="hidden space-y-2 text-left" onsubmit="event.preventDefault(); Admin.submitResetEmail()">
-          <label for="reset-email-input" class="block text-xs">Email para recuperar a senha</label>
-          <input id="reset-email-input" type="email" required autocomplete="email" placeholder="teuemail@exemplo.com" class="w-full p-3 border border-costura bg-papel text-xs" />
-          <button type="submit" class="w-full btn-editorial text-xs py-3">Enviar link de recuperação</button>
-        </form>
         <a href="index.html" class="block text-xs text-grafite hover:text-tinta pt-2">
           &larr; Voltar à Loja Maelle
         </a>
