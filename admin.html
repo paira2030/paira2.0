@@ -63,6 +63,11 @@
         <button onclick="Admin.login()" class="w-full btn-editorial text-xs py-3">
           Entrar no Painel ADM
         </button>
+        <button type="button"
+onclick="document.getElementById('reset-email-form').classList.remove('hidden')"
+  class="block w-full text-xs text-grafite underline pt-2">
+  Esqueci minha senha
+</button>
         <a href="index.html" class="block text-xs text-grafite hover:text-tinta pt-2">
           &larr; Voltar à Loja Maelle
         </a>
@@ -405,6 +410,25 @@
     </div>
   </div>
 
+<div id="reset-email-form"
+     class="hidden fixed inset-0 z-[100] bg-black/70 flex items-center justify-center p-6">
+  <form onsubmit="event.preventDefault(); Admin.submitResetEmail()"
+        class="bg-white w-full max-w-md p-7 space-y-4">
+    <h2 class="text-xl">Recuperar senha</h2>
+    <p class="text-sm">Digite o email da conta administradora para receber o link de recuperação.</p>
+    <input id="reset-email-input" type="email" required
+           placeholder="Email do administrador"
+           class="w-full p-3 border border-gray-300">
+    <button type="submit" class="w-full btn-editorial py-3">
+      Enviar link de recuperação
+    </button>
+    <button type="button"
+            onclick="document.getElementById('reset-email-form').classList.add('hidden')"
+            class="w-full text-sm underline">
+      Cancelar
+    </button>
+  </form>
+</div>
   <div id="password-recovery-modal" class="hidden fixed inset-0 z-[100] bg-black/70 p-5 items-center justify-center" role="dialog" aria-modal="true" aria-labelledby="password-recovery-title">
     <form id="password-recovery-form" class="bg-white w-full max-w-md p-7 space-y-4" onsubmit="event.preventDefault(); Admin.finishPasswordReset()">
       <h2 id="password-recovery-title" class="font-display text-2xl">Definir nova senha</h2>
