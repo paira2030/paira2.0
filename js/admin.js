@@ -98,9 +98,11 @@ const Admin = {
   },
   async submitResetEmail() {
     const email = document.getElementById('reset-email-input').value.trim();
-    document.getElementById('admin-email-input').value = email;
-    await this.requestPasswordReset(false);
-  },
+
+await MaelleDB.client.auth.resetPasswordForEmail(email, {
+  redirectTo: 'https://maelleoficial.vercel.app/admin.html'
+}); 
+ },
   async finishPasswordReset() {
     const target = document.getElementById('password-recovery-message');
     const password = document.getElementById('new-password').value;
