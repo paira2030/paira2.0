@@ -16,8 +16,8 @@ const Admin = {
     clientNumber: '60001234',
     keyIndex: 1,
     currency: 'EUR',
-    privateKey:
-    publicCert:
+    privateKey: '',
+    publicCert: '',
     webhookUrl: window.location.origin + '/api/mypos/webhook',
     returnOkUrl: window.location.origin + '/checkout-sucesso.html',
     returnCancelUrl: window.location.origin + '/checkout-cancelado.html',
