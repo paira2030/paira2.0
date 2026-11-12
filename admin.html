@@ -66,6 +66,11 @@
         </button>
 
         <button type="button" onclick="Admin.requestPasswordReset()" class="block mx-auto text-xs underline text-grafite hover:text-tinta">Esqueci a minha senha — receber email</button>
+        <form id="reset-email-form" class="hidden space-y-2 text-left" onsubmit="event.preventDefault(); Admin.submitResetEmail()">
+          <label for="reset-email-input" class="block text-xs">Email para recuperar a senha</label>
+          <input id="reset-email-input" type="email" required autocomplete="email" placeholder="teuemail@exemplo.com" class="w-full p-3 border border-costura bg-papel text-xs" />
+          <button type="submit" class="w-full btn-editorial text-xs py-3">Enviar link de recuperação</button>
+        </form>
         <a href="index.html" class="block text-xs text-grafite hover:text-tinta pt-2">
           &larr; Voltar à Loja Maelle
         </a>
