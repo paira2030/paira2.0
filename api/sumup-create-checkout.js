@@ -50,6 +50,16 @@ if (!db.ok) {
   const origin='https://maelleoficial.vercel.app';
   const payment=await fetch('https://api.sumup.com/v0.1/checkouts',{method:'POST',headers:{Authorization:`Bearer ${process.env.SUMUP_API_KEY}`,'Content-Type':'application/json'},body:JSON.stringify({merchant_code:process.env.SUMUP_MERCHANT_CODE,amount:total,currency:'EUR',checkout_reference:id,description:`Encomenda Maelle ${id.slice(0,8)}`,hosted_checkout:{enabled:true},redirect_url:`${origin}/pagamento.html?pedido=${id}`})});
   const result=await payment.json().catch(()=>({}));
+  console.error('Diagnostico SumUp:', {
+  status: payment.status,
+  resposta: {
+    error_code: result.error_code,
+    message: result.message,
+    errors: result.errors,
+    checkout_criado: Boolean(result.id),
+    url_recebida: Boolean(result.hosted_checkout_url)
+  }
+});
   if(!payment.ok||!result.id||!result.hosted_checkout_url) {await api(`encomendas_sumup?id=eq.${id}`,{method:'PATCH',body:JSON.stringify({estado_pagamento:'ERROR'})}); throw Error('A SumUp não criou o pagamento. Confirme a ativação do Hosted Checkout e as credenciais.');}
   const updated=await api(`encomendas_sumup?id=eq.${id}`,{method:'PATCH',body:JSON.stringify({sumup_checkout_id:result.id})});
   if(!updated.ok) throw Error('Não foi possível associar o pagamento à encomenda.');
