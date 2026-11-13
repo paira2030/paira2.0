@@ -1,0 +1,10 @@
+MAELLE - CORRECAO DE RECUPERACAO DE SENHA
+
+1. Substitua os arquivos do repositorio GitHub pelos arquivos desta pasta e aguarde o deploy Vercel.
+2. Supabase > Authentication > URL Configuration: adicione https://maelleoficial.vercel.app/admin.html em Redirect URLs.
+3. Solicite UM novo link de recuperacao, respeitando os limites de envio.
+4. Abra o link mais recente no mesmo navegador. A tela de nova senha deve abrir quando a sessao de recuperacao for valida.
+5. Caso o link esteja expirado, solicite outro apos o limite liberar.
+
+Nao publique chaves secretas nem senhas no GitHub.
+Observacao: esta versao ainda contem configuracoes legadas myPOS, nao foi feita migracao para SumUp.
