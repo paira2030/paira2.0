@@ -144,6 +144,10 @@ const Admin = {
 
     document.getElementById('tab-produtos').style.display = tab === 'produtos' ? 'block' : 'none';
     document.getElementById('tab-sumup').style.display = tab === 'sumup' ? 'block' : 'none';
+    document.getElementById('tab-encomendas').style.display = tab === 'encomendas' ? 'block' : 'none';
+    document.getElementById('tab-paginas').style.display = tab === 'paginas' ? 'block' : 'none';
+    if(tab==='encomendas') MaelleExtras.loadOrders();
+    if(tab==='paginas') MaelleExtras.loadPage();
   },
 
   renderProductsTable() {
