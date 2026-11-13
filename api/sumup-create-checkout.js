@@ -49,6 +49,7 @@ if (!db.ok) {
   if(!inserted.ok) throw Error('Tabela de encomendas não configurada. Execute o SQL incluído no projeto.');
   const origin='https://maelleoficial.vercel.app';
   const payment=await fetch('https://api.sumup.com/v0.1/checkouts',{method:'POST',headers:{Authorization:`Bearer ${process.env.SUMUP_API_KEY}`,'Content-Type':'application/json'},body:JSON.stringify({merchant_code:process.env.SUMUP_MERCHANT_CODE,amount:total,currency:'EUR',checkout_reference:id,description:`Encomenda Maelle ${id.slice(0,8)}`,hosted_checkout:{enabled:true},redirect_url:`${origin}/pagamento.html?pedido=${id}`})});
+  return_url:`${origin}/api/sumup-webhook`
   const result=await payment.json().catch(()=>({}));
   console.error('Diagnostico SumUp:', {
   status: payment.status,
