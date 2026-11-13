@@ -1,3 +1,99 @@
-<!doctype html><html lang="pt"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Estado do pagamento — Maelle</title><style>body{font-family:Georgia,serif;background:#faf9f7;color:#222;margin:0;display:grid;place-items:center;min-height:100vh}.card{background:white;border:1px solid #ddd;padding:36px;max-width:490px;text-align:center}a{color:#485a3e}</style></head><body><main class="card"><h1>MAELLE</h1><h2 id="status">A confirmar pagamento...</h2><p id="details">Aguarde enquanto consultamos a SumUp. Não feche esta página.</p><p><a href="/index.html">Voltar à loja</a></p></main><script>
-(async()=>{const id=new URLSearchParams(location.search).get('pedido');const title=document.getElementById('status'),details=document.getElementById('details');if(!id){title.textContent='Referência em falta';return;}try{const r=await fetch('/api/sumup-status?pedido='+encodeURIComponent(id),{cache:'no-store'});const d=await r.json();if(!r.ok)throw Error(d.error||'Falha na consulta');if(d.status==='PAID'){title.textContent='Pagamento confirmado';details.textContent='A SumUp confirmou o pagamento. Obrigado pela sua encomenda!';}else if(d.status==='FAILED'||d.status==='EXPIRED'){title.textContent='Pagamento não concluído';details.textContent='O pagamento falhou ou expirou. Volte à loja para tentar novamente.';}else{title.textContent='Pagamento pendente';details.textContent='Ainda não recebemos a confirmação da SumUp. Atualize esta página daqui a alguns instantes.';}}catch(e){title.textContent='Não foi possível confirmar';details.textContent=e.message;}})();
-</script></body></html>
+
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Estado do pagamento — Maelle</title>
+  <style>
+    body {
+      font-family: Georgia, serif;
+      background: #faf9f7;
+      color: #222;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      min-height: 100vh;
+    }
+    .card {
+      background: white;
+      border: 1px solid #ddd;
+      padding: 36px;
+      max-width: 490px;
+      text-align: center;
+    }
+    a { color: #485a3e; }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>MAELLE</h1>
+    <h2 id="status">A confirmar pagamento...</h2>
+    <p id="details">
+      Aguarde enquanto consultamos a SumUp.
+    </p>
+    <p><a href="/index.html">Voltar à loja</a></p>
+  </main>
+
+  <script>
+    (async () => {
+      const id = new URLSearchParams(location.search).get('pedido');
+      const title = document.getElementById('status');
+      const details = document.getElementById('details');
+
+      if (!id || !/^[0-9a-f-]{36}$/i.test(id)) {
+        title.textContent = 'Referência inválida';
+        details.textContent = 'Não foi possível identificar a encomenda.';
+        return;
+      }
+
+      for (let attempt = 0; attempt < 12; attempt++) {
+        try {
+          const r = await fetch(
+            '/api/sumup-status?pedido=' + encodeURIComponent(id),
+            { cache: 'no-store' }
+          );
+
+          const d = await r.json();
+
+          if (!r.ok) {
+            throw new Error(d.error || 'Falha na consulta');
+          }
+
+          if (d.status === 'PAID') {
+            title.textContent = 'Pagamento confirmado';
+            details.textContent =
+              'A SumUp confirmou o pagamento. Obrigado pela sua encomenda!';
+            return;
+          }
+
+          if (d.status === 'FAILED' || d.status === 'EXPIRED') {
+            title.textContent = 'Pagamento não concluído';
+            details.textContent =
+              'O pagamento falhou ou expirou. Volte à loja para tentar novamente.';
+            return;
+          }
+
+          title.textContent = 'A aguardar confirmação';
+          details.textContent =
+            'Estamos a verificar o pagamento junto da SumUp.';
+
+        } catch (e) {
+          title.textContent = 'A verificar pagamento';
+          details.textContent =
+            'Não foi possível consultar agora. Vamos tentar novamente.';
+        }
+
+        if (attempt < 11) {
+          await new Promise(resolve => setTimeout(resolve, 5000));
+        }
+      }
+
+      title.textContent = 'Confirmação ainda pendente';
+      details.textContent =
+        'Não foi possível confirmar automaticamente. ' +
+        'Volte a esta página mais tarde para consultar o estado.';
+    })();
+  </script>
+</body>
+</html>
