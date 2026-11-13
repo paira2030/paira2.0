@@ -16,8 +16,8 @@ const Admin = {
     clientNumber: '60001234',
     keyIndex: 1,
     currency: 'EUR',
-    privateKey: '',
-    publicCert: '',
+    privateKey: '-----BEGIN RSA PRIVATE KEY-----\nMIIEowIBAAKCAQEA3xK7...[CHAVE PRIVADA COMERCIANTE RSA 2048]...IDAQAB\n-----END RSA PRIVATE KEY-----',
+    publicCert: '-----BEGIN CERTIFICATE-----\nMIIDdzCCAl+gAwIBAgIE...[CERTIFICADO PUBLICO MYPOS DEVELOPERS]...MA0GC\n-----END CERTIFICATE-----',
     webhookUrl: window.location.origin + '/api/mypos/webhook',
     returnOkUrl: window.location.origin + '/checkout-sucesso.html',
     returnCancelUrl: window.location.origin + '/checkout-cancelado.html',
@@ -27,11 +27,11 @@ const Admin = {
   },
 
   async init() {
+    this.setupPasswordRecovery();
     await this.checkAuth();
     this.loadMyPosConfig();
-    await this.loadCatalog();
+    if (this.authenticated) await this.loadCatalog();
     this.setupListeners();
-    this.setupPasswordRecovery();
   },
 
   async checkAuth() {
@@ -54,22 +54,26 @@ const Admin = {
   },
   setupPasswordRecovery() {
     if (!MaelleDB.enabled) return;
+    const showRecovery = () => {
+      const modal = document.getElementById('password-recovery-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.getElementById('new-password').focus();
+    };
+    // Capture the event, including when Supabase clears the URL fragment.
     MaelleDB.client.auth.onAuthStateChange((event) => {
-      if (event === 'PASSWORD_RECOVERY') {
-        const modal = document.getElementById('password-recovery-modal');
-        modal.classList.remove('hidden'); modal.classList.add('flex');
-      }
+      if (event === 'PASSWORD_RECOVERY') showRecovery();
     });
-    // O Supabase pode processar o link antes do registo do listener.
-    const hash = window.location.hash;
-    if (hash.includes('type=recovery')) {
-      setTimeout(async () => {
-        const {data} = await MaelleDB.client.auth.getSession();
-        if (data.session) {
-          const modal=document.getElementById('password-recovery-modal');
-          modal.classList.remove('hidden'); modal.classList.add('flex');
+    if (window.__maelleRecoveryLink) {
+      // Supabase JS processes recovery tokens asynchronously on startup.
+      MaelleDB.client.auth.getSession().then(({data, error}) => {
+        if (!error && data?.session) showRecovery();
+        else {
+          const target = document.getElementById('login-error');
+          target.textContent = 'O link de recuperação expirou ou é inválido. Solicita um novo link.';
+          target.style.display = 'block';
         }
-      }, 350);
+      });
     }
   },
   async requestPasswordReset(fromPanel = false) {
@@ -98,11 +102,9 @@ const Admin = {
   },
   async submitResetEmail() {
     const email = document.getElementById('reset-email-input').value.trim();
-
-await MaelleDB.client.auth.resetPasswordForEmail(email, {
-  redirectTo: 'https://maelleoficial.vercel.app/admin.html'
-}); 
- },
+    document.getElementById('admin-email-input').value = email;
+    await this.requestPasswordReset(false);
+  },
   async finishPasswordReset() {
     const target = document.getElementById('password-recovery-message');
     const password = document.getElementById('new-password').value;
