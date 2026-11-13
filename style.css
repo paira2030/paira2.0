@@ -1,6 +1,6 @@
 /* ============================================================
-   PAIRA LISBOA - DESIGN SYSTEM & EDITORIAL STYLING
-   Inspirado no visual minimalista e de alta-costura de payra.pt
+   MAELLE - DESIGN SYSTEM & EDITORIAL STYLING
+   Design System editorial minimalista e de alta-costura
    ============================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
@@ -415,3 +415,18 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--grafite);
 }
+
+/* Galeria de produto Maelle — fotografias em duas colunas */
+.maelle-product-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;align-items:start}
+.maelle-product-gallery.maelle-gallery-single{grid-template-columns:1fr}
+.maelle-gallery-item{display:block;width:100%;aspect-ratio:3/4;overflow:hidden;background:#f2f0eb;border:0;padding:0;cursor:zoom-in}
+.maelle-gallery-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .25s ease}
+.maelle-gallery-item:hover img{transform:scale(1.035)}
+.maelle-gallery-item:focus-visible{outline:3px solid #555;outline-offset:2px}
+.maelle-photo-lightbox[hidden]{display:none!important}
+.maelle-photo-lightbox{position:fixed;inset:0;z-index:9999;background:rgba(15,15,15,.94);display:flex;align-items:center;justify-content:center;padding:55px 45px}
+.maelle-photo-lightbox img{max-width:100%;max-height:100%;object-fit:contain}
+.maelle-photo-lightbox button{position:absolute;color:white;font-size:40px;background:rgba(0,0,0,.3);border:0;cursor:pointer;padding:5px 14px}
+.maelle-photo-close{right:12px;top:8px}.maelle-photo-prev{left:5px;top:50%;transform:translateY(-50%)}.maelle-photo-next{right:5px;top:50%;transform:translateY(-50%)}
+.maelle-photo-count{position:absolute;bottom:12px;color:white;font-size:13px}
+@media(max-width:640px){.maelle-product-gallery{gap:4px}.maelle-photo-lightbox{padding:55px 35px}}

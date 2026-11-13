@@ -1,73 +1,117 @@
 /**
- * PAIRA LISBOA - Painel Administrativo ADM
- * Gestão de Catálogo e Configurações do Gateway developers.mypos
+ * MAELLE - Painel Administrativo ADM
+ * Gestão de Catálogo Maelle e pagamentos SumUp
  */
 
 const Admin = {
   authenticated: false,
-  masterPin: 'paira2026',
   products: [],
+  editingImages: [],
   currentTab: 'produtos',
 
-  // Configuração padrão do myPOS
-  myposConfig: {
-    mode: 'sandbox',
-    storeId: '00000012',
-    clientNumber: '60001234',
-    keyIndex: 1,
-    currency: 'EUR',
-    privateKey: '-----BEGIN RSA PRIVATE KEY-----\nMIIEowIBAAKCAQEA3xK7...[CHAVE PRIVADA COMERCIANTE RSA 2048]...IDAQAB\n-----END RSA PRIVATE KEY-----',
-    publicCert: '-----BEGIN CERTIFICATE-----\nMIIDdzCCAl+gAwIBAgIE...[CERTIFICADO PUBLICO MYPOS DEVELOPERS]...MA0GC\n-----END CERTIFICATE-----',
-    webhookUrl: window.location.origin + '/api/mypos/webhook',
-    returnOkUrl: window.location.origin + '/checkout-sucesso.html',
-    returnCancelUrl: window.location.origin + '/checkout-cancelado.html',
-    enableMbway: true,
-    enableMultibanco: true,
-    enableCards: true
-  },
 
   async init() {
-    this.checkAuth();
-    this.loadMyPosConfig();
-    await this.loadCatalog();
+    this.setupPasswordRecovery();
+    await this.checkAuth();
+    if (this.authenticated) await this.loadCatalog();
     this.setupListeners();
   },
 
-  checkAuth() {
-    const isAuth = sessionStorage.getItem('paira_admin_auth');
-    if (isAuth === 'true') {
-      this.authenticated = true;
-      document.getElementById('auth-gate').style.display = 'none';
-      document.getElementById('admin-dashboard').style.display = 'block';
-      this.renderProductsTable();
-      this.populateMyPosFields();
-    } else {
-      document.getElementById('auth-gate').style.display = 'flex';
-      document.getElementById('admin-dashboard').style.display = 'none';
+  async checkAuth() {
+    try {
+      this.authenticated = MaelleDB.enabled ? await MaelleDB.isAdmin() : false;
+    } catch(e) { console.error(e); this.authenticated = false; }
+    document.getElementById('auth-gate').style.display = this.authenticated ? 'none' : 'flex';
+    document.getElementById('admin-dashboard').style.display = this.authenticated ? 'block' : 'none';
+    if (this.authenticated) {
+      await this.loadCatalog(); this.renderProductsTable();
     }
   },
-
-  login() {
+  async login() {
     const pin = document.getElementById('admin-pin-input').value;
-    if (pin === this.masterPin) {
-      sessionStorage.setItem('paira_admin_auth', 'true');
-      this.authenticated = true;
-      this.checkAuth();
-    } else {
-      const err = document.getElementById('login-error');
-      err.textContent = 'Palavra-passe / PIN de administrador incorreto.';
-      err.style.display = 'block';
+    try {
+      if (MaelleDB.enabled) await MaelleDB.loginWithPasswordOnly(pin);
+      else throw new Error('Supabase não configurado. Verifique js/supabase-config.js.');
+      await this.checkAuth();
+    } catch(e) { const el=document.getElementById('login-error'); el.textContent=e.message; el.style.display='block'; }
+  },
+  setupPasswordRecovery() {
+    if (!MaelleDB.enabled) return;
+    const showRecovery = () => {
+      const modal = document.getElementById('password-recovery-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.getElementById('new-password').focus();
+    };
+    // Capture the event, including when Supabase clears the URL fragment.
+    MaelleDB.client.auth.onAuthStateChange((event) => {
+      if (event === 'PASSWORD_RECOVERY') showRecovery();
+    });
+    if (window.__maelleRecoveryLink) {
+      // Supabase JS processes recovery tokens asynchronously on startup.
+      MaelleDB.client.auth.getSession().then(({data, error}) => {
+        if (!error && data?.session) showRecovery();
+        else {
+          const target = document.getElementById('login-error');
+          target.textContent = 'O link de recuperação expirou ou é inválido. Solicita um novo link.';
+          target.style.display = 'block';
+        }
+      });
     }
   },
-
-  logout() {
-    sessionStorage.removeItem('paira_admin_auth');
-    window.location.reload();
+  async requestPasswordReset(fromPanel = false) {
+    const target = document.getElementById(fromPanel ? 'security-message' : 'login-error');
+    target.style.display = 'block';
+    if (!MaelleDB.enabled) { target.textContent = 'Configura primeiro o Project URL e a Publishable Key do Supabase.'; return; }
+    let email = document.getElementById('admin-email-input').value.trim();
+    if (fromPanel) {
+      const {data} = await MaelleDB.client.auth.getUser();
+      email = data.user?.email || '';
+    }
+    if (!email && !fromPanel) {
+      const form = document.getElementById('reset-email-form');
+      form.classList.remove('hidden');
+      document.getElementById('reset-email-input').focus();
+      target.textContent = 'Introduz o email da conta Supabase no campo abaixo e clica em Enviar link.';
+      return;
+    }
+    if (!email) { target.textContent = 'Introduz o teu email de administrador.'; return; }
+    try {
+      const redirectTo = new URL('admin.html', window.location.href).href.split('#')[0];
+      const {error} = await MaelleDB.client.auth.resetPasswordForEmail(email, {redirectTo});
+      if (error) throw error;
+      target.textContent = 'Se o email estiver registado, receberás um link para redefinir a senha. Verifica também o spam.';
+    } catch(e) { target.textContent = 'Não foi possível enviar: ' + e.message; }
+  },
+  async submitResetEmail() {
+    const email = document.getElementById('reset-email-input').value.trim();
+    document.getElementById('admin-email-input').value = email;
+    await this.requestPasswordReset(false);
+  },
+  async finishPasswordReset() {
+    const target = document.getElementById('password-recovery-message');
+    const password = document.getElementById('new-password').value;
+    const confirmation = document.getElementById('confirm-password').value;
+    if (password.length < 12 || password !== confirmation) {
+      target.textContent = 'Usa pelo menos 12 caracteres e confirma a mesma senha.'; return;
+    }
+    try {
+      const {error} = await MaelleDB.client.auth.updateUser({password});
+      if (error) throw error;
+      target.textContent = 'Senha alterada. Entra novamente com a nova senha.';
+      await MaelleDB.client.auth.signOut();
+      setTimeout(() => window.location.replace('admin.html'), 1300);
+    } catch(e) { target.textContent = 'Erro ao alterar senha: ' + e.message; }
+  },
+  async logout() {
+    if(MaelleDB.enabled) await MaelleDB.client.auth.signOut();
+    sessionStorage.removeItem('maelle_admin_auth'); window.location.reload();
   },
 
   async loadCatalog() {
     try {
-      const localCustom = localStorage.getItem('paira_custom_products');
+      if (MaelleDB.enabled) { this.products = await MaelleDB.list(); return; }
+      const localCustom = localStorage.getItem('maelle_custom_products');
       if (localCustom) {
         this.products = JSON.parse(localCustom);
       } else {
@@ -82,76 +126,8 @@ const Admin = {
   },
 
   saveCatalog() {
-    localStorage.setItem('paira_custom_products', JSON.stringify(this.products));
-  },
-
-  loadMyPosConfig() {
-    const saved = localStorage.getItem('paira_mypos_config');
-    if (saved) {
-      try {
-        this.myposConfig = Object.assign(this.myposConfig, JSON.parse(saved));
-      } catch (e) {}
-    }
-  },
-
-  saveMyPosConfig() {
-    this.myposConfig.mode = document.getElementById('mypos-mode').value;
-    this.myposConfig.storeId = document.getElementById('mypos-store-id').value;
-    this.myposConfig.clientNumber = document.getElementById('mypos-client-number').value;
-    this.myposConfig.keyIndex = parseInt(document.getElementById('mypos-key-index').value) || 1;
-    this.myposConfig.currency = document.getElementById('mypos-currency').value;
-    this.myposConfig.webhookUrl = document.getElementById('mypos-webhook').value;
-    this.myposConfig.returnOkUrl = document.getElementById('mypos-url-ok').value;
-    this.myposConfig.returnCancelUrl = document.getElementById('mypos-url-cancel').value;
-    this.myposConfig.privateKey = document.getElementById('mypos-private-key').value;
-    this.myposConfig.publicCert = document.getElementById('mypos-public-cert').value;
-
-    this.myposConfig.enableMbway = document.getElementById('mypos-method-mbway').checked;
-    this.myposConfig.enableMultibanco = document.getElementById('mypos-method-multibanco').checked;
-    this.myposConfig.enableCards = document.getElementById('mypos-method-cards').checked;
-
-    localStorage.setItem('paira_mypos_config', JSON.stringify(this.myposConfig));
-    this.showAdminToast('Configurações do developers.mypos guardadas com sucesso!');
-  },
-
-  populateMyPosFields() {
-    document.getElementById('mypos-mode').value = this.myposConfig.mode;
-    document.getElementById('mypos-store-id').value = this.myposConfig.storeId;
-    document.getElementById('mypos-client-number').value = this.myposConfig.clientNumber;
-    document.getElementById('mypos-key-index').value = this.myposConfig.keyIndex;
-    document.getElementById('mypos-currency').value = this.myposConfig.currency;
-    document.getElementById('mypos-webhook').value = this.myposConfig.webhookUrl;
-    document.getElementById('mypos-url-ok').value = this.myposConfig.returnOkUrl;
-    document.getElementById('mypos-url-cancel').value = this.myposConfig.returnCancelUrl;
-    document.getElementById('mypos-private-key').value = this.myposConfig.privateKey;
-    document.getElementById('mypos-public-cert').value = this.myposConfig.publicCert;
-
-    document.getElementById('mypos-method-mbway').checked = !!this.myposConfig.enableMbway;
-    document.getElementById('mypos-method-multibanco').checked = !!this.myposConfig.enableMultibanco;
-    document.getElementById('mypos-method-cards').checked = !!this.myposConfig.enableCards;
-  },
-
-  testMyPosConnection() {
-    const statusBox = document.getElementById('mypos-test-result');
-    statusBox.style.display = 'block';
-    statusBox.innerHTML = `
-      <div class="p-3 bg-oliva/10 border border-oliva text-oliva text-xs flex items-center gap-2">
-        <svg class="animate-spin" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
-        A validar handshake criptográfico com https://developers.mypos.com (Ambiente: ${this.myposConfig.mode.toUpperCase()})...
-      </div>
-    `;
-
-    setTimeout(() => {
-      statusBox.innerHTML = `
-        <div class="p-3 bg-sucesso/10 border border-sucesso text-sucesso text-xs">
-          <strong>Conexão Bem-Sucedida!</strong><br/>
-          Gateway: <code>myPOS Checkout IPC API v1.4</code><br/>
-          Assinatura Digital SHA-256: <code>VÁLIDA</code><br/>
-          Store ID: <code>${this.myposConfig.storeId}</code> | Moeda: <code>EUR (€)</code><br/>
-          Métodos ativos em Portugal: Multibanco, MB WAY, Cartão Visa/Mastercard 3DS2.
-        </div>
-      `;
-    }, 1200);
+    if (MaelleDB.enabled) return;
+    localStorage.setItem('maelle_custom_products', JSON.stringify(this.products));
   },
 
   switchTab(tab) {
@@ -167,7 +143,7 @@ const Admin = {
     });
 
     document.getElementById('tab-produtos').style.display = tab === 'produtos' ? 'block' : 'none';
-    document.getElementById('tab-mypos').style.display = tab === 'mypos' ? 'block' : 'none';
+    document.getElementById('tab-sumup').style.display = tab === 'sumup' ? 'block' : 'none';
   },
 
   renderProductsTable() {
@@ -214,6 +190,9 @@ const Admin = {
     document.getElementById('prod-form-stock').value = '15';
     document.getElementById('prod-form-tag').value = 'Novo';
     document.getElementById('prod-form-image').value = 'assets/images/produtos/vestidos/rona-v-neck-cutout-sleeveless-maxi-dress.webp';
+    this.editingImages = [];
+    this.renderImagePreviews();
+    document.getElementById('prod-form-files').value = '';
     document.getElementById('prod-form-desc').value = 'Peça confecionada com materiais de alta qualidade e corte editorial contemporâneo.';
     document.getElementById('product-edit-modal').classList.add('active');
   },
@@ -231,7 +210,10 @@ const Admin = {
     document.getElementById('prod-form-old-price').value = p.oldPrice || '';
     document.getElementById('prod-form-stock').value = p.stock || 10;
     document.getElementById('prod-form-tag').value = p.tag || '';
-    document.getElementById('prod-form-image').value = p.localImage;
+    document.getElementById('prod-form-image').value = p.localImage?.startsWith('data:') ? '' : (p.localImage || '');
+    this.editingImages = Array.isArray(p.images) ? [...p.images] : (p.localImage ? [p.localImage] : []);
+    this.renderImagePreviews();
+    document.getElementById('prod-form-files').value = '';
     document.getElementById('prod-form-desc').value = p.description || '';
     document.getElementById('product-edit-modal').classList.add('active');
   },
@@ -240,7 +222,7 @@ const Admin = {
     document.getElementById('product-edit-modal').classList.remove('active');
   },
 
-  saveProductForm(e) {
+  async saveProductForm(e) {
     e.preventDefault();
     const idx = parseInt(document.getElementById('prod-form-index').value);
 
@@ -253,7 +235,8 @@ const Admin = {
       oldPrice: parseFloat(document.getElementById('prod-form-old-price').value) || 0,
       stock: parseInt(document.getElementById('prod-form-stock').value) || 10,
       tag: document.getElementById('prod-form-tag').value,
-      localImage: document.getElementById('prod-form-image').value,
+      localImage: this.editingImages[0] || document.getElementById('prod-form-image').value,
+      images: [...this.editingImages],
       description: document.getElementById('prod-form-desc').value,
       sizes: ['XS', 'S', 'M', 'L'],
       colors: ['Creme', 'Preto'],
@@ -261,6 +244,17 @@ const Admin = {
       reviewsCount: 12
     };
 
+    if (!productData.localImage) { this.showAdminToast('Escolha uma imagem para o produto.'); return; }
+    const previousProduct = idx >= 0 ? this.products[idx] : null;
+    if (MaelleDB.enabled) {
+      try {
+        if (previousProduct) productData.dbId = previousProduct.dbId;
+        await MaelleDB.save(productData);
+        await this.loadCatalog(); this.renderProductsTable(); this.closeProductEditModal();
+        this.showAdminToast('Produto guardado online com sucesso!');
+      } catch(err) { console.error(err); this.showAdminToast('Erro ao guardar online: '+err.message); }
+      return;
+    }
     if (idx === -1) {
       this.products.unshift(productData);
       this.showAdminToast('Nova peça adicionada com sucesso!');
@@ -269,13 +263,22 @@ const Admin = {
       this.showAdminToast('Peça atualizada com sucesso!');
     }
 
-    this.saveCatalog();
+    try { this.saveCatalog(); } catch (error) {
+      if (idx === -1) this.products.shift();
+      else this.products[idx] = previousProduct;
+      this.showAdminToast('Armazenamento cheio. Escolha menos imagens ou imagens menores.'); return;
+    }
     this.renderProductsTable();
     this.closeProductEditModal();
   },
 
-  deleteProduct(index) {
+  async deleteProduct(index) {
     if (confirm(`Tem a certeza que deseja eliminar "${this.products[index].title}"?`)) {
+      if (MaelleDB.enabled) {
+        try { await MaelleDB.remove(this.products[index]); await this.loadCatalog(); this.renderProductsTable(); this.showAdminToast('Produto removido online.'); }
+        catch(err) { this.showAdminToast('Erro: '+err.message); }
+        return;
+      }
       this.products.splice(index, 1);
       this.saveCatalog();
       this.renderProductsTable();
@@ -306,6 +309,39 @@ const Admin = {
     setTimeout(() => { t.style.display = 'none'; }, 3000);
   },
 
+  async handleProductImages(files) {
+    for (const file of [...files]) {
+      if (!['image/jpeg','image/png','image/webp'].includes(file.type)) { this.showAdminToast('Formato não suportado.'); continue; }
+      if (file.size > 8 * 1024 * 1024) { this.showAdminToast('Imagem acima de 8 MB.'); continue; }
+      try {
+        const img = await createImageBitmap(file);
+        const scale = Math.min(1, 900 / Math.max(img.width, img.height));
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.max(1, Math.round(img.width * scale));
+        canvas.height = Math.max(1, Math.round(img.height * scale));
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height); img.close();
+        this.editingImages.push(canvas.toDataURL('image/jpeg', 0.72));
+      } catch (error) { this.showAdminToast('Não foi possível ler uma imagem.'); }
+    }
+    this.renderImagePreviews();
+  },
+  renderImagePreviews() {
+    const box = document.getElementById('prod-image-previews'); if (!box) return;
+    box.replaceChildren();
+    this.editingImages.forEach((src, index) => {
+      const wrapper = document.createElement('div'); wrapper.className = 'flex flex-col gap-1 items-center';
+      const image = document.createElement('img'); image.src = src; image.alt = 'Foto ' + (index + 1);
+      image.className = 'w-20 h-24 object-cover border cursor-pointer ' + (index === 0 ? 'border-oliva border-2' : 'border-costura');
+      image.title = 'Definir como imagem principal'; image.onclick = () => {
+        const selected = this.editingImages.splice(index, 1)[0]; this.editingImages.unshift(selected); this.renderImagePreviews();
+      };
+      const remove = document.createElement('button'); remove.type = 'button'; remove.textContent = index === 0 ? 'Principal · Remover' : 'Remover';
+      remove.className = 'text-xs underline'; remove.onclick = () => { this.editingImages.splice(index, 1); this.renderImagePreviews(); };
+      wrapper.append(image, remove); box.append(wrapper);
+    });
+  },
   setupListeners() {
     document.querySelectorAll('.admin-nav-btn').forEach(btn => {
       btn.addEventListener('click', () => {

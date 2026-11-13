@@ -1,0 +1,607 @@
+﻿[
+    {
+        "id":  "PAIR-001",
+        "localImage":  "assets/images/produtos/vestidos/rona-v-neck-cutout-sleeveless-maxi-dress.webp",
+        "sizes":  [
+                      "XS",
+                      "S",
+                      "M",
+                      "L",
+                      "XL"
+                  ],
+        "title":  "Vestido Maxi Rona sem Mangas com Decote em V e Recortes",
+        "colors":  [
+                       "Creme Suave",
+                       "Preto Noite",
+                       "Terracota"
+                   ],
+        "category":  "vestidos",
+        "rating":  4.9,
+        "price":  49.99,
+        "description":  "Vestido comprido fluido com decote em V pronunciado e recortes laterais elegantes que desenham a silhueta. Tecido com toque acetinado, fendas discretas e acabamento impecÃ¡vel. Ideal para ocasiÃµes especiais e noites de verÃ£o.",
+        "reviewsCount":  42,
+        "slug":  "rona-v-neck-cutout-sleeveless-maxi-dress",
+        "categoryFolder":  "vestidos",
+        "stock":  18,
+        "tag":  "Best-seller",
+        "oldPrice":  64.99,
+        "composition":  "95% PoliÃ©ster Premium, 5% Elastano. Forro: 100% Viscose."
+    },
+    {
+        "id":  "PAIR-002",
+        "localImage":  "assets/images/produtos/tops-e-blusas/audrey-polka-dot-tank-top.webp",
+        "sizes":  [
+                      "XS",
+                      "S",
+                      "M",
+                      "L"
+                  ],
+        "title":  "Top Audrey de AlÃ§as com Bolinhas",
+        "colors":  [
+                       "Creme e Bolinhas Negras",
+                       "Preto e Bolinhas Creme"
+                   ],
+        "category":  "tops",
+        "rating":  4.8,
+        "price":  39.99,
+        "description":  "Top de alÃ§as finas regulÃ¡veis com padrÃ£o clÃ¡ssico de bolinhas (polka dots) sobre fundo creme. Decote direito de alfaiataria leve com fecho invisÃ­vel lateral.",
+        "reviewsCount":  38,
+        "slug":  "audrey-polka-dot-tank-top",
+        "categoryFolder":  "tops-e-blusas",
+        "stock":  25,
+        "tag":  "Best-seller",
+        "oldPrice":  49.99,
+        "composition":  "100% Seda SintÃ©tica de Toque Seco."
+    },
+    {
+        "id":  "PAIR-003",
+        "localImage":  "assets/images/produtos/tops-e-blusas/julianne-v-neck-sleeveless-satin-lace-blouse.webp",
+        "sizes":  [
+                      "XS",
+                      "S",
+                      "M",
+                      "L",
+                      "XL"
+                  ],
+        "title":  "Blusa Julianne em Cetim com Decote em V e Renda",
+        "colors":  [
+                       "Champanhe",
+                       "Preto Seda",
+                       "Verde Oliva"
+                   ],
+        "category":  "tops",
+        "rating":  5,
+        "price":  39.99,
+        "description":  "Blusa refinada em cetim luminoso com aplicaÃ§Ã£o de renda chantilly no decote e cavas. Uma peÃ§a versÃ¡til indispensÃ¡vel para elevar qualquer conjunto casual ou formal.",
+        "reviewsCount":  29,
+        "slug":  "julianne-v-neck-sleeveless-satin-lace-blouse",
+        "categoryFolder":  "tops-e-blusas",
+        "stock":  14,
+        "tag":  "Best-seller",
+        "oldPrice":  49.99,
+        "composition":  "97% PoliÃ©ster Acetinado, 3% Elastano."
+    },
+    {
+        "id":  "PAIR-004",
+        "localImage":  "assets/images/produtos/casacos-e-blazers/taylor-lace-panel-tailored-blazer.webp",
+        "sizes":  [
+                      "S",
+                      "M",
+                      "L"
+                  ],
+        "title":  "Blazer Taylor com PainÃ©is de Renda",
+        "colors":  [
+                       "Preto Intenso",
+                       "Marfim Nobre"
+                   ],
+        "category":  "casacos",
+        "rating":  4.9,
+        "price":  59.99,
+        "description":  "Blazer de alfaiataria estruturado com abotoadura simples e inserÃ§Ãµes transparentes em renda geomÃ©trica nas mangas e cintura. Caimento impecÃ¡vel com ombreiras leves.",
+        "reviewsCount":  31,
+        "slug":  "taylor-lace-panel-tailored-blazer",
+        "categoryFolder":  "casacos-e-blazers",
+        "stock":  10,
+        "tag":  "Best-seller",
+        "oldPrice":  79.99,
+        "composition":  "70% PoliÃ©ster, 25% Viscose, 5% Spandex."
+    },
+    {
+        "id":  "PAIR-005",
+        "localImage":  "assets/images/produtos/casacos-e-blazers/lucia-funnel-neck-lace-up-kimono-coat.webp",
+        "sizes":  [
+                      "Tamanho Ãšnico (Oversized XS-L)"
+                  ],
+        "title":  "Casaco Kimono Lucia com Gola Alta e Atacadores",
+        "colors":  [
+                       "Linho Cru",
+                       "Areia"
+                   ],
+        "category":  "casacos",
+        "rating":  4.9,
+        "price":  69.99,
+        "description":  "Sobretudo leve estilo quimono com gola funil escultural, mangas amplas e cinto ajustÃ¡vel na mesma matÃ©ria. O equilÃ­brio exato entre o corte oriental e o estilo urbano europeu.",
+        "reviewsCount":  22,
+        "slug":  "lucia-funnel-neck-lace-up-kimono-coat",
+        "categoryFolder":  "casacos-e-blazers",
+        "stock":  12,
+        "tag":  "Best-seller",
+        "oldPrice":  89.99,
+        "composition":  "65% AlgodÃ£o, 35% Linho Encorpado."
+    },
+    {
+        "id":  "PAIR-006",
+        "localImage":  "assets/images/produtos/casacos-e-blazers/melanie-stand-up-collar-short-trench-coat.webp",
+        "sizes":  [
+                      "XS",
+                      "S",
+                      "M",
+                      "L"
+                  ],
+        "title":  "Melanie Trench Coat Curto com Gola Alta",
+        "colors":  [
+                       "Camel Tradicional",
+                       "CÃ¡qui Suave"
+                   ],
+        "category":  "casacos",
+        "rating":  5,
+        "price":  69.99,
+        "description":  "ReinterpretaÃ§Ã£o moderna do icÃ³nico trench coat em comprimento crop. Lapelas volumosas, botÃµes tartaruga e punhos franzidos com fivelas metÃ¡licas.",
+        "reviewsCount":  19,
+        "slug":  "melanie-stand-up-collar-short-trench-coat",
+        "categoryFolder":  "casacos-e-blazers",
+        "stock":  8,
+        "tag":  "Best-seller",
+        "oldPrice":  89.99,
+        "composition":  "100% Sarja de AlgodÃ£o Repelente Ã  Ãgua."
+    },
+    {
+        "id":  "PAIR-007",
+        "localImage":  "assets/images/produtos/casacos-e-blazers/rachelle-cropped-faux-leather-jacket.webp",
+        "sizes":  [
+                      "XS",
+                      "S",
+                      "M",
+                      "L"
+                  ],
+        "title":  "Casaco Curto Rachelle em Pele SintÃ©tica",
+        "colors":  [
+                       "Preto Matte",
+                       "CafÃ©"
+                   ],
+        "category":  "casacos",
+        "rating":  4.7,
+        "price":  49.99,
+        "description":  "BlusÃ£o biker contemporÃ¢neo confecionado em pele sintÃ©tica macia de toque genuÃ­no. Fecho assimÃ©trico prateado, gola com molas de pressÃ£o e corte curto acima da anca.",
+        "reviewsCount":  26,
+        "slug":  "rachelle-cropped-faux-leather-jacket",
+        "categoryFolder":  "casacos-e-blazers",
+        "stock":  15,
+        "tag":  "Best-seller",
+        "oldPrice":  69.99,
+        "composition":  "100% Poliuretano. Forro: 100% PoliÃ©ster reciclado."
+    },
+    {
+        "id":  "PAIR-008",
+        "localImage":  "assets/images/produtos/tops-e-blusas/vivian-v-neck-puff-long-sleeve-blouse.webp",
+        "sizes":  [
+                      "XS",
+                      "S",
+                      "M",
+                      "L",
+                      "XL"
+                  ],
+        "title":  "Blusa Vivian Decote em V com Mangas Bufantes",
+        "colors":  [
+                       "Branco AlgodÃ£o",
+                       "Azul NÃ©voa"
+                   ],
+        "category":  "tops",
+        "rating":  4.8,
+        "price":  39.99,
+        "description":  "Blusa romÃ¢ntica com mangas em balÃ£o dramÃ¡ticas, punhos ajustados e decote em V clÃ¡ssico. Tecido leve e translÃºcido com textura sutil.",
+        "reviewsCount":  33,
+        "slug":  "vivian-v-neck-puff-long-sleeve-blouse",
+        "categoryFolder":  "tops-e-blusas",
+        "stock":  20,
+        "tag":  "Best-seller",
+        "oldPrice":  49.99,
+        "composition":  "100% Chiffon de PoliÃ©ster Premium."
+    },
+    {
+        "id":  "PAIR-009",
+        "localImage":  "assets/images/produtos/conjuntos-e-saias/connie-swiss-dot-ruffled-crop-top-skirt-set.webp",
+        "sizes":  [
+                      "XS",
+                      "S",
+                      "M",
+                      "L"
+                  ],
+        "title":  "Conjunto Connie Top Curto com Folhos e Saia Swiss Dot",
+        "colors":  [
+                       "Branco Puro",
+                       "Lavanda PÃ¡lido"
+                   ],
+        "category":  "conjuntos",
+        "rating":  4.9,
+        "price":  49.99,
+        "description":  "Coordenado composto por top cropped de ombros descaÃ­dos com folhos delicados e saia midi em camadas com motivo swiss dot texturado. Cintura elÃ¡stica com laÃ§o frontal.",
+        "reviewsCount":  45,
+        "slug":  "connie-swiss-dot-ruffled-crop-top-skirt-set",
+        "categoryFolder":  "conjuntos-e-saias",
+        "stock":  16,
+        "tag":  "Best-seller",
+        "oldPrice":  64.99,
+        "composition":  "100% AlgodÃ£o Plumeti."
+    },
+    {
+        "id":  "PAIR-010",
+        "localImage":  "assets/images/produtos/conjuntos-e-saias/lena-jacquard-lace-tiered-mini-skirt.webp",
+        "sizes":  [
+                      "XS",
+                      "S",
+                      "M",
+                      "L"
+                  ],
+        "title":  "Saia Mini Lena Jacquard em Renda e Camadas",
+        "colors":  [
+                       "PÃ©rola",
+                       "Preto ClÃ¡ssico"
+                   ],
+        "category":  "conjuntos",
+        "rating":  4.8,
+        "price":  39.99,
+        "description":  "Minisaia estruturada em jacquard trabalhado com barras em renda bordada. Cintura alta modeladora e pequenos folhos assimÃ©tricos que conferem movimento.",
+        "reviewsCount":  27,
+        "slug":  "lena-jacquard-lace-tiered-mini-skirt",
+        "categoryFolder":  "conjuntos-e-saias",
+        "stock":  14,
+        "tag":  "Best-seller",
+        "oldPrice":  49.99,
+        "composition":  "85% AlgodÃ£o, 15% Poliamida."
+    },
+    {
+        "id":  "PAIR-011",
+        "localImage":  "assets/images/produtos/conjuntos-e-saias/lucy-backless-halter-jumpsuit.webp",
+        "sizes":  [
+                      "XS",
+                      "S",
+                      "M",
+                      "L"
+                  ],
+        "title":  "MacacÃ£o Lucy de Atar nas Costas",
+        "colors":  [
+                       "Terracota Sol",
+                       "Oliva Lisboa",
+                       "Preto Noite"
+                   ],
+        "category":  "conjuntos",
+        "rating":  4.9,
+        "price":  39.99,
+        "description":  "MacacÃ£o pantacourt com decote halter cruzado e costas totalmente abertas com laÃ§ada dramÃ¡tica. Perfeita transiÃ§Ã£o entre o dia Ã  beira-mar e o jantar sofisticado.",
+        "reviewsCount":  36,
+        "slug":  "lucy-backless-halter-jumpsuit",
+        "categoryFolder":  "conjuntos-e-saias",
+        "stock":  19,
+        "tag":  "Best-seller",
+        "oldPrice":  54.99,
+        "composition":  "70% Viscose, 30% Linho."
+    },
+    {
+        "id":  "PAIR-012",
+        "localImage":  "assets/images/produtos/vestidos/mona-floral-v-neck-midi-dress.webp",
+        "sizes":  [
+                      "XS",
+                      "S",
+                      "M",
+                      "L",
+                      "XL"
+                  ],
+        "title":  "Vestido Midi Mona com Decote em V e Estampa Floral",
+        "colors":  [
+                       "Floral Jardim Sintra",
+                       "Floral Noir"
+                   ],
+        "category":  "vestidos",
+        "rating":  4.9,
+        "price":  49.99,
+        "description":  "Vestido midi com padrÃ£o floral aguarelado exclusivo. Decote transpassado em V, mangas tulipa fluidas e cinto coordenado para realÃ§ar a cintura.",
+        "reviewsCount":  52,
+        "slug":  "mona-floral-v-neck-midi-dress",
+        "categoryFolder":  "vestidos",
+        "stock":  21,
+        "tag":  "Best-seller",
+        "oldPrice":  64.99,
+        "composition":  "100% Crepe de Seda SintÃ©tica."
+    },
+    {
+        "id":  "PAIR-013",
+        "localImage":  "assets/images/produtos/vestidos/lara-backless-strap-maxi-dress.webp",
+        "sizes":  [
+                      "XS",
+                      "S",
+                      "M",
+                      "L"
+                  ],
+        "title":  "Lara Vestido Comprido de AlÃ§as Sem Costas",
+        "colors":  [
+                       "Verde Oliva",
+                       "Castanho Chocolate",
+                       "Creme Areia"
+                   ],
+        "category":  "vestidos",
+        "rating":  4.8,
+        "price":  49.99,
+        "description":  "Vestido maxi de linhas puras com alÃ§as esparguete cruzadas na parte posterior. Saia fluida de caimento solto e decote minimalista quadrado.",
+        "reviewsCount":  41,
+        "slug":  "lara-backless-strap-maxi-dress",
+        "categoryFolder":  "vestidos",
+        "stock":  17,
+        "tag":  "Best-seller",
+        "oldPrice":  64.99,
+        "composition":  "92% Modal, 8% Elastano."
+    },
+    {
+        "id":  "PAIR-014",
+        "localImage":  "assets/images/produtos/vestidos/miranda-ribbed-knit-maxi-dress.webp",
+        "sizes":  [
+                      "XS",
+                      "S",
+                      "M",
+                      "L"
+                  ],
+        "title":  "Vestido Maxi Miranda em Malha Canelada",
+        "colors":  [
+                       "Taupe Mineral",
+                       "CarvÃ£o",
+                       "Cru"
+                   ],
+        "category":  "vestidos",
+        "rating":  5,
+        "price":  64.99,
+        "description":  "Vestido maxi confeccionado em malha fina canelada que abraÃ§a o corpo com conforto inigualÃ¡vel. Gola subida elegante e racha lateral discreta.",
+        "reviewsCount":  18,
+        "slug":  "miranda-ribbed-knit-maxi-dress",
+        "categoryFolder":  "vestidos",
+        "stock":  13,
+        "tag":  "Novo",
+        "oldPrice":  79.99,
+        "composition":  "60% Fio de AlgodÃ£o, 40% Viscose Suave."
+    },
+    {
+        "id":  "PAIR-015",
+        "localImage":  "assets/images/produtos/vestidos/elena-asymmetrical-lace-silk-satin-midi-dress.webp",
+        "sizes":  [
+                      "XS",
+                      "S",
+                      "M",
+                      "L"
+                  ],
+        "title":  "Vestido Midi AssimÃ©trico Elena em Renda e Cetim de Seda",
+        "colors":  [
+                       "Champanhe Dourado",
+                       "Bordeaux Noturno"
+                   ],
+        "category":  "vestidos",
+        "rating":  5,
+        "price":  64.99,
+        "description":  "Obra-prima de alfaiataria Ã­ntima convertida em vestuÃ¡rio de gala. Bainha assimÃ©trica com aplicaÃ§Ã£o de renda artesanal e corte em viÃ©s que alonga o porte.",
+        "reviewsCount":  15,
+        "slug":  "elena-asymmetrical-lace-silk-satin-midi-dress",
+        "categoryFolder":  "vestidos",
+        "stock":  9,
+        "tag":  "Novo",
+        "oldPrice":  84.99,
+        "composition":  "100% Cetim com Toque de Seda."
+    },
+    {
+        "id":  "PAIR-016",
+        "localImage":  "assets/images/produtos/vestidos/elara-lace-cami-maxi-dress.webp",
+        "sizes":  [
+                      "XS",
+                      "S",
+                      "M",
+                      "L"
+                  ],
+        "title":  "Vestido Maxi Elara em Renda com AlÃ§as tipo Cami",
+        "colors":  [
+                       "Marfim Vintage",
+                       "Preto Intenso"
+                   ],
+        "category":  "vestidos",
+        "rating":  4.9,
+        "price":  59.99,
+        "description":  "Slip dress reinventado com corpo em renda recortada, alÃ§as acetinadas regulÃ¡veis e forro em tons nude para efeito de sutil transparÃªncia.",
+        "reviewsCount":  20,
+        "slug":  "elara-lace-cami-maxi-dress",
+        "categoryFolder":  "vestidos",
+        "stock":  12,
+        "tag":  "Novo",
+        "oldPrice":  74.99,
+        "composition":  "90% Renda de Poliamida, 10% Spandex."
+    },
+    {
+        "id":  "PAIR-017",
+        "localImage":  "assets/images/produtos/vestidos/aliya-ruched-bandeau-mini-dress.webp",
+        "sizes":  [
+                      "XS",
+                      "S",
+                      "M",
+                      "L"
+                  ],
+        "title":  "Aliya Vestido Curto Bandeau Franzido",
+        "colors":  [
+                       "Azul MediterrÃ¢neo",
+                       "Terracota",
+                       "Preto"
+                   ],
+        "category":  "vestidos",
+        "rating":  4.8,
+        "price":  49.99,
+        "description":  "Vestido sem alÃ§as com decote reto estruturado por barbatanas leves e franzidos laterais personalizÃ¡veis por cordÃ£o. Tecido elÃ¡stico duplo para sustentaÃ§Ã£o Ã­mpar.",
+        "reviewsCount":  39,
+        "slug":  "aliya-ruched-bandeau-mini-dress",
+        "categoryFolder":  "vestidos",
+        "stock":  22,
+        "tag":  "Novo",
+        "oldPrice":  59.99,
+        "composition":  "88% Poliamida reciclada, 12% Elastano."
+    },
+    {
+        "id":  "PAIR-018",
+        "localImage":  "assets/images/produtos/conjuntos-e-saias/margot-leopard-print-shorts.webp",
+        "sizes":  [
+                      "XS",
+                      "S",
+                      "M",
+                      "L"
+                  ],
+        "title":  "CalÃ§Ãµes Margot com PadrÃ£o de Leopardo",
+        "colors":  [
+                       "Leopardo ClÃ¡ssico"
+                   ],
+        "category":  "conjuntos",
+        "rating":  4.7,
+        "price":  44.99,
+        "description":  "Shorts de alfaiataria em padrÃ£o animal print sofisticado em tons castanhos e ocre. Cintura subida com passadores para cinto e bolsos faca funcionais.",
+        "reviewsCount":  14,
+        "slug":  "margot-leopard-print-shorts",
+        "categoryFolder":  "conjuntos-e-saias",
+        "stock":  15,
+        "tag":  "Novo",
+        "oldPrice":  54.99,
+        "composition":  "100% Linho com AlgodÃ£o."
+    },
+    {
+        "id":  "PAIR-019",
+        "localImage":  "assets/images/produtos/vestidos/sienna-striped-knit-mini-dress.webp",
+        "sizes":  [
+                      "XS",
+                      "S",
+                      "M",
+                      "L"
+                  ],
+        "title":  "Sienna Vestido Curto de Malha Ã s Riscas",
+        "colors":  [
+                       "Cru e Azul Marinho",
+                       "Preto e Areia"
+                   ],
+        "category":  "vestidos",
+        "rating":  4.9,
+        "price":  44.99,
+        "description":  "Estilo nÃ¡utico com sofisticaÃ§Ã£o portuguesa. Minivestido em malha encorpada com riscas horizontais contrastantes em azul-marinho e cru, botÃµes dourados no ombro.",
+        "reviewsCount":  28,
+        "slug":  "sienna-striped-knit-mini-dress",
+        "categoryFolder":  "vestidos",
+        "stock":  19,
+        "tag":  "Novo",
+        "oldPrice":  54.99,
+        "composition":  "100% AlgodÃ£o Mercerizado."
+    },
+    {
+        "id":  "PAIR-020",
+        "localImage":  "assets/images/produtos/vestidos/sophie-one-shoulder-maxi-dress-with-slit.webp",
+        "sizes":  [
+                      "XS",
+                      "S",
+                      "M",
+                      "L"
+                  ],
+        "title":  "Sophie Vestido Maxi de Um Ombro com Racha",
+        "colors":  [
+                       "Verde Esmeralda",
+                       "Vinho Tinto",
+                       "Preto Noite"
+                   ],
+        "category":  "vestidos",
+        "rating":  5,
+        "price":  69.99,
+        "description":  "Design assimÃ©trico de alta-costura com manga Ãºnica longa, corpete drapeado e racha profunda lateral. Perfeito para casamentos, galas e receÃ§Ãµes requintadas.",
+        "reviewsCount":  17,
+        "slug":  "sophie-one-shoulder-maxi-dress-with-slit",
+        "categoryFolder":  "vestidos",
+        "stock":  8,
+        "tag":  "Novo",
+        "oldPrice":  89.99,
+        "composition":  "95% Crepe Georgette, 5% Elastano."
+    },
+    {
+        "id":  "PAIR-021",
+        "localImage":  "assets/images/produtos/vestidos/margot-strapless-sweater-maxi-dress.webp",
+        "sizes":  [
+                      "XS",
+                      "S",
+                      "M",
+                      "L"
+                  ],
+        "title":  "Margot Vestido Maxi Ã s Riscas sem AlÃ§as",
+        "colors":  [
+                       "Creme e CafÃ©",
+                       "Preto e Branco"
+                   ],
+        "category":  "vestidos",
+        "rating":  4.8,
+        "price":  49.99,
+        "description":  "Vestido tubular em malha canelada de verÃ£o com riscas texturadas. Decote cai-cai com silicone interior anti-deslizamento para seguranÃ§a total.",
+        "reviewsCount":  23,
+        "slug":  "margot-strapless-sweater-maxi-dress",
+        "categoryFolder":  "vestidos",
+        "stock":  16,
+        "tag":  "Novo",
+        "oldPrice":  64.99,
+        "composition":  "80% Fio de AlgodÃ£o, 20% Elastano."
+    },
+    {
+        "id":  "PAIR-022",
+        "localImage":  "assets/images/produtos/vestidos/lindsay-sheer-lace-halter-maxi-dress.webp",
+        "sizes":  [
+                      "XS",
+                      "S",
+                      "M",
+                      "L"
+                  ],
+        "title":  "Lindsay Vestido Maxi Halter em Renda Transparente",
+        "colors":  [
+                       "Preto Noir",
+                       "Branco PÃ©rola"
+                   ],
+        "category":  "vestidos",
+        "rating":  4.9,
+        "price":  59.99,
+        "description":  "Sensualidade e requinte em perfeita harmonia. Vestido comprido em renda floral delicada com gola alta halter e forro interior curto contrastante.",
+        "reviewsCount":  30,
+        "slug":  "lindsay-sheer-lace-halter-maxi-dress",
+        "categoryFolder":  "vestidos",
+        "stock":  11,
+        "tag":  "Novo",
+        "oldPrice":  74.99,
+        "composition":  "92% Renda Poliamida, 8% Elastano."
+    },
+    {
+        "id":  "PAIR-023",
+        "localImage":  "assets/images/produtos/vestidos/margot-satin-lace-trim-maxi-dress.webp",
+        "sizes":  [
+                      "XS",
+                      "S",
+                      "M",
+                      "L"
+                  ],
+        "title":  "Vestido Maxi Margot em Cetim com Renda",
+        "colors":  [
+                       "Champanhe Rosa",
+                       "Verde Musgo",
+                       "Preto"
+                   ],
+        "category":  "vestidos",
+        "rating":  4.9,
+        "price":  64.99,
+        "description":  "Vestido comprido fluido em cetim com detalhe em renda recortada no decote e costas baixas. O caimento suave acompanha os passos com graÃ§a natural.",
+        "reviewsCount":  34,
+        "slug":  "margot-satin-lace-trim-maxi-dress",
+        "categoryFolder":  "vestidos",
+        "stock":  14,
+        "tag":  "Novo",
+        "oldPrice":  79.99,
+        "composition":  "100% Seda Lavada de PoliÃ©ster."
+    }
+]
