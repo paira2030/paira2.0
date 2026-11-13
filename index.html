@@ -97,7 +97,7 @@
         <button type="button" onclick="Store.openSearchModal()" aria-label="Pesquisar (atalho: /)" class="p-2 text-tinta transition-colors hover:text-oliva">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
         </button>
-        <a href="admin.html" aria-label="A minha conta / ADM" class="hidden sm:block p-2 text-tinta transition-colors hover:text-oliva" title="Acesso ADM & myPOS">
+        <a href="admin.html" aria-label="A minha conta / ADM" class="hidden sm:block p-2 text-tinta transition-colors hover:text-oliva" title="Acesso ADM">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
         </a>
         <button type="button" onclick="Store.filterCategory('all'); Store.showToast('Visualizando pecas favoritas!');" aria-label="Favoritos" class="hidden sm:block relative p-2 text-tinta transition-colors hover:text-oliva">
@@ -701,7 +701,7 @@
           </div>
           <div>
             <h4 class="text-sm font-semibold uppercase tracking-wider text-tinta">Pagamentos 100% Seguros</h4>
-            <p class="text-xs text-grafite mt-1 leading-relaxed">Processamento certificado pelo <strong>Banco de Portugal</strong> via MB WAY, Multibanco e myPOS.</p>
+            <p class="text-xs text-grafite mt-1 leading-relaxed">Pagamento seguro com redirecionamento para a SumUp.</p>
           </div>
         </div>
 
@@ -789,7 +789,7 @@
             <li><a href="#" onclick="Store.showToast('Tabela de medidas europeia (XS a XL).'); return false;" class="hover:text-white transition-colors">Guia de Tamanhos</a></li>
             <li><a href="#" onclick="Store.showToast('Linha de apoio: +351 920 198 349'); return false;" class="hover:text-white transition-colors">Contactos & Suporte</a></li>
             <li><a href="#" onclick="Store.showToast('Preços com IVA a 23% incluído.'); return false;" class="hover:text-white transition-colors">Política Fiscal (IVA 23%)</a></li>
-            <li><a href="admin.html" class="text-oliva hover:underline font-semibold flex items-center gap-1">Painel ADM / myPOS</a></li>
+            <li><a href="admin.html" class="text-oliva hover:underline font-semibold flex items-center gap-1">Painel ADM</a></li>
           </ul>
         </div>
 
@@ -816,7 +816,7 @@
           <img src="assets/images/pagamentos/multibanco.svg" alt="Multibanco" class="h-6 w-auto bg-white/10 px-2 py-1 rounded" />
           <img src="assets/images/pagamentos/visa.svg" alt="Visa" class="h-6 w-auto bg-white/10 px-2 py-1 rounded" />
           <img src="assets/images/pagamentos/mastercard.svg" alt="Mastercard" class="h-6 w-auto bg-white/10 px-2 py-1 rounded" />
-          <img src="assets/images/pagamentos/mypos.svg" alt="myPOS Checkout" class="h-6 w-auto bg-white/10 px-2 py-1 rounded" />
+          <span class="text-xs">Pagamento seguro SumUp</span>
         </div>
       </div>
     </div>
@@ -892,7 +892,7 @@
         <button onclick="Store.closeMobileMenu(); Store.filterCategory('conjuntos');" class="block w-full text-left py-2.5 border-b border-costura hover:text-oliva">CONJUNTOS</button>
         <button onclick="Store.closeMobileMenu(); Store.filterCategory('acessorios');" class="block w-full text-left py-2.5 border-b border-costura hover:text-oliva">ACESS&Oacute;RIOS</button>
         <button onclick="Store.closeMobileMenu(); Store.filterCategory('saldos');" class="block w-full text-left py-2.5 border-b border-costura text-promo hover:underline">SALDOS</button>
-        <a href="admin.html" class="block w-full text-left py-2.5 text-oliva font-bold">Aba Restrita ADM / myPOS</a>
+        <a href="admin.html" class="block w-full text-left py-2.5 text-oliva font-bold">Aba Restrita ADM</a>
       </nav>
 
       <div class="pt-6 border-t border-costura text-xs text-grafite space-y-2">
@@ -1010,7 +1010,7 @@
   </div>
 
   <!-- ==========================================
-       MODAL DE CHECKOUT & PAGAMENTOS (MYPOS / BANCO DE PORTUGAL)
+       MODAL DE CHECKOUT SUMUP
        ========================================== -->
   <div id="checkout-modal" class="modal-backdrop">
     <div id="checkout-modal-content" class="modal-content relative p-6 sm:p-10 max-w-3xl">
@@ -1022,7 +1022,7 @@
       <div class="mb-6 border-b border-costura pb-4">
         <span class="etiqueta etiqueta-oliva">Checkout Seguro</span>
         <h2 class="font-display text-3xl text-tinta mt-1">Finalização de Encomenda</h2>
-        <p class="text-xs text-grafite">Pagamentos auditados e em conformidade com as normas do Banco de Portugal.</p>
+        <p class="text-xs text-grafite">Pagamento processado pela SumUp em página segura.</p>
       </div>
 
       <form id="checkout-form" onsubmit="Checkout.processOrder(event)" class="space-y-6">
@@ -1036,15 +1036,15 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
             <div>
               <label class="block font-medium text-grafite mb-1">Nome Completo *</label>
-              <input type="text" id="cust-name" required value="Maria Fernandes Silva" class="w-full bg-papel border border-costura p-2.5 focus:border-tinta outline-none" />
+              <input type="text" id="cust-name" required  class="w-full bg-papel border border-costura p-2.5 focus:border-tinta outline-none" />
             </div>
             <div>
               <label class="block font-medium text-grafite mb-1">E-mail *</label>
-              <input type="email" id="cust-email" required value="maria.silva@exemplo.pt" class="w-full bg-papel border border-costura p-2.5 focus:border-tinta outline-none" />
+              <input type="email" id="cust-email" required  class="w-full bg-papel border border-costura p-2.5 focus:border-tinta outline-none" />
             </div>
             <div>
               <label class="block font-medium text-grafite mb-1">Telemóvel (PT +351) *</label>
-              <input type="tel" id="cust-phone" required value="920 198 349" class="w-full bg-papel border border-costura p-2.5 focus:border-tinta outline-none" />
+              <input type="tel" id="cust-phone" required  class="w-full bg-papel border border-costura p-2.5 focus:border-tinta outline-none" />
             </div>
             <div>
               <label class="block font-medium text-grafite mb-1">NIF (Opcional p/ Fatura)</label>
@@ -1052,87 +1052,22 @@
             </div>
             <div class="sm:col-span-2">
               <label class="block font-medium text-grafite mb-1">Morada de Entrega *</label>
-              <input type="text" id="cust-address" required value="Avenida da Liberdade, nº 120, 3º Dto" class="w-full bg-papel border border-costura p-2.5 focus:border-tinta outline-none" />
+              <input type="text" id="cust-address" required  class="w-full bg-papel border border-costura p-2.5 focus:border-tinta outline-none" />
             </div>
             <div>
               <label class="block font-medium text-grafite mb-1">Código Postal (XXXX-XXX) *</label>
-              <input type="text" id="cust-postal" required pattern="[0-9]{4}-[0-9]{3}" value="1250-146" class="w-full bg-papel border border-costura p-2.5 focus:border-tinta outline-none" />
+              <input type="text" id="cust-postal" required pattern="[0-9]{4}-[0-9]{3}"  class="w-full bg-papel border border-costura p-2.5 focus:border-tinta outline-none" />
             </div>
             <div>
               <label class="block font-medium text-grafite mb-1">Localidade / Concelho *</label>
-              <input type="text" id="cust-city" required value="Lisboa" class="w-full bg-papel border border-costura p-2.5 focus:border-tinta outline-none" />
+              <input type="text" id="cust-city" required  class="w-full bg-papel border border-costura p-2.5 focus:border-tinta outline-none" />
             </div>
           </div>
         </div>
 
-        <!-- Passo 2: Seleção do Método de Pagamento -->
-        <div>
-          <h3 class="text-xs font-bold uppercase tracking-wider text-tinta mb-3 flex items-center gap-2">
-            <span class="w-5 h-5 rounded-full bg-tinta text-linho flex items-center justify-center text-[10px]">2</span>
-            Método de Pagamento Certificado
-          </h3>
-
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            
-            <!-- Opção MB WAY -->
-            <div data-method="mbway" class="payment-method-card border-2 border-tinta bg-papel p-3 cursor-pointer transition-all flex flex-col justify-between">
-              <div class="flex justify-between items-center">
-                <span class="font-bold text-xs text-tinta">MB WAY</span>
-                <img src="assets/images/pagamentos/mbway.svg" alt="MB WAY" class="h-5"/>
-              </div>
-              <p class="text-[11px] text-grafite mt-2">Pagamento instantâneo via app MB WAY.</p>
-            </div>
-
-            <!-- Opção Multibanco -->
-            <div data-method="multibanco" class="payment-method-card border border-costura p-3 cursor-pointer transition-all flex flex-col justify-between">
-              <div class="flex justify-between items-center">
-                <span class="font-bold text-xs text-tinta">Multibanco</span>
-                <img src="assets/images/pagamentos/multibanco.svg" alt="Multibanco" class="h-5"/>
-              </div>
-              <p class="text-[11px] text-grafite mt-2">Pagamento por Entidade e Referência.</p>
-            </div>
-
-            <!-- Opção Cartão / myPOS -->
-            <div data-method="mypos_card" class="payment-method-card border border-costura p-3 cursor-pointer transition-all flex flex-col justify-between">
-              <div class="flex justify-between items-center">
-                <span class="font-bold text-xs text-tinta">Cartão / myPOS</span>
-                <img src="assets/images/pagamentos/visa.svg" alt="Cartão" class="h-4"/>
-              </div>
-              <p class="text-[11px] text-grafite mt-2">Visa, Mastercard e myPOS 3DS2.</p>
-            </div>
-          </div>
-
-          <!-- Campos Específicos para MB WAY -->
-          <div id="mbway-fields" class="mt-4 p-4 bg-papel border border-costura text-xs">
-            <label class="block font-medium text-tinta mb-1">Número de Telemóvel MB WAY:</label>
-            <input type="tel" id="mbway-phone" value="920 198 349" class="w-full sm:w-64 bg-white border border-costura p-2 text-xs focus:border-tinta outline-none" />
-            <p class="text-[11px] text-grafite mt-1.5">Receberá uma notificação no seu telemóvel para autorizar a compra em segurança.</p>
-          </div>
-
-          <!-- Campos Específicos para Multibanco -->
-          <div id="multibanco-fields" style="display:none;" class="mt-4 p-4 bg-papel border border-costura text-xs">
-            <p class="text-tinta font-medium">As referências de Multibanco serão emitidas imediatamente após a confirmação da encomenda.</p>
-            <p class="text-[11px] text-grafite mt-1">Disporá de 48 horas para efetuar o pagamento num terminal Multibanco ou através do seu Homebanking.</p>
-          </div>
-
-          <!-- Campos Específicos para myPOS Cartão -->
-          <div id="mypos-fields" style="display:none;" class="mt-4 p-4 bg-papel border border-costura text-xs space-y-2">
-            <div class="grid grid-cols-2 gap-2">
-              <div class="col-span-2">
-                <label class="block font-medium text-tinta mb-1">Número do Cartão</label>
-                <input type="text" placeholder="4000 1234 5678 9010" value="4532 •••• •••• 8821" class="w-full bg-white border border-costura p-2 font-mono" />
-              </div>
-              <div>
-                <label class="block font-medium text-tinta mb-1">Validade (MM/AA)</label>
-                <input type="text" placeholder="12/28" value="09/29" class="w-full bg-white border border-costura p-2 font-mono" />
-              </div>
-              <div>
-                <label class="block font-medium text-tinta mb-1">CVC / CVV</label>
-                <input type="password" placeholder="•••" value="789" class="w-full bg-white border border-costura p-2 font-mono" />
-              </div>
-            </div>
-            <p class="text-[10px] text-grafite">Transação encriptada com certificado SSL e autenticação 3D Secure da myPOS Europe Ltd.</p>
-          </div>
+        <div class="border border-costura p-4 bg-papel">
+          <h3 class="text-xs font-bold uppercase tracking-wider mb-2">2. Pagamento seguro SumUp</h3>
+          <p class="text-sm text-grafite">Será encaminhado para a página segura da SumUp para concluir o pagamento em euros. A encomenda só será considerada paga após confirmação da SumUp.</p>
         </div>
 
         <!-- Resumo Financeiro da Encomenda -->
