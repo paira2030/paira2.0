@@ -21,7 +21,16 @@ module.exports=async (req,res)=>{
   if(uuids.length) filters.push(`id.in.(${uuids.join(',')})`);
   if(codes.length) filters.push(`codigo.in.(${codes.map(x=>'"'+x.replace(/["\\,()]/g,'')+'"').join(',')})`);
   query+='&or=('+filters.join(',')+')';
-  const db=await api('produtos?'+query); if(!db.ok) throw Error('Não foi possível consultar o catálogo.');
+  const db = await api('produtos?' + query);
+
+if (!db.ok) {
+  const detalhe = await db.text();
+  console.error('Erro Supabase catálogo:', {
+    status: db.status,
+    detalhe
+  });
+  throw Error('Não foi possível consultar o catálogo.');
+}
   const products=await db.json();
   let subtotalCents=0; const snapshot=[];
   for(const x of parsed){
