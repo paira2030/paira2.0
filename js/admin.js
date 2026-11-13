@@ -1,6 +1,6 @@
 /**
  * MAELLE - Painel Administrativo ADM
- * Gestão de Catálogo e Configurações do Gateway developers.mypos
+ * Gestão de Catálogo Maelle e pagamentos SumUp
  */
 
 const Admin = {
@@ -9,27 +9,10 @@ const Admin = {
   editingImages: [],
   currentTab: 'produtos',
 
-  // Configuração padrão do myPOS
-  myposConfig: {
-    mode: 'sandbox',
-    storeId: '00000012',
-    clientNumber: '60001234',
-    keyIndex: 1,
-    currency: 'EUR',
-    privateKey: '-----BEGIN RSA PRIVATE KEY-----\nMIIEowIBAAKCAQEA3xK7...[CHAVE PRIVADA COMERCIANTE RSA 2048]...IDAQAB\n-----END RSA PRIVATE KEY-----',
-    publicCert: '-----BEGIN CERTIFICATE-----\nMIIDdzCCAl+gAwIBAgIE...[CERTIFICADO PUBLICO MYPOS DEVELOPERS]...MA0GC\n-----END CERTIFICATE-----',
-    webhookUrl: window.location.origin + '/api/mypos/webhook',
-    returnOkUrl: window.location.origin + '/checkout-sucesso.html',
-    returnCancelUrl: window.location.origin + '/checkout-cancelado.html',
-    enableMbway: true,
-    enableMultibanco: true,
-    enableCards: true
-  },
 
   async init() {
     this.setupPasswordRecovery();
     await this.checkAuth();
-    this.loadMyPosConfig();
     if (this.authenticated) await this.loadCatalog();
     this.setupListeners();
   },
@@ -41,7 +24,7 @@ const Admin = {
     document.getElementById('auth-gate').style.display = this.authenticated ? 'none' : 'flex';
     document.getElementById('admin-dashboard').style.display = this.authenticated ? 'block' : 'none';
     if (this.authenticated) {
-      await this.loadCatalog(); this.renderProductsTable(); this.populateMyPosFields(); this.populateVivaFields();
+      await this.loadCatalog(); this.renderProductsTable();
     }
   },
   async login() {
@@ -147,75 +130,6 @@ const Admin = {
     localStorage.setItem('maelle_custom_products', JSON.stringify(this.products));
   },
 
-  loadMyPosConfig() {
-    const saved = localStorage.getItem('maelle_mypos_config');
-    if (saved) {
-      try {
-        this.myposConfig = Object.assign(this.myposConfig, JSON.parse(saved));
-      } catch (e) {}
-    }
-  },
-
-  saveMyPosConfig() {
-    this.myposConfig.mode = document.getElementById('mypos-mode').value;
-    this.myposConfig.storeId = document.getElementById('mypos-store-id').value;
-    this.myposConfig.clientNumber = document.getElementById('mypos-client-number').value;
-    this.myposConfig.keyIndex = parseInt(document.getElementById('mypos-key-index').value) || 1;
-    this.myposConfig.currency = document.getElementById('mypos-currency').value;
-    this.myposConfig.webhookUrl = document.getElementById('mypos-webhook').value;
-    this.myposConfig.returnOkUrl = document.getElementById('mypos-url-ok').value;
-    this.myposConfig.returnCancelUrl = document.getElementById('mypos-url-cancel').value;
-    this.myposConfig.privateKey = document.getElementById('mypos-private-key').value;
-    this.myposConfig.publicCert = document.getElementById('mypos-public-cert').value;
-
-    this.myposConfig.enableMbway = document.getElementById('mypos-method-mbway').checked;
-    this.myposConfig.enableMultibanco = document.getElementById('mypos-method-multibanco').checked;
-    this.myposConfig.enableCards = document.getElementById('mypos-method-cards').checked;
-
-    localStorage.setItem('maelle_mypos_config', JSON.stringify(this.myposConfig));
-    this.showAdminToast('Configurações do developers.mypos guardadas com sucesso!');
-  },
-
-  populateMyPosFields() {
-    document.getElementById('mypos-mode').value = this.myposConfig.mode;
-    document.getElementById('mypos-store-id').value = this.myposConfig.storeId;
-    document.getElementById('mypos-client-number').value = this.myposConfig.clientNumber;
-    document.getElementById('mypos-key-index').value = this.myposConfig.keyIndex;
-    document.getElementById('mypos-currency').value = this.myposConfig.currency;
-    document.getElementById('mypos-webhook').value = this.myposConfig.webhookUrl;
-    document.getElementById('mypos-url-ok').value = this.myposConfig.returnOkUrl;
-    document.getElementById('mypos-url-cancel').value = this.myposConfig.returnCancelUrl;
-    document.getElementById('mypos-private-key').value = this.myposConfig.privateKey;
-    document.getElementById('mypos-public-cert').value = this.myposConfig.publicCert;
-
-    document.getElementById('mypos-method-mbway').checked = !!this.myposConfig.enableMbway;
-    document.getElementById('mypos-method-multibanco').checked = !!this.myposConfig.enableMultibanco;
-    document.getElementById('mypos-method-cards').checked = !!this.myposConfig.enableCards;
-  },
-
-  testMyPosConnection() {
-    const statusBox = document.getElementById('mypos-test-result');
-    statusBox.style.display = 'block';
-    statusBox.innerHTML = `
-      <div class="p-3 bg-oliva/10 border border-oliva text-oliva text-xs flex items-center gap-2">
-        <svg class="animate-spin" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
-        A validar handshake criptográfico com https://developers.mypos.com (Ambiente: ${this.myposConfig.mode.toUpperCase()})...
-      </div>
-    `;
-
-    setTimeout(() => {
-      statusBox.innerHTML = `
-        <div class="p-3 bg-sucesso/10 border border-sucesso text-sucesso text-xs">
-          <strong>Conexão Bem-Sucedida!</strong><br/>
-          Gateway: <code>myPOS Checkout IPC API v1.4</code><br/>
-          Assinatura Digital SHA-256: <code>VÁLIDA</code><br/>
-          Store ID: <code>${this.myposConfig.storeId}</code> | Moeda: <code>EUR (€)</code><br/>
-          Métodos ativos em Portugal: Multibanco, MB WAY, Cartão Visa/Mastercard 3DS2.
-        </div>
-      `;
-    }, 1200);
-  },
-
   switchTab(tab) {
     this.currentTab = tab;
     document.querySelectorAll('.admin-nav-btn').forEach(btn => {
@@ -229,8 +143,7 @@ const Admin = {
     });
 
     document.getElementById('tab-produtos').style.display = tab === 'produtos' ? 'block' : 'none';
-    document.getElementById('tab-mypos').style.display = tab === 'mypos' ? 'block' : 'none';
-    document.getElementById('tab-viva').style.display = tab === 'viva' ? 'block' : 'none';
+    document.getElementById('tab-sumup').style.display = tab === 'sumup' ? 'block' : 'none';
   },
 
   renderProductsTable() {
@@ -396,17 +309,6 @@ const Admin = {
     setTimeout(() => { t.style.display = 'none'; }, 3000);
   },
 
-  populateVivaFields() {
-    const cfg = JSON.parse(localStorage.getItem('maelle_viva_preferences') || '{}');
-    document.getElementById('viva-mode').value = cfg.mode === 'live' ? 'live' : 'demo';
-    document.getElementById('viva-source').value = cfg.sourceCode || '';
-  },
-  saveVivaConfig() {
-    const sourceCode = document.getElementById('viva-source').value.trim();
-    if (sourceCode && !/^[a-zA-Z0-9]{4}$/.test(sourceCode)) { this.showAdminToast('Source Code deve ter 4 caracteres.'); return; }
-    localStorage.setItem('maelle_viva_preferences', JSON.stringify({mode: document.getElementById('viva-mode').value, sourceCode}));
-    this.showAdminToast('Preferências guardadas neste navegador; pagamentos ainda não ativados.');
-  },
   async handleProductImages(files) {
     for (const file of [...files]) {
       if (!['image/jpeg','image/png','image/webp'].includes(file.type)) { this.showAdminToast('Formato não suportado.'); continue; }
