@@ -1,0 +1,7 @@
+MAELLE - CORES E TAMANHOS POR PRODUTO
+1. Execute SUPABASE_VARIACOES_EXECUTAR.sql no SQL Editor do projeto Supabase.
+2. Publique todos os arquivos desta pasta no GitHub e aguarde o deploy da Vercel.
+3. No ADM, edite uma peça: clique nas bolinhas para adicionar/retirar cores e nos tamanhos para ativar/desativar.
+4. Para nova cor, informe nome, escolha tonalidade e clique Adicionar cor.
+5. Clique Guardar Peça. O site mostrará somente as opções selecionadas.
+ATENÇÃO: as opções são por produto, não há controlo de stock por combinação cor+tamanho nesta atualização.
