@@ -359,15 +359,21 @@ body {
 .accordion-body {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   font-size: 0.875rem;
   color: var(--grafite);
   line-height: 1.6;
 }
 
 .accordion-item.open .accordion-body {
-  max-height: 350px;
+  max-height: none;
+  overflow: visible;
   padding-bottom: 1.25rem;
+}
+
+/* Preserva os parágrafos e quebras de linha cadastrados no ADM. */
+#pdp-description {
+  white-space: pre-line;
+  overflow-wrap: anywhere;
 }
 
 /* Links Editoriais */
