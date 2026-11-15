@@ -243,6 +243,15 @@
             <input type="text" id="prod-form-tag" placeholder="Ex: Best-seller, Novo, Edição Limitada" class="w-full bg-papel border border-costura p-2.5 focus:border-tinta outline-none" />
           </div>
 
+          <div class="sm:col-span-2 border-t border-costura pt-4">
+            <label class="block font-medium text-grafite mb-2">Cores disponíveis — marque apenas as cores da peça *</label>
+            <div id="prod-form-colors" class="flex flex-wrap gap-3"></div>
+            <div class="flex gap-2 mt-3 items-center"><input id="prod-new-color-name" type="text" placeholder="Nova cor (ex.: Bordô)" class="bg-papel border border-costura p-2 text-xs flex-1"/><input id="prod-new-color-hex" type="color" value="#785044" aria-label="Escolher tonalidade" class="w-10 h-9"/><button type="button" onclick="Admin.addCustomColor()" class="border border-costura px-3 py-2 text-xs">Adicionar cor</button></div>
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block font-medium text-grafite mb-2">Tamanhos disponíveis — marque apenas os tamanhos da peça *</label>
+            <div id="prod-form-sizes" class="flex flex-wrap gap-2"></div>
+          </div>
           <div class="sm:col-span-2">
             <label class="block font-medium text-grafite mb-1">Fotografias do produto</label>
             <input type="file" id="prod-form-files" accept="image/png,image/jpeg,image/webp" multiple onchange="Admin.handleProductImages(this.files)" class="w-full bg-papel border border-costura p-2.5 text-xs" />

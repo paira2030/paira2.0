@@ -30,6 +30,7 @@ const Admin = {
     this.checkAuth();
     this.loadMyPosConfig();
     await this.loadCatalog();
+    try { this.availableColors = {...this.availableColors, ...JSON.parse(localStorage.getItem('maelle_color_palette') || '{}')}; } catch(e) {}
     this.setupListeners();
   },
 
@@ -203,6 +204,28 @@ const Admin = {
     `).join('');
   },
 
+  availableColors: {Preto:'#222222', Branco:'#ffffff', Creme:'#f0e2c7', Azul:'#365c9b', Vermelho:'#ba343b', Verde:'#477454', Bege:'#d9c2a1', Rosa:'#e6b4c5', Castanho:'#79513e', Bordô:'#702e40', Cinzento:'#929292', Amarelo:'#e9c951'},
+  selectedColors: [],
+  selectedSizes: [],
+  renderVariations() {
+    const colors = document.getElementById('prod-form-colors');
+    colors.innerHTML = Object.entries(this.availableColors).map(([name, hex]) => `<button type="button" data-color="${name}" onclick="Admin.toggleVariation('color',this.dataset.color)" title="${name}" aria-pressed="${this.selectedColors.includes(name)}" class="flex flex-col items-center gap-1 text-xs"><span style="background:${hex};width:32px;height:32px;border-radius:50%;border:2px solid white;outline:${this.selectedColors.includes(name)?'2px solid #242424':'1px solid #c8c8c8'}"></span>${name}</button>`).join('');
+    document.getElementById('prod-form-sizes').innerHTML = ['XXS','XS','S','M','L','XL','XXL','3XL','Único'].map(size => `<button type="button" onclick="Admin.toggleVariation('size','${size}')" aria-pressed="${this.selectedSizes.includes(size)}" class="border px-3 py-2 text-xs ${this.selectedSizes.includes(size)?'bg-black text-white border-black':'bg-white border-gray-300'}">${size}</button>`).join('');
+  },
+  toggleVariation(type, value) {
+    const key = type === 'color' ? 'selectedColors' : 'selectedSizes';
+    this[key] = this[key].includes(value) ? this[key].filter(x => x !== value) : [...this[key], value];
+    this.renderVariations();
+  },
+  addCustomColor() {
+    const name = document.getElementById('prod-new-color-name').value.trim();
+    if (!name || /[<>"'`]/.test(name)) { alert('Indique um nome de cor válido.'); return; }
+    this.availableColors[name] = document.getElementById('prod-new-color-hex').value;
+    localStorage.setItem('maelle_color_palette', JSON.stringify(this.availableColors));
+    if (!this.selectedColors.includes(name)) this.selectedColors.push(name);
+    document.getElementById('prod-new-color-name').value = '';
+    this.renderVariations();
+  },
   openAddProductModal() {
     document.getElementById('modal-product-title-heading').textContent = 'Adicionar Nova Peça ao Catálogo';
     document.getElementById('prod-form-index').value = '-1';
@@ -215,6 +238,7 @@ const Admin = {
     document.getElementById('prod-form-tag').value = 'Novo';
     document.getElementById('prod-form-image').value = 'assets/images/produtos/vestidos/rona-v-neck-cutout-sleeveless-maxi-dress.webp';
     document.getElementById('prod-form-desc').value = 'Peça confecionada com materiais de alta qualidade e corte editorial contemporâneo.';
+    this.selectedColors = []; this.selectedSizes = []; this.renderVariations();
     document.getElementById('product-edit-modal').classList.add('active');
   },
 
@@ -233,6 +257,10 @@ const Admin = {
     document.getElementById('prod-form-tag').value = p.tag || '';
     document.getElementById('prod-form-image').value = p.localImage;
     document.getElementById('prod-form-desc').value = p.description || '';
+    this.selectedColors = [...(p.colors || ['Creme','Preto'])];
+    this.selectedSizes = [...(p.sizes || ['XS','S','M','L'])];
+    this.selectedColors.forEach(c => {if (!this.availableColors[c]) this.availableColors[c] = '#888888';});
+    this.renderVariations();
     document.getElementById('product-edit-modal').classList.add('active');
   },
 
@@ -244,6 +272,7 @@ const Admin = {
     e.preventDefault();
     const idx = parseInt(document.getElementById('prod-form-index').value);
 
+    if (!this.selectedColors.length || !this.selectedSizes.length) { alert('Selecione pelo menos uma cor e um tamanho.'); return; }
     const productData = {
       id: document.getElementById('prod-form-id').value,
       title: document.getElementById('prod-form-title').value,
@@ -255,8 +284,9 @@ const Admin = {
       tag: document.getElementById('prod-form-tag').value,
       localImage: document.getElementById('prod-form-image').value,
       description: document.getElementById('prod-form-desc').value,
-      sizes: ['XS', 'S', 'M', 'L'],
-      colors: ['Creme', 'Preto'],
+      sizes: [...this.selectedSizes],
+      colors: [...this.selectedColors],
+      colorHex: Object.fromEntries(this.selectedColors.map(c => [c, this.availableColors[c] || '#888888'])),
       rating: 5.0,
       reviewsCount: 12
     };

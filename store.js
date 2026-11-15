@@ -507,22 +507,17 @@ const Store = {
 
     // Renderizar seletores de cor
     const colorsContainer = modalEl.querySelector('#pdp-colors');
-    colorsContainer.innerHTML = (product.colors || ['Creme']).map((c, idx) => `
-      <button 
-        type="button" 
-        class="px-3 py-1.5 text-xs border ${idx === 0 ? 'border-tinta bg-tinta text-linho' : 'border-costura bg-white text-tinta'} transition-all"
-        data-color="${c}"
-        onclick="Store.selectPdpColor('${c}', this)"
-      >
-        ${c}
-      </button>
-    `).join('');
+    const palette = {Preto:'#222222', Branco:'#ffffff', Creme:'#f0e2c7', Azul:'#365c9b', Vermelho:'#ba343b', Verde:'#477454', Bege:'#d9c2a1', Rosa:'#e6b4c5', Castanho:'#79513e', Bordô:'#702e40', Cinzento:'#929292', Amarelo:'#e9c951'};
+    colorsContainer.innerHTML = (product.colors || ['Creme']).map((c, idx) => {
+      const hex = (product.colorHex && product.colorHex[c]) || palette[c] || '#888888';
+      return `<button type="button" class="maelle-color-choice ${idx === 0 ? 'selected' : ''}" data-color="${c.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')}" title="${c.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')}" aria-label="Cor ${c.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')}" aria-pressed="${idx === 0}" style="--swatch:${hex}"><span class="maelle-color-dot"></span><span class="maelle-color-label">${c.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</span></button>`;
+    }).join('');
 
     // Botão Adicionar
     const addBtn = modalEl.querySelector('#pdp-add-btn');
     addBtn.onclick = () => {
       const activeSize = modalEl.querySelector('.size-pill.selected')?.getAttribute('data-size') || selectedSize;
-      const activeColor = modalEl.querySelector('#pdp-colors button.border-tinta')?.getAttribute('data-color') || selectedColor;
+      const activeColor = modalEl.querySelector('#pdp-colors button.selected')?.getAttribute('data-color') || selectedColor;
       this.addToCart(product, activeSize, activeColor, 1);
       this.closePDP();
       this.openCart();
@@ -539,11 +534,12 @@ const Store = {
   },
 
   selectPdpColor(color, el) {
-    document.querySelectorAll('#pdp-colors button').forEach(b => {
-      b.className = 'px-3 py-1.5 text-xs border border-costura bg-white text-tinta transition-all';
-    });
-    el.className = 'px-3 py-1.5 text-xs border border-tinta bg-tinta text-linho transition-all';
+    document.querySelectorAll('#pdp-colors .maelle-color-choice').forEach(b => { b.classList.remove('selected'); b.setAttribute('aria-pressed','false'); });
+    el.classList.add('selected'); el.setAttribute('aria-pressed','true');
   },
+
+  openSizeGuide() { document.getElementById('maelle-size-guide')?.classList.add('active'); },
+  closeSizeGuide() { document.getElementById('maelle-size-guide')?.classList.remove('active'); },
 
   closePDP() {
     const modalEl = document.getElementById('pdp-modal');
