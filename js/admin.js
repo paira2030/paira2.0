@@ -183,6 +183,80 @@ const Admin = {
     `).join('');
   },
 
+  palette: [{name:'Preto',hex:'#202020'},{name:'Branco',hex:'#ffffff'},{name:'Creme',hex:'#e9dfc8'},{name:'Bege',hex:'#d5c3a8'},{name:'Azul',hex:'#58799d'},{name:'Vermelho',hex:'#b63e48'},{name:'Verde',hex:'#54765c'},{name:'Rosa',hex:'#d99da8'},{name:'Castanho',hex:'#785044'}],
+  colorChoices: [],
+  sizeChoices: [],
+  customPalette: [],
+  renderVariations() {
+    const colors = document.getElementById('prod-form-colors');
+    const sizes = document.getElementById('prod-form-sizes');
+    const selectedList = document.getElementById('prod-selected-colors');
+    if (!colors || !sizes) return;
+    colors.replaceChildren();
+    if (selectedList) selectedList.replaceChildren();
+    const palette = [...this.palette, ...this.customPalette];
+    const toggle = (name) => {
+      this.colorChoices = this.colorChoices.includes(name)
+        ? this.colorChoices.filter(x => x !== name)
+        : [...this.colorChoices, name];
+      this.renderVariations();
+    };
+    for (const item of palette) {
+      const selected = this.colorChoices.includes(item.name);
+      const wrapper = document.createElement('div');
+      wrapper.className = 'flex flex-col items-center gap-1';
+      const btn = document.createElement('button'); btn.type = 'button';
+      btn.title = (selected ? 'Retirar ' : 'Adicionar ') + item.name;
+      btn.setAttribute('aria-label', btn.title);
+      btn.setAttribute('aria-pressed', String(selected));
+      btn.style.cssText = 'width:38px;height:38px;border-radius:50%;background:'+item.hex+';border:3px solid '+(selected?'#232323':'#dedede')+';outline:'+(selected?'2px solid #9b9b9b':'none')+';outline-offset:2px;cursor:pointer';
+      btn.onclick = () => toggle(item.name);
+      const name = document.createElement('span'); name.className = 'text-[10px]'; name.textContent = item.name;
+      wrapper.append(btn, name);
+      colors.append(wrapper);
+    }
+    if (selectedList) {
+      if (!this.colorChoices.length) {
+        const hint = document.createElement('span');
+        hint.className = 'text-xs text-gray-500';
+        hint.textContent = 'Nenhuma cor selecionada. Clique numa bolinha para adicionar.';
+        selectedList.append(hint);
+      }
+      for (const name of this.colorChoices) {
+        const item = palette.find(c => c.name === name) || {name,hex:'#999999'};
+        const chip = document.createElement('div');
+        chip.className = 'inline-flex items-center gap-2 border border-costura rounded-full bg-white px-2 py-1';
+        const swatch = document.createElement('span');
+        swatch.style.cssText = 'display:inline-block;width:18px;height:18px;border-radius:50%;border:1px solid #aaa;background:'+item.hex;
+        const label = document.createElement('span'); label.className = 'text-xs'; label.textContent = name;
+        const remove = document.createElement('button'); remove.type = 'button';
+        remove.textContent = '×'; remove.title = 'Remover '+name+' desta peça';
+        remove.setAttribute('aria-label', remove.title);
+        remove.className = 'text-lg leading-none px-1';
+        remove.onclick = () => toggle(name);
+        chip.append(swatch,label,remove); selectedList.append(chip);
+      }
+    }
+    sizes.replaceChildren();
+    for (const name of ['XXS','XS','S','M','L','XL','XXL','3XL']) {
+      const selected = this.sizeChoices.includes(name);
+      const btn = document.createElement('button');btn.type='button';btn.textContent=name;
+      btn.className='border px-3 py-2 text-xs '+(selected?'bg-tinta text-white border-tinta':'border-costura bg-white text-tinta');
+      btn.setAttribute('aria-pressed',String(selected));
+      btn.onclick=()=>{this.sizeChoices=selected?this.sizeChoices.filter(x=>x!==name):[...this.sizeChoices,name];this.renderVariations();};
+      sizes.append(btn);
+    }
+  },
+  addCustomColor() {
+    const input=document.getElementById('prod-new-color-name');
+    const name=input.value.trim();const hex=document.getElementById('prod-new-color-hex').value;
+    if(!name) return this.showAdminToast('Escreva o nome da cor.');
+    const existing=[...this.palette,...this.customPalette].find(c=>c.name.toLowerCase()===name.toLowerCase());
+    if(!existing) this.customPalette.push({name,hex});
+    const chosen=existing?.name||name;
+    if(!this.colorChoices.includes(chosen)) this.colorChoices.push(chosen);
+    input.value='';this.renderVariations();
+  },
   openAddProductModal() {
     document.getElementById('modal-product-title-heading').textContent = 'Adicionar Nova Peça ao Catálogo';
     document.getElementById('prod-form-index').value = '-1';
@@ -195,6 +269,7 @@ const Admin = {
     document.getElementById('prod-form-tag').value = 'Novo';
     document.getElementById('prod-form-image').value = 'assets/images/produtos/vestidos/rona-v-neck-cutout-sleeveless-maxi-dress.webp';
     this.editingImages = [];
+    this.colorChoices = []; this.sizeChoices = []; this.customPalette = []; this.renderVariations();
     this.renderImagePreviews();
     document.getElementById('prod-form-files').value = '';
     document.getElementById('prod-form-desc').value = 'Peça confecionada com materiais de alta qualidade e corte editorial contemporâneo.';
@@ -215,6 +290,10 @@ const Admin = {
     document.getElementById('prod-form-stock').value = p.stock || 10;
     document.getElementById('prod-form-tag').value = p.tag || '';
     document.getElementById('prod-form-image').value = p.localImage?.startsWith('data:') ? '' : (p.localImage || '');
+    this.colorChoices = [...(p.colors || [])]; this.sizeChoices = [...(p.sizes || [])];
+    this.customPalette = (p.colorHex || []).filter(c=>!this.palette.some(x=>x.name===c.name));
+    for (const name of this.colorChoices) if (![...this.palette,...this.customPalette].some(c=>c.name===name)) this.customPalette.push({name,hex:'#999999'});
+    this.renderVariations();
     this.editingImages = Array.isArray(p.images) ? [...p.images] : (p.localImage ? [p.localImage] : []);
     this.renderImagePreviews();
     document.getElementById('prod-form-files').value = '';
@@ -242,12 +321,14 @@ const Admin = {
       localImage: this.editingImages[0] || document.getElementById('prod-form-image').value,
       images: [...this.editingImages],
       description: document.getElementById('prod-form-desc').value,
-      sizes: ['XS', 'S', 'M', 'L'],
-      colors: ['Creme', 'Preto'],
+      sizes: [...this.sizeChoices],
+      colors: [...this.colorChoices],
+      colorHex: [...this.palette,...this.customPalette].filter(c=>this.colorChoices.includes(c.name)),
       rating: 5.0,
       reviewsCount: 12
     };
 
+    if (!productData.colors.length || !productData.sizes.length) { this.showAdminToast('Selecione pelo menos uma cor e um tamanho.'); return; }
     if (!productData.localImage) { this.showAdminToast('Escolha uma imagem para o produto.'); return; }
     const previousProduct = idx >= 0 ? this.products[idx] : null;
     if (MaelleDB.enabled) {
