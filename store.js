@@ -526,37 +526,29 @@ const Store = {
       </button>
     `).join('');
 
-    // Cores do produto: bolinhas idênticas às do painel administrativo.
+    // Cores redondas com nome da cor selecionada
     const colorsContainer = modalEl.querySelector('#pdp-colors');
-    const swatches = {Preto:'#202020', Branco:'#ffffff', Creme:'#e9dfc8', Bege:'#d5c3a8', Azul:'#58799d', Vermelho:'#b63e48', Verde:'#54765c', Rosa:'#d99da8', Castanho:'#785044'};
-    const customHex = product.colorHex || [];
-    if (Array.isArray(customHex)) customHex.forEach(c => { if (c && c.name && /^#[0-9a-f]{6}$/i.test(c.hex)) swatches[c.name] = c.hex; });
-    else Object.entries(customHex).forEach(([name, hex]) => { if (/^#[0-9a-f]{6}$/i.test(hex)) swatches[name] = hex; });
+    const swatches = {Preto:'#202020',Branco:'#ffffff',Creme:'#e9dfc8',Bege:'#d5c3a8',Azul:'#58799d',Vermelho:'#b63e48',Verde:'#54765c',Rosa:'#d99da8',Castanho:'#785044'};
+    (product.colorHex || []).forEach(c=>{if(c?.name && c.hex) swatches[c.name]=c.hex;});
     colorsContainer.replaceChildren();
-    (product.colors || []).forEach((c, idx) => {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'maelle-color-choice' + (idx === 0 ? ' selected' : '');
-      button.dataset.color = c;
-      button.title = c;
-      button.setAttribute('aria-label', 'Cor ' + c);
-      button.setAttribute('aria-pressed', String(idx === 0));
-      const dot = document.createElement('span');
-      dot.className = 'maelle-color-dot';
-      dot.style.setProperty('--swatch', swatches[c] || '#888888');
-      const label = document.createElement('span');
-      label.className = 'maelle-color-label';
-      label.textContent = c;
-      button.append(dot, label);
-      button.addEventListener('click', () => this.selectPdpColor(c, button));
-      colorsContainer.appendChild(button);
+    const colorLabel = document.createElement('span');
+    colorLabel.className='w-full text-xs mb-1';
+    colorLabel.textContent='COR: '+(product.colors?.[0]||'');
+    colorsContainer.append(colorLabel);
+    (product.colors || []).forEach((c,idx)=>{
+      const btn=document.createElement('button');btn.type='button';btn.dataset.color=c;
+      btn.title=c;btn.setAttribute('aria-label','Cor '+c);
+      btn.setAttribute('aria-pressed',String(idx===0));
+      btn.style.cssText='width:30px;height:30px;border-radius:50%;background:'+(swatches[c]||'#999999')+';border:3px solid white;outline:'+(idx===0?'2px solid #222':'1px solid #ddd')+';outline-offset:1px;cursor:pointer;margin:3px';
+      btn.addEventListener('click',()=>this.selectPdpColor(c,btn));
+      colorsContainer.append(btn);
     });
 
     // Botão Adicionar
     const addBtn = modalEl.querySelector('#pdp-add-btn');
     addBtn.onclick = () => {
       const activeSize = modalEl.querySelector('.size-pill.selected')?.getAttribute('data-size') || selectedSize;
-      const activeColor = modalEl.querySelector('#pdp-colors button.selected')?.getAttribute('data-color') || selectedColor;
+      const activeColor = modalEl.querySelector('#pdp-colors button[aria-pressed="true"]')?.getAttribute('data-color') || selectedColor;
       this.addToCart(product, activeSize, activeColor, 1);
       this.closePDP();
       this.openCart();
@@ -600,11 +592,13 @@ const Store = {
   },
 
   selectPdpColor(color, el) {
-    document.querySelectorAll('#pdp-colors .maelle-color-choice').forEach(button => {
-      const active = button === el;
-      button.classList.toggle('selected', active);
-      button.setAttribute('aria-pressed', String(active));
+    const container=el.closest('#pdp-colors');
+    container.querySelectorAll('button').forEach(btn=>{
+      const active=btn===el;
+      btn.setAttribute('aria-pressed',String(active));
+      btn.style.outline=active?'2px solid #222':'1px solid #ddd';
     });
+    container.querySelector('span').textContent='COR: '+color;
   },
 
   closePDP() {
