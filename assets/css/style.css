@@ -430,3 +430,10 @@ body {
 .maelle-photo-close{right:12px;top:8px}.maelle-photo-prev{left:5px;top:50%;transform:translateY(-50%)}.maelle-photo-next{right:5px;top:50%;transform:translateY(-50%)}
 .maelle-photo-count{position:absolute;bottom:12px;color:white;font-size:13px}
 @media(max-width:640px){.maelle-product-gallery{gap:4px}.maelle-photo-lightbox{padding:55px 35px}}
+
+/* Seletores de cor na página do produto: mesmo padrão visual do ADM */
+#pdp-colors .maelle-color-choice { display:flex; flex-direction:column; align-items:center; gap:5px; min-width:48px; padding:4px; background:transparent; border:0; color:#242424; font-size:11px; cursor:pointer; }
+#pdp-colors .maelle-color-dot { display:block; width:32px; height:32px; border-radius:50%; background:var(--swatch); border:3px solid white; outline:1px solid #c8c8c8; outline-offset:1px; }
+#pdp-colors .maelle-color-choice.selected .maelle-color-dot { outline:2px solid #222; }
+#pdp-colors .maelle-color-choice:focus-visible { outline:2px solid #222; outline-offset:2px; }
+#pdp-colors .maelle-color-label { white-space:nowrap; }
