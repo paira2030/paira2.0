@@ -607,6 +607,21 @@ const Store = {
     });
   },
 
+  openSizeGuide() {
+    const guide = document.getElementById('maelle-size-guide');
+    if (!guide) return;
+    guide.classList.add('active');
+    guide.setAttribute('aria-hidden', 'false');
+    guide.querySelector('.maelle-size-close')?.focus();
+  },
+
+  closeSizeGuide() {
+    const guide = document.getElementById('maelle-size-guide');
+    if (!guide) return;
+    guide.classList.remove('active');
+    guide.setAttribute('aria-hidden', 'true');
+  },
+
   closePDP() {
     this.closePhotoLightbox();
     const modalEl = document.getElementById('pdp-modal');
@@ -737,4 +752,14 @@ const Store = {
 // Auto-inicializar
 document.addEventListener('DOMContentLoaded', () => {
   Store.init();
+});
+
+// Permitir abrir o guia a partir dos rodapes das paginas institucionais.
+document.addEventListener('DOMContentLoaded', () => {
+  if (location.hash === '#guia-de-tamanhos') {
+    Store.openSizeGuide();
+  }
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') Store.closeSizeGuide();
+  });
 });
