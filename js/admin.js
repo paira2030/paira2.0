@@ -143,11 +143,52 @@ const Admin = {
     });
 
     document.getElementById('tab-produtos').style.display = tab === 'produtos' ? 'block' : 'none';
+    for (const name of ['saldos','inverno']) document.getElementById('tab-'+name).style.display = tab === name ? 'block' : 'none';
+    if (tab === 'saldos' || tab === 'inverno') this.renderCollectionTab(tab);
     document.getElementById('tab-sumup').style.display = tab === 'sumup' ? 'block' : 'none';
     document.getElementById('tab-encomendas').style.display = tab === 'encomendas' ? 'block' : 'none';
     document.getElementById('tab-paginas').style.display = tab === 'paginas' ? 'block' : 'none';
     if(tab==='encomendas') MaelleExtras.loadOrders();
     if(tab==='paginas') MaelleExtras.loadPage();
+  },
+
+  renderCollectionTab(tab) {
+    const el = document.getElementById('admin-'+tab+'-list');
+    if (!el) return;
+    el.replaceChildren();
+    this.products.forEach((p,index) => {
+      const row = document.createElement('div');
+      row.className='bg-white border border-costura p-3 flex flex-wrap gap-3 items-center';
+      const name = document.createElement('span'); name.className='flex-1 min-w-40 text-sm'; name.textContent=p.title;
+      const check=document.createElement('input'); check.type='checkbox'; check.checked=tab==='saldos'?!!p.isSaldo:!!p.isInverno;
+      check.setAttribute('aria-label','Incluir '+p.title+' em '+tab);
+      const details=document.createElement('span');details.className='text-xs text-grafite';details.textContent=Number(p.price||0).toFixed(2)+' €';
+      if(tab==='saldos') {
+        const old=document.createElement('input');old.type='number';old.min='0.01';old.step='0.01';old.placeholder='Preço anterior (€)';old.value=p.oldPrice||'';old.className='border p-2 w-36 text-xs';
+        const current=document.createElement('input');current.type='number';current.min='0.01';current.step='0.01';current.value=p.price||'';current.className='border p-2 w-32 text-xs';current.title='Preço promocional (€)';
+        const save=document.createElement('button');save.className='btn-editorial text-xs px-3 py-2';save.textContent='Guardar';
+        save.onclick=()=>this.saveCollectionItem(index,tab,check.checked,Number(old.value),Number(current.value));
+        row.append(name,check,details,old,current,save);
+      } else {
+        const save=document.createElement('button');save.className='btn-editorial text-xs px-3 py-2';save.textContent='Guardar';
+        save.onclick=()=>this.saveCollectionItem(index,tab,check.checked);
+        row.append(name,check,details,save);
+      }
+      el.appendChild(row);
+    });
+  },
+  async saveCollectionItem(index,tab,checked,oldPrice,price) {
+    const original=this.products[index]; if(!original)return;
+    if(tab==='saldos' && checked && !(price>0 && oldPrice>price)) {
+      this.showAdminToast('O preço anterior deve ser maior que o preço promocional.');return;
+    }
+    const p={...original,images:original.images||[],isSaldo:tab==='saldos'?checked:!!original.isSaldo,isInverno:tab==='inverno'?checked:!!original.isInverno};
+    if(tab==='saldos') {p.price=price;p.oldPrice=oldPrice;}
+    try {
+      if(MaelleDB.enabled) {await MaelleDB.save(p);await this.loadCatalog();}
+      else {this.products[index]=p;this.saveCatalog();}
+      this.renderCollectionTab(tab);this.renderProductsTable();this.showAdminToast('Alterações guardadas.');
+    } catch(e) {console.error(e);this.showAdminToast('Erro ao guardar: '+e.message);}
   },
 
   renderProductsTable() {
@@ -265,6 +306,8 @@ const Admin = {
     document.getElementById('prod-form-category').value = 'vestidos';
     document.getElementById('prod-form-price').value = '49.99';
     document.getElementById('prod-form-old-price').value = '64.99';
+    document.getElementById('prod-form-saldos').checked = false;
+    document.getElementById('prod-form-inverno').checked = false;
     document.getElementById('prod-form-stock').value = '15';
     document.getElementById('prod-form-tag').value = 'Novo';
     document.getElementById('prod-form-image').value = 'assets/images/produtos/vestidos/rona-v-neck-cutout-sleeveless-maxi-dress.webp';
@@ -287,6 +330,8 @@ const Admin = {
     document.getElementById('prod-form-category').value = p.category;
     document.getElementById('prod-form-price').value = p.price;
     document.getElementById('prod-form-old-price').value = p.oldPrice || '';
+    document.getElementById('prod-form-saldos').checked = !!p.isSaldo;
+    document.getElementById('prod-form-inverno').checked = !!p.isInverno;
     document.getElementById('prod-form-stock').value = p.stock || 10;
     document.getElementById('prod-form-tag').value = p.tag || '';
     document.getElementById('prod-form-image').value = p.localImage?.startsWith('data:') ? '' : (p.localImage || '');
@@ -316,6 +361,8 @@ const Admin = {
       categoryFolder: document.getElementById('prod-form-category').value,
       price: parseFloat(document.getElementById('prod-form-price').value) || 0,
       oldPrice: parseFloat(document.getElementById('prod-form-old-price').value) || 0,
+      isSaldo: document.getElementById('prod-form-saldos').checked,
+      isInverno: document.getElementById('prod-form-inverno').checked,
       stock: parseInt(document.getElementById('prod-form-stock').value) || 10,
       tag: document.getElementById('prod-form-tag').value,
       localImage: this.editingImages[0] || document.getElementById('prod-form-image').value,
@@ -328,6 +375,7 @@ const Admin = {
       reviewsCount: 12
     };
 
+    if (productData.isSaldo && !(productData.oldPrice > productData.price && productData.price > 0)) { this.showAdminToast('Para Saldos, o preço anterior deve ser maior que o promocional.'); return; }
     if (!productData.colors.length || !productData.sizes.length) { this.showAdminToast('Selecione pelo menos uma cor e um tamanho.'); return; }
     if (!productData.localImage) { this.showAdminToast('Escolha uma imagem para o produto.'); return; }
     const previousProduct = idx >= 0 ? this.products[idx] : null;
