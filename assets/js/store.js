@@ -26,6 +26,8 @@ const Store = {
     this.updateCartUI();
     this.updateWishlistBadges();
     this.setupEventListeners();
+    const productId = new URLSearchParams(location.search).get('produto');
+    if (productId && this.products.some(p => String(p.id) === productId)) this.openPDP(productId);
   },
 
   // Carregar Catálogo
@@ -215,7 +217,9 @@ const Store = {
     } else if (this.currentCategory === 'novidades') {
       filtered = filtered.filter(p => p.tag === 'Novo' || p.tag === 'Best-seller');
     } else if (this.currentCategory === 'saldos') {
-      filtered = filtered.filter(p => p.oldPrice && p.oldPrice > p.price);
+      filtered = filtered.filter(p => p.isSaldo && p.oldPrice && p.oldPrice > p.price);
+    } else if (this.currentCategory === 'inverno') {
+      filtered = filtered.filter(p => p.isInverno);
     } else if (this.currentCategory === 'verao') {
       filtered = filtered.filter(p => p.category === 'vestidos' || p.category === 'tops' || p.category === 'conjuntos');
     } else if (this.currentCategory === 'acessorios') {

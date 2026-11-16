@@ -43,7 +43,7 @@ const MaelleDB = {
   async list() {
     const {data,error} = await this.client.from('produtos').select('*').order('criado_em',{ascending:false});
     if (error) throw error;
-    return data.map(p=>({id:p.codigo||p.id,dbId:p.id,title:p.nome,description:p.descricao||'',price:Number(p.preco),stock:p.estoque,images:p.imagens||[],localImage:p.imagens?.[0]||'',category:p.categoria||'vestidos',categoryFolder:p.categoria||'vestidos',oldPrice:Number(p.preco_anterior||0),tag:p.etiqueta||'',sizes:Array.isArray(p.tamanhos)?p.tamanhos:['XS','S','M','L'],colors:Array.isArray(p.cores)?p.cores:['Creme','Preto'],colorHex:p.cores_hex||[],rating:5,reviewsCount:0}));
+    return data.map(p=>({id:p.codigo||p.id,dbId:p.id,title:p.nome,description:p.descricao||'',price:Number(p.preco),stock:p.estoque,images:p.imagens||[],localImage:p.imagens?.[0]||'',category:p.categoria||'vestidos',categoryFolder:p.categoria||'vestidos',oldPrice:Number(p.preco_anterior||0),isSaldo:!!p.em_saldos,isInverno:!!p.em_inverno,tag:p.etiqueta||'',sizes:p.tamanhos||['XS','S','M','L'],colors:p.cores||['Creme','Preto'],colorHex:p.cores_hex||[],rating:5,reviewsCount:0}));
   },
   async upload(dataUrl) {
     if (!dataUrl.startsWith('data:image/')) return dataUrl;
@@ -58,7 +58,7 @@ const MaelleDB = {
     if (!(await this.isAdmin())) throw new Error('Sem permissão de administrador.');
     const images=[];
     for (const src of p.images.length?p.images:[p.localImage]) if(src) images.push(await this.upload(src));
-    const row={nome:p.title,descricao:p.description,preco:p.price,estoque:p.stock,imagens:images,ativo:true,categoria:p.category,preco_anterior:p.oldPrice||null,etiqueta:p.tag||null,codigo:p.id,cores:p.colors,tamanhos:p.sizes,cores_hex:p.colorHex||[]};
+    const row={nome:p.title,descricao:p.description,preco:p.price,estoque:p.stock,imagens:images,ativo:true,categoria:p.category,preco_anterior:p.oldPrice||null,em_saldos:!!p.isSaldo,em_inverno:!!p.isInverno,etiqueta:p.tag||null,codigo:p.id,cores:p.colors,tamanhos:p.sizes,cores_hex:p.colorHex||[]};
     let q;
     if (p.dbId) q=this.client.from('produtos').update(row).eq('id',p.dbId);
     else q=this.client.from('produtos').insert(row);
