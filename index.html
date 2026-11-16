@@ -65,6 +65,7 @@
       <!-- Navegacao Desktop (8 Departamentos Identicos a MAELLE) -->
       <nav aria-label="Departamentos" class="hidden lg:block">
         <ul class="flex items-center gap-7 lg:gap-8">
+          <li class="py-5"><a href="inverno.html" class="label-etiqueta transition-colors duration-200 hover:text-oliva">INVERNO</a></li>
           <li class="py-5" onmouseenter="Store.openMegaMenu('verao')" onmouseleave="Store.closeMegaMenu()">
             <button onclick="Store.filterCategory('verao')" class="label-etiqueta transition-colors duration-200 hover:text-oliva">VER&Atilde;O</button>
           </li>
@@ -87,7 +88,7 @@
             <button onclick="Store.filterCategory('acessorios')" class="label-etiqueta transition-colors duration-200 hover:text-oliva">ACESS&Oacute;RIOS</button>
           </li>
           <li class="py-5" onmouseenter="Store.openMegaMenu('saldos')" onmouseleave="Store.closeMegaMenu()">
-            <button onclick="Store.filterCategory('saldos')" class="label-etiqueta transition-colors duration-200 text-promo">SALDOS</button>
+            <a href="saldos.html" class="label-etiqueta transition-colors duration-200 text-promo">SALDOS</a>
           </li>
         </ul>
       </nav>
@@ -887,6 +888,7 @@
 
     <div class="p-6 space-y-6 flex-1 overflow-y-auto">
       <nav class="space-y-3 text-xs font-semibold uppercase tracking-wider">
+        <a href="inverno.html" class="block w-full text-left py-2.5 border-b border-costura hover:text-oliva">INVERNO</a>
         <button onclick="Store.closeMobileMenu(); Store.filterCategory('verao');" class="block w-full text-left py-2.5 border-b border-costura hover:text-oliva">VER&Atilde;O</button>
         <button onclick="Store.closeMobileMenu(); Store.filterCategory('novidades');" class="block w-full text-left py-2.5 border-b border-costura hover:text-oliva">NOVIDADES</button>
         <button onclick="Store.closeMobileMenu(); Store.filterCategory('vestidos');" class="block w-full text-left py-2.5 border-b border-costura hover:text-oliva">VESTIDOS</button>
@@ -894,7 +896,7 @@
         <button onclick="Store.closeMobileMenu(); Store.filterCategory('casacos');" class="block w-full text-left py-2.5 border-b border-costura hover:text-oliva">CASACOS</button>
         <button onclick="Store.closeMobileMenu(); Store.filterCategory('conjuntos');" class="block w-full text-left py-2.5 border-b border-costura hover:text-oliva">CONJUNTOS</button>
         <button onclick="Store.closeMobileMenu(); Store.filterCategory('acessorios');" class="block w-full text-left py-2.5 border-b border-costura hover:text-oliva">ACESS&Oacute;RIOS</button>
-        <button onclick="Store.closeMobileMenu(); Store.filterCategory('saldos');" class="block w-full text-left py-2.5 border-b border-costura text-promo hover:underline">SALDOS</button>
+        <a href="saldos.html" class="block w-full text-left py-2.5 border-b border-costura text-promo hover:underline">SALDOS</a>
         <a href="admin.html" class="block w-full text-left py-2.5 text-oliva font-bold">Aba Restrita ADM</a>
       </nav>
 

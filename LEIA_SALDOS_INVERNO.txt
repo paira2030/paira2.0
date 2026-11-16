@@ -1,0 +1,7 @@
+MAELLE - Saldos e Inverno
+1. Execute SUPABASE_SALDOS_INVERNO.sql no SQL Editor do Supabase da loja.
+2. Publique a pasta completa na Vercel.
+3. No ADM, abra Saldos ou Inverno e selecione produtos.
+4. Saldos exige preço anterior maior que preço promocional; por padrão aceita qualquer desconto.
+5. A loja lê os produtos do Supabase quando configurado. Não há promoções fictícias nem produtos atribuídos automaticamente ao Inverno.
+6. Antes de publicar, teste login ADM, compra, pagamento SumUp, guia de tamanhos e páginas no telemóvel.
