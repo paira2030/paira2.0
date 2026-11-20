@@ -47,6 +47,19 @@ const Store = {
     try { const custom = localStorage.getItem('maelle_custom_products'); if (custom) this.products = JSON.parse(custom); } catch (e) { console.warn('Catálogo local inválido', e); }
   },
 
+  // Portes por produto: máximo único entre artigos pagos; antigos mantêm regra de 49,90 €.
+  calculateShipping(cart = this.cart) {
+    const subtotal = cart.reduce((s, item) => s + Number(item.price) * Number(item.qty), 0);
+    const amounts = cart.map(item => {
+      const product = this.products.find(p => p.id === item.id);
+      const mode = product?.shippingMode ?? item.shippingMode ?? 'legacy';
+      const price = Number(product?.shippingPrice ?? item.shippingPrice ?? 4.50);
+      if (mode === 'free') return 0;
+      if (mode === 'paid') return Number.isFinite(price) && price >= 0 ? price : 4.50;
+      return subtotal >= this.freeShippingThreshold ? 0 : 4.50;
+    });
+    return Math.max(0, ...amounts);
+  },
   // Formatação de Preço Português (€)
   formatPrice(num) {
     return Number(num).toFixed(2).replace('.', ',') + ' €';
@@ -352,6 +365,8 @@ const Store = {
         id: product.id,
         title: product.title,
         price: product.price,
+        shippingMode: product.shippingMode || 'legacy',
+        shippingPrice: product.shippingPrice ?? 4.50,
         image: product.localImage,
         size: size,
         color: color,
@@ -409,6 +424,16 @@ const Store = {
       subtotalEl.textContent = this.formatPrice(subtotal);
     }
 
+    // Regras personalizadas de envio prevalecem sobre a antiga barra de 49,90 €.
+    const customShipping = this.cart.some(item => {
+      const product = this.products.find(p => p.id === item.id);
+      return (product?.shippingMode ?? item.shippingMode ?? 'legacy') !== 'legacy';
+    });
+    if (progressEl && shippingTextEl && customShipping) {
+      const charge = this.calculateShipping();
+      progressEl.style.width = charge === 0 ? '100%' : '0%';
+      shippingTextEl.textContent = charge === 0 ? 'Esta encomenda tem envio grátis!' : `Portes de envio desta encomenda: ${this.formatPrice(charge)}`;
+    } else
     // Cálculo da barra de Portes Grátis para Portugal (> 49,90 €)
     if (progressEl && shippingTextEl) {
       if (subtotal >= this.freeShippingThreshold) {

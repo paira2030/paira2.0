@@ -298,6 +298,11 @@ const Admin = {
     if(!this.colorChoices.includes(chosen)) this.colorChoices.push(chosen);
     input.value='';this.renderVariations();
   },
+  toggleShippingPrice() {
+    const paid = document.getElementById('prod-form-shipping-mode').value === 'paid';
+    document.getElementById('prod-form-shipping-price-wrap').style.display = paid ? '' : 'none';
+    document.getElementById('prod-form-shipping-price').required = paid;
+  },
   openAddProductModal() {
     document.getElementById('modal-product-title-heading').textContent = 'Adicionar Nova Peça ao Catálogo';
     document.getElementById('prod-form-index').value = '-1';
@@ -309,6 +314,9 @@ const Admin = {
     document.getElementById('prod-form-saldos').checked = false;
     document.getElementById('prod-form-inverno').checked = false;
     document.getElementById('prod-form-stock').value = '15';
+    document.getElementById('prod-form-shipping-mode').value = 'paid';
+    document.getElementById('prod-form-shipping-price').value = '4.50';
+    this.toggleShippingPrice();
     document.getElementById('prod-form-tag').value = 'Novo';
     document.getElementById('prod-form-image').value = 'assets/images/produtos/vestidos/rona-v-neck-cutout-sleeveless-maxi-dress.webp';
     this.editingImages = [];
@@ -333,6 +341,9 @@ const Admin = {
     document.getElementById('prod-form-saldos').checked = !!p.isSaldo;
     document.getElementById('prod-form-inverno').checked = !!p.isInverno;
     document.getElementById('prod-form-stock').value = p.stock || 10;
+    document.getElementById('prod-form-shipping-mode').value = p.shippingMode || 'paid';
+    document.getElementById('prod-form-shipping-price').value = p.shippingPrice ?? 4.50;
+    this.toggleShippingPrice();
     document.getElementById('prod-form-tag').value = p.tag || '';
     document.getElementById('prod-form-image').value = p.localImage?.startsWith('data:') ? '' : (p.localImage || '');
     this.colorChoices = [...(p.colors || [])]; this.sizeChoices = [...(p.sizes || [])];
@@ -364,6 +375,8 @@ const Admin = {
       isSaldo: document.getElementById('prod-form-saldos').checked,
       isInverno: document.getElementById('prod-form-inverno').checked,
       stock: parseInt(document.getElementById('prod-form-stock').value) || 10,
+      shippingMode: document.getElementById('prod-form-shipping-mode').value,
+      shippingPrice: Number(document.getElementById('prod-form-shipping-price').value),
       tag: document.getElementById('prod-form-tag').value,
       localImage: this.editingImages[0] || document.getElementById('prod-form-image').value,
       images: [...this.editingImages],
@@ -375,6 +388,7 @@ const Admin = {
       reviewsCount: 12
     };
 
+    if (productData.shippingMode === 'paid' && (!Number.isFinite(productData.shippingPrice) || productData.shippingPrice < 0 || productData.shippingPrice > 9999.99)) { this.showAdminToast('Indique um valor válido para os portes.'); return; }
     if (productData.isSaldo && !(productData.oldPrice > productData.price && productData.price > 0)) { this.showAdminToast('Para Saldos, o preço anterior deve ser maior que o promocional.'); return; }
     if (!productData.colors.length || !productData.sizes.length) { this.showAdminToast('Selecione pelo menos uma cor e um tamanho.'); return; }
     if (!productData.localImage) { this.showAdminToast('Escolha uma imagem para o produto.'); return; }
