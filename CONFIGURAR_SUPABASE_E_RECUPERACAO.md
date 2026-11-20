@@ -6,8 +6,8 @@ O botão de recuperação só envia email depois de configurar a ligação ao Su
 2. Abra Project Settings > API Keys e copie a **Publishable key** (`sb_publishable_...`). NÃO use a Secret Key.
 3. Edite `assets/js/supabase-config.js` e preencha as duas strings entre aspas.
 4. Publique novamente o conteúdo da pasta `maelle` na Vercel (certifique-se de que `admin.html` fica na raiz publicada).
-5. No Supabase > Authentication > URL Configuration, configure Site URL como `https://maelleoficial.vercel.app/` e adicione `https://maelleoficial.vercel.app/admin.html` em Redirect URLs (se já existir, não duplique).
-6. Em `https://maelleoficial.vercel.app/admin.html`, clique Esqueci a minha senha, informe o email do utilizador cadastrado no Supabase e clique Enviar link.
+5. No Supabase > Authentication > URL Configuration, configure Site URL como `https://www.maelle.pt/` e adicione `https://www.maelle.pt/admin.html` em Redirect URLs (se já existir, não duplique).
+6. Em `https://www.maelle.pt/admin.html`, clique Esqueci a minha senha, informe o email do utilizador cadastrado no Supabase e clique Enviar link.
 7. Verifique a caixa de entrada e spam. Se houver erros de entrega, verifique os logs de Auth e a configuração SMTP do Supabase.
 
 **Segurança:** nunca coloque `sb_secret_`, `service_role` ou passwords neste ficheiro. A chave publicável depende das políticas RLS que já configurou. O PIN local antigo foi desativado para evitar acesso sem autenticação Supabase.

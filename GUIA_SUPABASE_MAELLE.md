@@ -8,7 +8,6 @@
 
 ## Segurança e limites
 - O login antigo por PIN continua apenas no modo local sem configuração Supabase. Com Supabase configurado, a entrada é feita por Supabase Auth e a autorização é conferida na tabela admins protegida por RLS.
-- O código antigo do site contém demonstrações de checkout/myPOS e campos de cartão. **Não use este site para receber pagamentos reais** antes de substituir o checkout por integração certificada com backend seguro. O botão de compra NÃO está ligado à Viva.com.
 - Não cole segredos de gateways em campos do navegador; configurações antigas em localStorage não são seguras.
 - Se o projeto já tiver dados na tabela produtos, faça cópia de segurança antes de alterar.
 - O JavaScript Supabase é carregado por CDN: é necessária ligação à internet para operar online.
