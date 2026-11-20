@@ -3,10 +3,7 @@ const Checkout = {
   init() {},
   openCheckoutModal() {
     if (!Store.cart?.length) return Store.showToast('O seu cesto está vazio.');
-    this.renderOrderSummary();
-    document.getElementById('checkout-modal').classList.add('active');
-    document.body.style.overflow='hidden';
-    Store.closeCart();
+    window.location.assign('/checkout.html');
   },
   closeCheckoutModal() { document.getElementById('checkout-modal')?.classList.remove('active'); document.body.style.overflow=''; },
   renderOrderSummary() {
