@@ -44,7 +44,8 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const { items, customer } = req.body || {};
+    const { items, customer, paymentMode } = req.body || {};
+    const embedded = paymentMode === 'widget';
 
     if (
       !Array.isArray(items) ||
@@ -239,9 +240,7 @@ module.exports = async (req, res) => {
           currency: 'EUR',
           checkout_reference: id,
           description: `Encomenda Maelle ${id.slice(0, 8)}`,
-          hosted_checkout: {
-            enabled: true
-          },
+          ...(embedded ? {} : { hosted_checkout: { enabled: true } }),
           redirect_url:
             `${ORIGIN}/pagamento.html?pedido=${id}`,
           return_url:
@@ -261,7 +260,7 @@ module.exports = async (req, res) => {
     if (
       !payment.ok ||
       !result.id ||
-      !result.hosted_checkout_url
+      (!embedded && !result.hosted_checkout_url)
     ) {
       await api(`encomendas_sumup?id=eq.${id}`, {
         method: 'PATCH',
@@ -289,6 +288,10 @@ module.exports = async (req, res) => {
       throw Error(
         'Não foi possível associar o pagamento à encomenda.'
       );
+    }
+
+    if (embedded) {
+      return res.status(200).json({ checkoutId: result.id, pedido: id });
     }
 
     const checkoutUrl = new URL(result.hosted_checkout_url);

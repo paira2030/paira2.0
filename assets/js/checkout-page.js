@@ -24,14 +24,37 @@ const MaelleCheckout={
   document.getElementById('checkout-total').textContent=this.eur(subtotal+shipping);
  },
  async pay(event){
-  event.preventDefault();const form=document.getElementById('checkout-form');if(!form.reportValidity())return;
-  const btn=form.querySelector('[type=submit]');btn.disabled=true;const label=btn.textContent;btn.textContent='A preparar pagamento...';
+  event.preventDefault();
+  const form=document.getElementById('checkout-form');
+  if(!form.reportValidity() || this.paymentPrepared)return;
+  const btn=document.getElementById('prepare-payment');
+  const status=document.getElementById('payment-status');
+  const errorBox=document.getElementById('payment-error');
+  errorBox.hidden=true;btn.disabled=true;btn.textContent='A preparar pagamento...';
   const val=id=>document.getElementById(id).value.trim();
   const customer={name:val('cust-name'),email:val('cust-email'),phone:val('cust-phone'),address:val('cust-address'),postalCode:val('cust-postal'),city:val('cust-city'),nif:val('cust-nif')};
   try{
-   const response=await fetch('/api/sumup-create-checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({customer,items:this.cart.map(i=>({id:i.dbId||i.id,code:i.id,qty:i.qty,size:i.size,color:i.color}))})});
-   const data=await response.json().catch(()=>({}));if(!response.ok||!data.url)throw Error(data.error||'Não foi possível iniciar o pagamento.');
-   const url=new URL(data.url);if(url.protocol!=='https:'||url.hostname!=='checkout.sumup.com')throw Error('Destino de pagamento inválido.');window.location.assign(url.toString());
-  }catch(err){alert(err.message);btn.disabled=false;btn.textContent=label}
+   if(!window.SumUpCard || typeof window.SumUpCard.mount!=='function')throw Error('O formulário seguro da SumUp não carregou. Atualize a página.');
+   const response=await fetch('/api/sumup-create-checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({paymentMode:'widget',customer,items:this.cart.map(i=>({id:i.dbId||i.id,code:i.id,qty:i.qty,size:i.size,color:i.color}))})});
+   const data=await response.json().catch(()=>({}));
+   if(!response.ok||!data.checkoutId||!data.pedido)throw Error(data.error||'Não foi possível iniciar o pagamento.');
+   this.paymentPrepared=true;
+   this.pedido=data.pedido;
+   btn.hidden=true;
+   status.textContent='Preencha os dados do pagamento no formulário seguro abaixo.';
+   window.SumUpCard.mount({id:'sumup-card',checkoutId:data.checkoutId,email:customer.email,onResponse:async(type,body)=>{
+    if(type==='error'||type==='fail'){errorBox.textContent='Não foi possível concluir o pagamento. Verifique os dados ou tente novamente.';errorBox.hidden=false;status.textContent='Pagamento não confirmado.';return}
+    if(type==='success'){
+     status.textContent='A verificar o pagamento com a SumUp...';
+     try{
+      const check=await fetch('/api/sumup-status?pedido='+encodeURIComponent(this.pedido),{cache:'no-store'});
+      const result=await check.json();
+      if(!check.ok)throw Error(result.error||'Não foi possível confirmar o pagamento.');
+      if(result.status==='PAID')window.location.assign('/pagamento.html?pedido='+encodeURIComponent(this.pedido));
+      else status.textContent='Pagamento enviado. A confirmação ainda está pendente; consulte o estado da encomenda antes de repetir.';
+     }catch(e){status.textContent=e.message+' Não tente pagar novamente antes de verificar a encomenda.'}
+    }
+   }});
+  }catch(err){errorBox.textContent=err.message;errorBox.hidden=false;btn.disabled=false;btn.textContent='Tentar novamente'}
  }
 };document.addEventListener('DOMContentLoaded',()=>MaelleCheckout.init());
