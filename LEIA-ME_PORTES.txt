@@ -1,0 +1,10 @@
+MAELLE — Portes por produto
+
+1. Antes de publicar, execute SUPABASE_PORTES_POR_PRODUTO.sql no SQL Editor do Supabase usado pela Maelle.
+2. Publique os arquivos atualizados no GitHub e aguarde o deploy da Vercel.
+3. No ADM, edite um produto e escolha Cobrar portes (qualquer valor em euros) ou Envio grátis. Guarde.
+4. Para carrinhos com vários produtos: cobra-se uma única vez o MAIOR valor de portes entre os produtos pagos. Produtos grátis não acrescentam portes.
+5. Produtos antigos mantêm a regra antiga (4,50 € abaixo de 49,90 € de subtotal; grátis acima) até serem editados no ADM.
+6. O servidor SumUp calcula os portes consultando diretamente o Supabase, não aceita preços enviados pelo navegador.
+7. Teste produtos pagos, grátis e mistos antes de receber pedidos reais.
+8. Credenciais SumUp não foram alteradas.

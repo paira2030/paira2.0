@@ -247,6 +247,18 @@
             <input type="text" id="prod-form-tag" placeholder="Ex: Best-seller, Novo, Edição Limitada" class="w-full bg-papel border border-costura p-2.5 focus:border-tinta outline-none" />
           </div>
 
+          <div class="sm:col-span-2 border-t border-costura pt-4" >
+            <label class="block font-medium text-grafite mb-2" for="prod-form-shipping-mode">Portes de envio deste produto</label>
+            <select id="prod-form-shipping-mode" onchange="Admin.toggleShippingPrice()" class="w-full bg-papel border border-costura p-2.5">
+              <option value="paid">Cobrar portes de envio</option>
+              <option value="free">Envio grátis</option>
+            </select>
+            <div id="prod-form-shipping-price-wrap" class="mt-3">
+              <label class="block font-medium text-grafite mb-1" for="prod-form-shipping-price">Valor dos portes (€)</label>
+              <input type="number" id="prod-form-shipping-price" min="0" max="9999.99" step="0.01" value="4.50" class="w-full bg-papel border border-costura p-2.5" />
+            </div>
+            <p class="text-xs mt-2 text-grafite">Num cesto com vários artigos, cobra-se uma única vez o maior valor de portes dos artigos pagos. Artigos com envio grátis não acrescentam portes.</p>
+          </div>
           <div class="sm:col-span-2 border-t border-costura pt-4 flex flex-wrap gap-6">
             <label class="flex gap-2 items-center"><input type="checkbox" id="prod-form-saldos"/> Publicar em Saldos</label>
             <label class="flex gap-2 items-center"><input type="checkbox" id="prod-form-inverno"/> Incluir na coleção Inverno</label>
