@@ -7,7 +7,7 @@ const URL_BASE =
 
 const KEY = process.env.SUPABASE_SECRET_KEY;
 
-const ORIGIN = 'https://maelleoficial.vercel.app';
+const ORIGIN = 'https://www.maelle.pt/';
 
 const api = (path, opts = {}) =>
   fetch(`${URL_BASE}/rest/v1/${path}`, {
