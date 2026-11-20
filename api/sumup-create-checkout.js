@@ -1,5 +1,5 @@
 
-const { randomUUID } = require('node:crypto');
+const { randomUUID, randomBytes } = require('node:crypto');
 
 const URL_BASE =
   process.env.SUPABASE_URL ||
@@ -198,6 +198,7 @@ module.exports = async (req, res) => {
 
     const row = {
       id,
+      codigo_rastreio: 'MAE-' + randomBytes(9).toString('hex').toUpperCase(),
       cliente: customer,
       itens: snapshot,
       subtotal: subtotalCents / 100,
