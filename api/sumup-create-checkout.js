@@ -105,7 +105,7 @@ module.exports = async (req, res) => {
       )
     ];
 
-    let query = 'select=id,codigo,nome,preco,estoque,ativo';
+    let query = 'select=id,codigo,nome,preco,estoque,ativo,modo_envio,valor_portes';
 
     const filters = [];
 
@@ -134,6 +134,7 @@ module.exports = async (req, res) => {
 
     let subtotalCents = 0;
     const snapshot = [];
+    const shippingRules = [];
 
     for (const x of parsed) {
       const product = products.find(
@@ -163,6 +164,7 @@ module.exports = async (req, res) => {
       }
 
       subtotalCents += cents * x.qty;
+      shippingRules.push({mode:product.modo_envio || 'legacy',cents:Math.round(Number(product.valor_portes ?? 4.50)*100)});
 
       snapshot.push({
         id: product.id,
@@ -179,8 +181,16 @@ module.exports = async (req, res) => {
       Number(process.env.MAELLE_FREE_SHIPPING_EUR || 49.90) * 100
     );
 
-    const shippingCents =
-      subtotalCents >= freeShipping ? 0 : 450;
+    // Uma cobrança por encomenda: maior valor entre produtos pagos.
+    // Produtos antigos preservam a regra anterior até serem editados no ADM.
+    const shippingCents = Math.max(0, ...shippingRules.map(rule => {
+      if (rule.mode === 'free') return 0;
+      if (rule.mode === 'paid') {
+        if (!Number.isSafeInteger(rule.cents) || rule.cents < 0 || rule.cents > 999999) throw Error('Portes inválidos no catálogo.');
+        return rule.cents;
+      }
+      return subtotalCents >= freeShipping ? 0 : 450;
+    }));
 
     const total = (subtotalCents + shippingCents) / 100;
 

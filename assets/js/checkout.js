@@ -11,7 +11,7 @@ const Checkout = {
   closeCheckoutModal() { document.getElementById('checkout-modal')?.classList.remove('active'); document.body.style.overflow=''; },
   renderOrderSummary() {
     const subtotal=Store.cart.reduce((s,i)=>s+Number(i.price)*Number(i.qty),0);
-    const shipping=subtotal>=Store.freeShippingThreshold?0:4.5;
+    const shipping=Store.calculateShipping();
     const el=document.getElementById('checkout-summary-items');
     el.replaceChildren();
     for (const item of Store.cart) {
