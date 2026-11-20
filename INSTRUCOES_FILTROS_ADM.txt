@@ -1,0 +1,7 @@
+MAELLE — GESTÃO DE ENCOMENDAS
+
+1. No Supabase SQL Editor, executar SUPABASE_CODIGOS_MAE_PEDIDOS_ANTIGOS.sql.
+2. Atualizar GitHub com esta versão e aguardar deploy Ready na Vercel.
+3. No ADM > Gestão de encomendas, clicar Atualizar lista e filtrar PAID / PENDING / ERROR.
+4. A consulta pública de acompanhamento continua limitada a encomendas PAID, com código + email.
+5. Não alterar credenciais da SumUp.

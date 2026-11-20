@@ -33,6 +33,7 @@
   </script>
 
   <link rel="stylesheet" href="assets/css/style.css" />
+<link rel="stylesheet" href="css/maelle-orders.css">
 </head>
 <body class="bg-linho text-tinta min-h-screen">
 
@@ -142,7 +143,12 @@
         <p id="security-message" class="text-xs" role="status" aria-live="polite"></p>
       </div>
 
-      <div id="tab-encomendas" class="hidden space-y-5"><h2 class="font-display text-3xl">Gestão de encomendas</h2><p class="text-xs text-grafite">Apenas pedidos pagos podem avançar na preparação e entrega.</p><button onclick="MaelleExtras.loadOrders()" class="btn-editorial text-xs px-5 py-2">Atualizar lista</button><div id="orders-list" class="space-y-3"></div></div>
+      <section id="tab-encomendas" class="hidden maelle-orders">
+        <div class="orders-heading"><div><h2>▣ Gestão de Encomendas</h2><p>Acompanhe, filtre e atualize o estado dos pedidos da Maelle.</p></div><button type="button" class="orders-refresh" onclick="MaelleExtras.loadOrders()">↻ &nbsp; Atualizar lista</button></div>
+        <div class="orders-stats"><div class="stat total"><span>Total de Encomendas</span><strong id="orders-count-all">—</strong></div><div class="stat paid"><span>Pagos (PAID)</span><strong id="orders-count-paid">—</strong></div><div class="stat pending"><span>Pendentes (PENDING)</span><strong id="orders-count-pending">—</strong></div><div class="stat error"><span>Erro (ERROR)</span><strong id="orders-count-error">—</strong></div></div>
+        <div class="orders-toolbar"><div class="orders-filters"><button data-order-filter="ALL" class="active">Todos</button><button data-order-filter="PAID">✓ PAID</button><button data-order-filter="PENDING">◷ PENDING</button><button data-order-filter="ERROR">✕ ERROR</button></div><input id="orders-search" type="search" placeholder="Pesquisar por nome, código MAE ou e-mail..." aria-label="Pesquisar encomendas"></div>
+        <div class="orders-table-wrap"><div class="orders-table-header"><span>Encomenda</span><span>Cliente</span><span>Valor</span><span>Pagamento</span><span>Estado da Entrega</span><span>Ações</span></div><div id="orders-list" aria-live="polite">Clique em Atualizar lista para consultar as encomendas.</div></div>
+      </section>
       <div id="tab-paginas" class="hidden space-y-5 max-w-3xl"><h2 class="font-display text-3xl">Editar páginas institucionais</h2><label class="block text-sm">Página<select id="edit-page" class="block w-full p-3 border" onchange="MaelleExtras.loadPage()"><option value="sobre">Sobre a Maelle</option><option value="sustentabilidade">Sustentabilidade</option></select></label><label class="block text-sm">Título<input id="edit-title" class="block w-full p-3 border"></label><label class="block text-sm">Introdução<textarea id="edit-intro" class="block w-full p-3 border" rows="3"></textarea></label><p class="text-xs text-grafite">Cada secção tem um título e texto editável.</p><div id="edit-sections" class="space-y-3"></div><button class="btn-editorial-outline text-xs px-4 py-2" onclick="MaelleExtras.addSection()">Adicionar secção</button> <button class="btn-editorial text-xs px-4 py-2" onclick="MaelleExtras.savePage()">Guardar alterações</button><p id="page-message" role="status" class="text-xs"></p></div>
       <section id="tab-saldos" style="display:none" class="space-y-5"><h2 class="font-display text-3xl">Gestão de Saldos</h2><p class="text-sm text-grafite">Escolha as peças e indique o preço de referência e o preço promocional. Só aparecem na página Saldos os artigos selecionados com desconto válido.</p><div id="admin-saldos-list" class="space-y-3"></div></section>
       <section id="tab-inverno" style="display:none" class="space-y-5"><h2 class="font-display text-3xl">Coleção Inverno</h2><p class="text-sm text-grafite">Escolha quais os produtos que pertencem à coleção Inverno, sem retirar das categorias originais.</p><div id="admin-inverno-list" class="space-y-3"></div></section>
@@ -321,5 +327,6 @@ window.__maelleRecoveryLink = /(?:[?#&])type=recovery(?:[&#]|$)/.test(window.loc
 <script src="js/supabase-bridge.js"></script>
 <script src="js/admin.js"></script>
 <script src="js/maelle-extras.js"></script>
+<script src="js/maelle-orders.js"></script>
 </body>
 </html>
