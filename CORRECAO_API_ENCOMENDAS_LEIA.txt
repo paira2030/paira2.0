@@ -1,0 +1,7 @@
+MAELLE - CORRECAO DA API DE ENCOMENDAS
+
+1. Esta versao modifica api/admin-orders.js para consultar os campos basicos das encomendas mesmo quando as colunas opcionais codigo_rastreio e estado_entrega ainda nao existem.
+2. O painel deve voltar a listar os pedidos se a consulta principal e a autenticacao estiverem corretas. Se continuar com erro, consulte os logs da funcao /api/admin-orders na Vercel; a API agora registra a resposta do Supabase sem expor a chave.
+3. Para mostrar codigos MAE e permitir guardar estados de entrega, execute no Supabase as migracoes existentes SUPABASE_RASTREIO_ENCOMENDAS.sql e MAELLE_NOVAS_FUNCOES.sql, apenas apos verificar se ja foram executadas. Sem elas, a lista pode aparecer, mas os codigos podem ficar vazios e a gravacao do estado pode falhar.
+4. Publique os arquivos no GitHub e aguarde a Vercel atualizar. Verifique o painel, filtros e as compras reais.
+5. A alteracao nao muda a API da SumUp nem apaga encomendas ou produtos.
