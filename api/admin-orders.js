@@ -1,7 +1,7 @@
 const { verify, db } = require('./_maelle-admin');
 
 const allowed = ['processando', 'preparando', 'despachado', 'saiu_entrega', 'entregue'];
-const baseColumns = 'id,cliente,itens,total,moeda,estado_pagamento,criado_em';
+const baseColumns = 'id,cliente,itens,total,moeda,estado_pagamento,criado_em,arquivado_em';
 
 async function failure(response, context) {
   const detail = await response.text().catch(() => '');
@@ -17,7 +17,7 @@ module.exports = async (req, res) => {
     if (req.method === 'GET') {
       // Start with columns that exist in the original orders table. Optional
       // tracking/delivery fields may not yet have been migrated in Supabase.
-      const query = 'encomendas_sumup?select=' + baseColumns + '&order=criado_em.desc&limit=100';
+      const query = 'encomendas_sumup?select=' + baseColumns + '&order=criado_em.desc&limit=1000';
       const result = await db(query);
       if (!result.ok) {
         await failure(result, 'GET orders');
@@ -40,6 +40,26 @@ module.exports = async (req, res) => {
       return res.status(200).json(orders);
     }
 
+    if (req.method === 'POST') {
+      const id = String(req.body?.id || '');
+      const action = String(req.body?.action || '');
+      if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id) || !['archive','restore'].includes(action)) {
+        return res.status(400).json({ error: 'Pedido inválido' });
+      }
+      // Soft-delete only. Never remove payment evidence or modify SumUp payment state.
+      const result = await db('encomendas_sumup?id=eq.' + encodeURIComponent(id), {
+        method: 'PATCH',
+        headers: { Prefer: 'return=representation' },
+        body: JSON.stringify({ arquivado_em: action === 'archive' ? new Date().toISOString() : null })
+      });
+      if (!result.ok) {
+        await failure(result, 'archive/restore');
+        return res.status(502).json({ error: 'Não foi possível alterar a lixeira. Confirme a migração SQL.' });
+      }
+      const changed = await result.json();
+      if (changed.length !== 1) return res.status(404).json({ error: 'Encomenda não encontrada' });
+      return res.status(200).json({ ok: true, arquivado_em: changed[0].arquivado_em });
+    }
     if (req.method !== 'PATCH') return res.status(405).json({ error: 'Método não permitido' });
     const id = String(req.body?.id || '');
     const estado = String(req.body?.estado_entrega || '');
