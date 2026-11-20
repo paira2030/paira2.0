@@ -1,0 +1,9 @@
+MAELLE — ACOMPANHAMENTO DE ENCOMENDAS
+1. Execute SUPABASE_RASTREIO_ENCOMENDAS.sql no SQL Editor do Supabase.
+2. Publique este ZIP no GitHub e aguarde o deploy Ready na Vercel.
+3. O rodapé possui Produtos > Localizar, com botão discreto.
+4. O cliente vê o código após pagamento confirmado e consulta com código + e-mail.
+5. O ADM continua atualizando manualmente o estado de entrega.
+6. Para pedidos antigos, o SQL cria códigos; a entrega dos códigos a esses clientes não é automática.
+7. Teste uma compra completa e confira o código, o estado no ADM e a consulta.
+8. Credenciais SumUp e Supabase não foram alteradas.

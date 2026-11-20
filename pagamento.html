@@ -64,6 +64,7 @@
             title.textContent = 'Pagamento confirmado';
             details.textContent =
               'A SumUp confirmou o pagamento. Obrigado pela sua encomenda!';
+            if(d.codigo_rastreio){const p=document.createElement('p');p.textContent='Código de acompanhamento: '+d.codigo_rastreio;const a=document.createElement('a');a.href='/localizar.html';a.textContent=' Acompanhar encomenda';p.append(document.createElement('br'),a);details.after(p);}
             return;
           }
 
