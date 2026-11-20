@@ -36,8 +36,6 @@ module.exports = async (req, res) => {
     !URL_BASE ||
     !KEY
   ) {
-    console.error('Checkout: configuração incompleta.');
-
     return fail(
       res,
       503,
@@ -107,8 +105,7 @@ module.exports = async (req, res) => {
       )
     ];
 
-    let query =
-      'select=id,codigo,nome,preco,estoque,ativo,modo_envio,valor_portes';
+    let query = 'select=id,codigo,nome,preco,estoque,ativo,modo_envio,valor_portes';
 
     const filters = [];
 
@@ -129,11 +126,7 @@ module.exports = async (req, res) => {
     const db = await api('produtos?' + query);
 
     if (!db.ok) {
-      console.error('Erro Supabase catálogo:', {
-        status: db.status,
-        detalhe: await db.text()
-      });
-
+      console.error('Erro Supabase catálogo:', db.status);
       throw Error('Não foi possível consultar o catálogo.');
     }
 
@@ -171,13 +164,7 @@ module.exports = async (req, res) => {
       }
 
       subtotalCents += cents * x.qty;
-
-      shippingRules.push({
-        mode: product.modo_envio || 'legacy',
-        cents: Math.round(
-          Number(product.valor_portes ?? 4.50) * 100
-        )
-      });
+      shippingRules.push({mode:product.modo_envio || 'legacy',cents:Math.round(Number(product.valor_portes ?? 4.50)*100)});
 
       snapshot.push({
         id: product.id,
@@ -194,26 +181,16 @@ module.exports = async (req, res) => {
       Number(process.env.MAELLE_FREE_SHIPPING_EUR || 49.90) * 100
     );
 
-    const shippingCents = Math.max(
-      0,
-      ...shippingRules.map(rule => {
-        if (rule.mode === 'free') return 0;
-
-        if (rule.mode === 'paid') {
-          if (
-            !Number.isSafeInteger(rule.cents) ||
-            rule.cents < 0 ||
-            rule.cents > 999999
-          ) {
-            throw Error('Portes inválidos no catálogo.');
-          }
-
-          return rule.cents;
-        }
-
-        return subtotalCents >= freeShipping ? 0 : 450;
-      })
-    );
+    // Uma cobrança por encomenda: maior valor entre produtos pagos.
+    // Produtos antigos preservam a regra anterior até serem editados no ADM.
+    const shippingCents = Math.max(0, ...shippingRules.map(rule => {
+      if (rule.mode === 'free') return 0;
+      if (rule.mode === 'paid') {
+        if (!Number.isSafeInteger(rule.cents) || rule.cents < 0 || rule.cents > 999999) throw Error('Portes inválidos no catálogo.');
+        return rule.cents;
+      }
+      return subtotalCents >= freeShipping ? 0 : 450;
+    }));
 
     const total = (subtotalCents + shippingCents) / 100;
 
@@ -221,8 +198,7 @@ module.exports = async (req, res) => {
 
     const row = {
       id,
-      codigo_rastreio:
-        'MAE-' + randomBytes(9).toString('hex').toUpperCase(),
+      codigo_rastreio: 'MAE-' + randomBytes(9).toString('hex').toUpperCase(),
       cliente: customer,
       itens: snapshot,
       subtotal: subtotalCents / 100,
@@ -231,8 +207,6 @@ module.exports = async (req, res) => {
       moeda: 'EUR',
       estado_pagamento: 'PENDING'
     };
-
-    // REGISTAR ENCOMENDA NO SUPABASE
 
     const inserted = await api('encomendas_sumup', {
       method: 'POST',
@@ -244,22 +218,12 @@ module.exports = async (req, res) => {
 
     if (!inserted.ok) {
       const detalhe = await inserted.text();
-
       console.error('Erro ao inserir encomenda no Supabase:', {
         status: inserted.status,
         detalhe
       });
-
       throw Error('Não foi possível registar a encomenda.');
     }
-
-    console.log('Encomenda registada no Supabase:', {
-      pedido: id,
-      total,
-      moeda: 'EUR'
-    });
-
-    // CRIAR PAGAMENTO NA SUMUP
 
     const payment = await fetch(
       'https://api.sumup.com/v0.1/checkouts',
@@ -311,8 +275,6 @@ module.exports = async (req, res) => {
       );
     }
 
-    // ASSOCIAR PAGAMENTO À ENCOMENDA
-
     const updated = await api(
       `encomendas_sumup?id=eq.${id}`,
       {
@@ -324,17 +286,10 @@ module.exports = async (req, res) => {
     );
 
     if (!updated.ok) {
-      console.error('Erro ao associar checkout:', {
-        status: updated.status,
-        detalhe: await updated.text()
-      });
-
       throw Error(
         'Não foi possível associar o pagamento à encomenda.'
       );
     }
-
-    // VALIDAR ENDEREÇO DE PAGAMENTO
 
     const checkoutUrl = new URL(result.hosted_checkout_url);
 
@@ -344,11 +299,6 @@ module.exports = async (req, res) => {
     ) {
       throw Error('URL de pagamento inesperada.');
     }
-
-    console.log('Checkout SumUp preparado:', {
-      pedido: id,
-      checkout: result.id
-    });
 
     return res.status(200).json({
       url: checkoutUrl.toString()
