@@ -143,8 +143,8 @@ const Admin = {
     });
 
     document.getElementById('tab-produtos').style.display = tab === 'produtos' ? 'block' : 'none';
-    for (const name of ['saldos','inverno']) document.getElementById('tab-'+name).style.display = tab === name ? 'block' : 'none';
-    if (tab === 'saldos' || tab === 'inverno') this.renderCollectionTab(tab);
+    for (const name of ['saldos','inverno','favoritos-inverno']) document.getElementById('tab-'+name).style.display = tab === name ? 'block' : 'none';
+    if (tab === 'saldos' || tab === 'inverno' || tab === 'favoritos-inverno') this.renderCollectionTab(tab);
     document.getElementById('tab-sumup').style.display = tab === 'sumup' ? 'block' : 'none';
     document.getElementById('tab-encomendas').style.display = tab === 'encomendas' ? 'block' : 'none';
     document.getElementById('tab-paginas').style.display = tab === 'paginas' ? 'block' : 'none';
@@ -156,11 +156,12 @@ const Admin = {
     const el = document.getElementById('admin-'+tab+'-list');
     if (!el) return;
     el.replaceChildren();
+    if(tab==='favoritos-inverno') { const counter=document.getElementById('admin-favoritos-count'); if(counter)counter.textContent=this.products.filter(p=>p.isFavoritoInverno).length+' de 4 produtos selecionados'; }
     this.products.forEach((p,index) => {
       const row = document.createElement('div');
       row.className='bg-white border border-costura p-3 flex flex-wrap gap-3 items-center';
       const name = document.createElement('span'); name.className='flex-1 min-w-40 text-sm'; name.textContent=p.title;
-      const check=document.createElement('input'); check.type='checkbox'; check.checked=tab==='saldos'?!!p.isSaldo:!!p.isInverno;
+      const check=document.createElement('input'); check.type='checkbox'; check.checked=tab==='saldos'?!!p.isSaldo:tab==='inverno'?!!p.isInverno:!!p.isFavoritoInverno;
       check.setAttribute('aria-label','Incluir '+p.title+' em '+tab);
       const details=document.createElement('span');details.className='text-xs text-grafite';details.textContent=Number(p.price||0).toFixed(2)+' €';
       if(tab==='saldos') {
@@ -182,7 +183,8 @@ const Admin = {
     if(tab==='saldos' && checked && !(price>0 && oldPrice>price)) {
       this.showAdminToast('O preço anterior deve ser maior que o preço promocional.');return;
     }
-    const p={...original,images:original.images||[],isSaldo:tab==='saldos'?checked:!!original.isSaldo,isInverno:tab==='inverno'?checked:!!original.isInverno};
+    if(tab==='favoritos-inverno' && checked && !original.isFavoritoInverno && this.products.filter(p=>p.isFavoritoInverno).length>=4) {this.showAdminToast('Pode destacar no máximo 4 peças. Retire uma antes de adicionar outra.');return;}
+    const p={...original,images:original.images||[],isSaldo:tab==='saldos'?checked:!!original.isSaldo,isInverno:tab==='inverno'?checked:!!original.isInverno,isFavoritoInverno:tab==='favoritos-inverno'?checked:!!original.isFavoritoInverno};
     if(tab==='saldos') {p.price=price;p.oldPrice=oldPrice;}
     try {
       if(MaelleDB.enabled) {await MaelleDB.save(p);await this.loadCatalog();}
@@ -315,6 +317,7 @@ const Admin = {
     document.getElementById('prod-form-old-price').value = '64.99';
     document.getElementById('prod-form-saldos').checked = false;
     document.getElementById('prod-form-inverno').checked = false;
+    document.getElementById('prod-form-favorito-inverno').checked = false;
     document.getElementById('prod-form-stock').value = '15';
     document.getElementById('prod-form-shipping-mode').value = 'paid';
     document.getElementById('prod-form-shipping-price').value = '4.50';
@@ -344,6 +347,7 @@ const Admin = {
     document.getElementById('prod-form-old-price').value = p.oldPrice || '';
     document.getElementById('prod-form-saldos').checked = !!p.isSaldo;
     document.getElementById('prod-form-inverno').checked = !!p.isInverno;
+    document.getElementById('prod-form-favorito-inverno').checked = !!p.isFavoritoInverno;
     document.getElementById('prod-form-stock').value = p.stock || 10;
     document.getElementById('prod-form-shipping-mode').value = p.shippingMode || 'paid';
     document.getElementById('prod-form-shipping-price').value = p.shippingPrice ?? 4.50;
@@ -378,6 +382,7 @@ const Admin = {
       oldPrice: parseFloat(document.getElementById('prod-form-old-price').value) || 0,
       isSaldo: document.getElementById('prod-form-saldos').checked,
       isInverno: document.getElementById('prod-form-inverno').checked,
+      isFavoritoInverno: document.getElementById('prod-form-favorito-inverno').checked,
       stock: parseInt(document.getElementById('prod-form-stock').value) || 10,
       shippingMode: document.getElementById('prod-form-shipping-mode').value,
       shippingPrice: Number(document.getElementById('prod-form-shipping-price').value),
@@ -392,6 +397,7 @@ const Admin = {
       reviewsCount: 12
     };
 
+    if(productData.isFavoritoInverno && !(idx>=0 && this.products[idx]?.isFavoritoInverno) && this.products.filter(p=>p.isFavoritoInverno).length>=4) {this.showAdminToast('Limite de 4 Favoritos de Inverno.');return;}
     if (productData.shippingMode === 'paid' && (!Number.isFinite(productData.shippingPrice) || productData.shippingPrice < 0 || productData.shippingPrice > 9999.99)) { this.showAdminToast('Indique um valor válido para os portes.'); return; }
     if (productData.isSaldo && !(productData.oldPrice > productData.price && productData.price > 0)) { this.showAdminToast('Para Saldos, o preço anterior deve ser maior que o promocional.'); return; }
     if (!productData.colors.length || !productData.sizes.length) { this.showAdminToast('Selecione pelo menos uma cor e um tamanho.'); return; }
