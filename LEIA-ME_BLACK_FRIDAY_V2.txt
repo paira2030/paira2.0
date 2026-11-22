@@ -1,0 +1,13 @@
+BLACK FRIDAY MAELLE V2 — SEM A API ANTIGA DE LEITURA COM SECRET KEY
+
+1. No Supabase SQL Editor, execute BLACK_FRIDAY_V2_RLS.sql.
+2. Na Vercel, confirme SUPABASE_URL e SUPABASE_PUBLISHABLE_KEY em Production.
+3. Publique estes ficheiros e aguarde o deploy Ready.
+4. ADM > Black Friday: confirme estado DESLIGADA; teste ligar e desligar.
+5. Teste produtos normais, produtos Saldos, carrinho e checkout SumUp em ambiente de teste.
+6. Só ative em produção após validar o montante do pagamento.
+
+O checkout ainda depende de SUPABASE_SECRET_KEY para o catálogo/encomendas.
+Esta versão muda especificamente a leitura da campanha para a chave pública
+com RLS e a atualização para a sessão autenticada do administrador.
+Não elimina a necessidade de credenciais de servidor válidas para o checkout.
