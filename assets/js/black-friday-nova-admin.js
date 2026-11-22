@@ -16,7 +16,7 @@
     if (busy) return;
     busy = true; loaded = false; draw('A consultar Supabase...');
     try {
-      if (!window.MaelleDB?.client) throw Error('Supabase não disponível.');
+      if (!(typeof MaelleDB !== 'undefined' && MaelleDB.client)) throw Error('Supabase não disponível.');
       if (!(await MaelleDB.isAdmin())) throw Error('Sessão administrativa não autorizada.');
       const {data,error} = await MaelleDB.client.from('maelle_promocoes').select('ativa').eq('chave','black_friday').single();
       if (error) throw error;
