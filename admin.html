@@ -151,7 +151,18 @@
         <div class="orders-table-wrap"><div class="orders-table-header"><span>Encomenda</span><span>Cliente</span><span>Valor</span><span>Pagamento</span><span>Estado da Entrega</span><span>Ações</span></div><div id="orders-list" aria-live="polite">Clique em Atualizar lista para consultar as encomendas.</div></div>
       </section>
       <div id="tab-paginas" class="hidden space-y-5 max-w-3xl"><h2 class="font-display text-3xl">Editar páginas institucionais</h2><label class="block text-sm">Página<select id="edit-page" class="block w-full p-3 border" onchange="MaelleExtras.loadPage()"><option value="sobre">Sobre a Maelle</option><option value="sustentabilidade">Sustentabilidade</option></select></label><label class="block text-sm">Título<input id="edit-title" class="block w-full p-3 border"></label><label class="block text-sm">Introdução<textarea id="edit-intro" class="block w-full p-3 border" rows="3"></textarea></label><p class="text-xs text-grafite">Cada secção tem um título e texto editável.</p><div id="edit-sections" class="space-y-3"></div><button class="btn-editorial-outline text-xs px-4 py-2" onclick="MaelleExtras.addSection()">Adicionar secção</button> <button class="btn-editorial text-xs px-4 py-2" onclick="MaelleExtras.savePage()">Guardar alterações</button><p id="page-message" role="status" class="text-xs"></p></div>
-      <section id="tab-black-friday" style="display:none" class="space-y-5 max-w-2xl"><h2 class="font-display text-3xl">Black Friday Maelle</h2><p>Desconto de 20% em todas as peças, exceto artigos marcados como Saldos. O preço de catálogo não é alterado.</p><p id="bf-status" role="status">A consultar...</p><button id="bf-toggle" type="button" class="btn-editorial px-7 py-3" disabled>Carregar campanha...</button><p class="text-xs">A campanha é guardada no Supabase e aplicada no pagamento SumUp.</p></section><section id="tab-saldos" style="display:none" class="space-y-5"><h2 class="font-display text-3xl">Gestão de Saldos</h2><p class="text-sm text-grafite">Escolha as peças e indique o preço de referência e o preço promocional. Só aparecem na página Saldos os artigos selecionados com desconto válido.</p><div id="admin-saldos-list" class="space-y-3"></div></section>
+      <section id="tab-black-friday" style="display:none" class="space-y-5 max-w-2xl">
+<h2 class="font-display text-3xl">Black Friday Maelle</h2>
+<p>Desconto de 20% em todas as peças, exceto artigos marcados como Saldos. O preço de catálogo não é alterado.</p>
+<div style="display:flex;align-items:center;gap:20px;padding:22px;border:1px solid #dedede;background:white;flex-wrap:wrap">
+<div style="flex:1;min-width:180px"><strong>Modo Black Friday</strong><p style="font-size:13px;margin-top:5px">Ligue ou desligue a campanha quando quiser.</p></div>
+<button id="bf-toggle" type="button" role="switch" aria-checked="false" aria-label="Ligar ou desligar Black Friday" class="bf-off" style="border:0;border-radius:30px;padding:8px 17px;min-width:150px;cursor:pointer;background:#ddd;color:#111;display:flex;align-items:center;gap:10px;justify-content:center"><span style="width:22px;height:22px;border-radius:50%;background:currentColor;display:inline-block"></span><span id="bf-switch-label">DESLIGADA</span></button>
+</div>
+<style>#bf-toggle.bf-on{background:#253f28!important;color:#fff!important}#bf-toggle.bf-off{background:#ddd!important;color:#111!important}#bf-toggle:disabled{opacity:.65;cursor:wait!important}</style>
+<p id="bf-status" role="status" aria-live="polite">Abra a aba para consultar o estado.</p>
+<button id="bf-retry" type="button" hidden style="border:1px solid #222;padding:10px 18px">Tentar novamente</button>
+<p class="text-xs">O estado é guardado no Supabase. Execute <code>BLACK_FRIDAY_SUPABASE.sql</code> uma única vez antes de usar. Confirme o valor no checkout SumUp com uma compra de teste.</p>
+</section><section id="tab-saldos" style="display:none" class="space-y-5"><h2 class="font-display text-3xl">Gestão de Saldos</h2><p class="text-sm text-grafite">Escolha as peças e indique o preço de referência e o preço promocional. Só aparecem na página Saldos os artigos selecionados com desconto válido.</p><div id="admin-saldos-list" class="space-y-3"></div></section>
       <section id="tab-favoritos-inverno" style="display:none" class="space-y-5"><h2 class="font-display text-3xl">Os Favoritos de Inverno</h2><p class="text-sm text-grafite">Selecione até 4 produtos para destacar na página inicial. Pode alterar ou retirar as peças a qualquer momento. As alterações são guardadas no Supabase.</p><p id="admin-favoritos-count" class="text-xs font-semibold" aria-live="polite"></p><div id="admin-favoritos-inverno-list" class="space-y-3"></div></section>
       <section id="tab-inverno" style="display:none" class="space-y-5"><h2 class="font-display text-3xl">Coleção Inverno</h2><p class="text-sm text-grafite">Escolha quais os produtos que pertencem à coleção Inverno, sem retirar das categorias originais.</p><div id="admin-inverno-list" class="space-y-3"></div></section>
       <div id="tab-produtos" class="space-y-6">
@@ -330,6 +341,6 @@ window.__maelleRecoveryLink = /(?:[?#&])type=recovery(?:[&#]|$)/.test(window.loc
 <script src="js/supabase-bridge.js"></script>
 <script src="js/admin.js"></script>
 <script src="js/maelle-extras.js"></script>
-<script src="js/maelle-orders.js"></script><script src="assets/js/black-friday-admin.js?v=bf1"></script>
+<script src="js/maelle-orders.js"></script><script src="assets/js/black-friday-admin.js?v=bf2"></script>
 </body>
 </html>
