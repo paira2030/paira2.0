@@ -1,0 +1,11 @@
+MAELLE — OS FAVORITOS DE INVERNO
+
+1. No Supabase > SQL Editor, execute SUPABASE_FAVORITOS_INVERNO.sql UMA VEZ.
+2. Publique todos os arquivos deste ZIP no GitHub e aguarde a Vercel.
+3. Abra o ADM > Favoritos de Inverno, marque até 4 peças e clique Guardar em cada uma.
+4. Alternativamente, no ADM > Produtos > Editar, marque Destacar em Os Favoritos de Inverno e guarde.
+5. A vitrine aparece automaticamente na página inicial quando houver ao menos uma peça marcada.
+6. Para retirar uma peça, desmarque e guarde. As categorias e a coleção Inverno continuam independentes.
+
+IMPORTANTE: Execute o SQL antes de publicar, pois o código novo lê e escreve a coluna favorito_inverno.
+Não altera SKUs, pagamentos, encomendas ou outras colunas.

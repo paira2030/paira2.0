@@ -111,6 +111,7 @@
           
           
           <button data-tab="saldos" class="admin-nav-btn py-4 text-grafite hover:text-tinta transition-all">Saldos</button>
+          <button data-tab="favoritos-inverno" class="admin-nav-btn py-4 text-grafite hover:text-tinta transition-all">Favoritos de Inverno</button>
           <button data-tab="inverno" class="admin-nav-btn py-4 text-grafite hover:text-tinta transition-all">Inverno</button>
           <button data-tab="sumup" class="admin-nav-btn py-4 text-grafite hover:text-tinta transition-all">SumUp</button>
           <button data-tab="encomendas" class="admin-nav-btn py-4 text-grafite hover:text-tinta transition-all">Encomendas</button>
@@ -151,6 +152,7 @@
       </section>
       <div id="tab-paginas" class="hidden space-y-5 max-w-3xl"><h2 class="font-display text-3xl">Editar páginas institucionais</h2><label class="block text-sm">Página<select id="edit-page" class="block w-full p-3 border" onchange="MaelleExtras.loadPage()"><option value="sobre">Sobre a Maelle</option><option value="sustentabilidade">Sustentabilidade</option></select></label><label class="block text-sm">Título<input id="edit-title" class="block w-full p-3 border"></label><label class="block text-sm">Introdução<textarea id="edit-intro" class="block w-full p-3 border" rows="3"></textarea></label><p class="text-xs text-grafite">Cada secção tem um título e texto editável.</p><div id="edit-sections" class="space-y-3"></div><button class="btn-editorial-outline text-xs px-4 py-2" onclick="MaelleExtras.addSection()">Adicionar secção</button> <button class="btn-editorial text-xs px-4 py-2" onclick="MaelleExtras.savePage()">Guardar alterações</button><p id="page-message" role="status" class="text-xs"></p></div>
       <section id="tab-saldos" style="display:none" class="space-y-5"><h2 class="font-display text-3xl">Gestão de Saldos</h2><p class="text-sm text-grafite">Escolha as peças e indique o preço de referência e o preço promocional. Só aparecem na página Saldos os artigos selecionados com desconto válido.</p><div id="admin-saldos-list" class="space-y-3"></div></section>
+      <section id="tab-favoritos-inverno" style="display:none" class="space-y-5"><h2 class="font-display text-3xl">Os Favoritos de Inverno</h2><p class="text-sm text-grafite">Selecione até 4 produtos para destacar na página inicial. Pode alterar ou retirar as peças a qualquer momento. As alterações são guardadas no Supabase.</p><p id="admin-favoritos-count" class="text-xs font-semibold" aria-live="polite"></p><div id="admin-favoritos-inverno-list" class="space-y-3"></div></section>
       <section id="tab-inverno" style="display:none" class="space-y-5"><h2 class="font-display text-3xl">Coleção Inverno</h2><p class="text-sm text-grafite">Escolha quais os produtos que pertencem à coleção Inverno, sem retirar das categorias originais.</p><div id="admin-inverno-list" class="space-y-3"></div></section>
       <div id="tab-produtos" class="space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -268,6 +270,7 @@
           <div class="sm:col-span-2 border-t border-costura pt-4 flex flex-wrap gap-6">
             <label class="flex gap-2 items-center"><input type="checkbox" id="prod-form-saldos"/> Publicar em Saldos</label>
             <label class="flex gap-2 items-center"><input type="checkbox" id="prod-form-inverno"/> Incluir na coleção Inverno</label>
+            <label class="flex gap-2 items-center"><input type="checkbox" id="prod-form-favorito-inverno"/> Destacar em Os Favoritos de Inverno (máx. 4)</label>
           </div>
           <div class="sm:col-span-2 border-t border-costura pt-4">
             <label class="block font-medium text-grafite mb-2">Cores disponíveis — marque apenas as cores da peça *</label>
