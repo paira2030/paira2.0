@@ -1,0 +1,8 @@
+MAELLE — BLACK FRIDAY NOVA
+
+1. No Supabase SQL Editor execute BLACK_FRIDAY_V2_RLS.sql (se ainda não executou).
+2. Publique todos os arquivos deste ZIP no GitHub. Remova também os arquivos antigos assets/js/black-friday-admin.js e api/black-friday.js do repositório.
+3. Aguarde o deploy Ready, atualize o ADM e abra Black Friday.
+4. Teste Ligar/Desligar. Confira o valor no carrinho e checkout SumUp antes de vender.
+5. A tabela maelle_promocoes é reutilizada. O SQL não liga a campanha.
+6. O checkout depende da variável SUPABASE_PUBLISHABLE_KEY correta na Vercel e de RLS aplicada.
