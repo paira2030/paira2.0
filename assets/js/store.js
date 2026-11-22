@@ -218,7 +218,7 @@ const Store = {
     const section=document.getElementById('favoritos-inverno');
     const grid=document.getElementById('favoritos-inverno-grid');
     if(!section || !grid) return;
-    const selected=this.products.filter(p=>p.isFavoritoInverno).slice(0,4);
+    const selected=this.products.filter(p=>p.isFavoritoInverno === true || p.isFavoritoInverno === 1 || p.isFavoritoInverno === "true").slice(0,4);
     section.hidden=selected.length===0;
     if(!selected.length) {grid.replaceChildren();return;}
     grid.replaceChildren();
