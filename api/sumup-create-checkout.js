@@ -106,9 +106,13 @@ module.exports = async (req, res) => {
       )
     ];
 
-    const promoResponse = await api('maelle_promocoes?chave=eq.black_friday&select=ativa');
+    // Public read through RLS; never trust the price sent by the browser.
+    const promoResponse = await fetch(`${URL_BASE}/rest/v1/maelle_promocoes?chave=eq.black_friday&select=ativa`, {
+      headers: { apikey: process.env.SUPABASE_PUBLISHABLE_KEY }, cache: 'no-store'
+    });
     if (!promoResponse.ok) throw Error('Não foi possível verificar a promoção.');
     const promoRows = await promoResponse.json();
+    if (!Array.isArray(promoRows) || promoRows.length !== 1) throw Error('Configuração da campanha indisponível.');
     const blackFridayActive = promoRows[0]?.ativa === true;
 
     let query = 'select=id,codigo,nome,preco,estoque,ativo,modo_envio,valor_portes,em_saldos';
