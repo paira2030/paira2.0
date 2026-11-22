@@ -23,6 +23,7 @@ const Store = {
   async init() {
     await this.loadProducts();
     this.renderCatalog();
+    this.renderFavoritosInverno();
     this.updateCartUI();
     this.updateWishlistBadges();
     this.setupEventListeners();
@@ -209,6 +210,32 @@ const Store = {
     const overlay = document.getElementById('search-overlay-bar');
     if (overlay) {
       overlay.classList.remove('active');
+    }
+  },
+
+  // Destaques selecionados no ADM; não mostra peças fictícias.
+  renderFavoritosInverno() {
+    const section=document.getElementById('favoritos-inverno');
+    const grid=document.getElementById('favoritos-inverno-grid');
+    if(!section || !grid) return;
+    const selected=this.products.filter(p=>p.isFavoritoInverno).slice(0,4);
+    section.hidden=selected.length===0;
+    if(!selected.length) {grid.replaceChildren();return;}
+    grid.replaceChildren();
+    for(const p of selected) {
+      const card=document.createElement('article');
+      card.className='group min-w-0';
+      const button=document.createElement('button');
+      button.type='button';button.className='block w-full text-left';
+      button.setAttribute('aria-label','Ver '+p.title);
+      button.onclick=()=>this.openPDP(p.id);
+      const picture=document.createElement('div');picture.className='relative aspect-[3/4] overflow-hidden bg-papel';
+      const img=document.createElement('img');img.src=p.localImage||p.images?.[0]||'';img.alt=p.title;img.loading='lazy';img.className='w-full h-full object-cover transition-transform duration-500 group-hover:scale-105';
+      const tag=document.createElement('span');tag.className='absolute left-3 top-3 bg-white px-2 py-1 text-[10px] uppercase tracking-wide';tag.textContent='Favorito de Inverno';
+      picture.append(img,tag);
+      const title=document.createElement('h3');title.className='mt-3 text-sm text-tinta';title.textContent=p.title;
+      const price=document.createElement('p');price.className='mt-1 text-sm font-semibold';price.textContent=this.formatPrice(p.price);
+      button.append(picture,title,price);card.append(button);grid.append(card);
     }
   },
 
