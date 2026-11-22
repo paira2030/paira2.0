@@ -1,5 +1,9 @@
-1. No Supabase > SQL Editor, execute SUPABASE_SKU_AUTOMATICO_MULTIADMIN.sql.
-2. Publique este ZIP no GitHub/Vercel como nas atualizações anteriores.
-3. Ao adicionar um produto, deixe o campo SKU vazio para geração automática.
-4. Se digitar um SKU manualmente, ele será respeitado desde que seja único.
-5. Produtos existentes mantêm seus códigos. Não remova a restrição de unicidade.
+MAELLE - SKU sequencial MAE-123, MAE-124...
+
+1. Execute SUPABASE_SKU_AUTOMATICO_MULTIADMIN.sql no SQL Editor do Supabase.
+2. Publique os arquivos deste ZIP no GitHub/Vercel.
+3. Ao adicionar um produto, o SKU fica vazio e é atribuído ao guardar.
+4. Os códigos já cadastrados são preservados.
+5. A sequência não reutiliza números após exclusão; podem existir saltos se uma gravação falhar.
+6. Se o banco tiver PAIR-200, o próximo será MAE-201 (não MAE-123).
+7. Evite cadastrar novos produtos durante a execução do SQL.

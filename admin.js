@@ -229,7 +229,9 @@ const Admin = {
   openAddProductModal() {
     document.getElementById('modal-product-title-heading').textContent = 'Adicionar Nova Peça ao Catálogo';
     document.getElementById('prod-form-index').value = '-1';
-    document.getElementById('prod-form-id').value = MaelleDB.enabled ? '' : 'PAIR-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).slice(2, 7).toUpperCase();
+    document.getElementById('prod-form-id').readOnly = MaelleDB.enabled;
+    document.getElementById('prod-form-id').placeholder = MaelleDB.enabled ? 'Gerado ao guardar (MAE-123, MAE-124...)' : '';
+    document.getElementById('prod-form-id').value = MaelleDB.enabled ? '' : 'MAE-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).slice(2, 7).toUpperCase();
     document.getElementById('prod-form-title').value = '';
     document.getElementById('prod-form-category').value = 'vestidos';
     document.getElementById('prod-form-price').value = '49.99';
@@ -248,6 +250,8 @@ const Admin = {
 
     document.getElementById('modal-product-title-heading').textContent = 'Editar Peça: ' + p.id;
     document.getElementById('prod-form-index').value = index;
+    document.getElementById('prod-form-id').readOnly = false;
+    document.getElementById('prod-form-id').placeholder = '';
     document.getElementById('prod-form-id').value = p.id;
     document.getElementById('prod-form-title').value = p.title;
     document.getElementById('prod-form-category').value = p.category;
