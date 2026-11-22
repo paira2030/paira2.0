@@ -306,7 +306,7 @@ const Admin = {
   openAddProductModal() {
     document.getElementById('modal-product-title-heading').textContent = 'Adicionar Nova Peça ao Catálogo';
     document.getElementById('prod-form-index').value = '-1';
-    document.getElementById('prod-form-id').value = 'PAIR-' + (this.products.length + 101);
+    document.getElementById('prod-form-id').value = MaelleDB.enabled ? '' : 'PAIR-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).slice(2, 7).toUpperCase();
     document.getElementById('prod-form-title').value = '';
     document.getElementById('prod-form-category').value = 'vestidos';
     document.getElementById('prod-form-price').value = '49.99';
