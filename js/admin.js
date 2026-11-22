@@ -143,7 +143,7 @@ const Admin = {
     });
 
     document.getElementById('tab-produtos').style.display = tab === 'produtos' ? 'block' : 'none';
-    for (const name of ['saldos','inverno','favoritos-inverno']) document.getElementById('tab-'+name).style.display = tab === name ? 'block' : 'none';
+    for (const name of ['saldos','inverno','favoritos-inverno','black-friday-nova']) document.getElementById('tab-'+name).style.display = tab === name ? 'block' : 'none';
     if (tab === 'saldos' || tab === 'inverno' || tab === 'favoritos-inverno') this.renderCollectionTab(tab);
     document.getElementById('tab-sumup').style.display = tab === 'sumup' ? 'block' : 'none';
     document.getElementById('tab-encomendas').style.display = tab === 'encomendas' ? 'block' : 'none';
