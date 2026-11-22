@@ -1,0 +1,1 @@
+Correção da autenticação Supabase nas APIs Black Friday e SumUp. Para sb_secret_, usa apikey sem Authorization Bearer da chave secreta; para chave service_role legada, mantém Bearer. Não modifica valores, produtos ou configuração de promoções. Publicar na Vercel e testar API, ADM e checkout antes de aceitar pedidos. Se persistir erro, verificar logs da Vercel.
