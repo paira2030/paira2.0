@@ -2,9 +2,10 @@
 const MaelleCheckout={
  cart:[],
  eur(v){return Number(v||0).toLocaleString('pt-PT',{style:'currency',currency:'EUR'})},
- init(){
-  try{const value=JSON.parse(localStorage.getItem('maelle_cart')||'[]');this.cart=Array.isArray(value)?value:[]}catch{this.cart=[]}
-  if(!this.cart.length){document.querySelector('main').innerHTML='<h1 class="font-display text-3xl my-8">O seu cesto está vazio</h1><a href="/" class="underline">Voltar à loja</a>';return}
+ async init(){
+  try { await window.MaelleBlackFriday.load();const catalog=await MaelleDB.list();this.liveCatalog=catalog; } catch(e){document.querySelector('main').innerHTML='<p>Não foi possível confirmar os preços atuais. Atualize a página antes de pagar.</p>';return;}
+  try{const value=JSON.parse(localStorage.getItem('maelle_cart')||'[]');this.cart=Array.isArray(value)?value:[];this.cart=this.cart.map(i=>{const p=this.liveCatalog.find(p=>p.id===i.id);return p?{...i,price:window.MaelleBlackFriday.price(p)}:i})}catch{this.cart=[]}
+  if(this.cart.some(i=>!this.liveCatalog.some(p=>p.id===i.id))){document.querySelector('main').textContent='Há artigos indisponíveis no cesto. Volte à loja.';return;}if(!this.cart.length){document.querySelector('main').innerHTML='<h1 class="font-display text-3xl my-8">O seu cesto está vazio</h1><a href="/" class="underline">Voltar à loja</a>';return}
   const box=document.getElementById('checkout-summary-items');box.replaceChildren();let subtotal=0;
   for(const item of this.cart){
    const qty=Number(item.qty)||1,price=Number(item.price)||0;subtotal+=qty*price;

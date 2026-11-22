@@ -106,7 +106,12 @@ module.exports = async (req, res) => {
       )
     ];
 
-    let query = 'select=id,codigo,nome,preco,estoque,ativo,modo_envio,valor_portes';
+    const promoResponse = await api('maelle_promocoes?chave=eq.black_friday&select=ativa');
+    if (!promoResponse.ok) throw Error('Não foi possível verificar a promoção.');
+    const promoRows = await promoResponse.json();
+    const blackFridayActive = promoRows[0]?.ativa === true;
+
+    let query = 'select=id,codigo,nome,preco,estoque,ativo,modo_envio,valor_portes,em_saldos';
 
     const filters = [];
 
@@ -154,7 +159,9 @@ module.exports = async (req, res) => {
         );
       }
 
-      const cents = Math.round(Number(product.preco) * 100);
+      const baseCents = Math.round(Number(product.preco) * 100);
+      const cents = blackFridayActive && product.em_saldos !== true
+        ? Math.round(baseCents * 0.8) : baseCents;
 
       if (!Number.isSafeInteger(cents) || cents <= 0) {
         return fail(

@@ -22,6 +22,9 @@ const Store = {
   // Inicialização
   async init() {
     await this.loadProducts();
+    await window.MaelleBlackFriday?.load();
+    this.products.forEach(p=>{p.basePrice=p.price;if(window.MaelleBlackFriday?.eligible(p)){p.price=window.MaelleBlackFriday.price(p);p.bfActive=true;}});
+    this.cart=this.cart.map(i=>{const p=this.products.find(p=>p.id===i.id);return p?{...i,price:p.price}:i;});this.saveCart();
     this.renderCatalog();
     this.renderFavoritosInverno();
     this.updateCartUI();
@@ -234,7 +237,7 @@ const Store = {
       const tag=document.createElement('span');tag.className='absolute left-3 top-3 bg-white px-2 py-1 text-[10px] uppercase tracking-wide';tag.textContent='Favorito de Inverno';
       picture.append(img,tag);
       const title=document.createElement('h3');title.className='mt-3 text-sm text-tinta';title.textContent=p.title;
-      const price=document.createElement('p');price.className='mt-1 text-sm font-semibold';price.textContent=this.formatPrice(p.price);
+      const price=document.createElement('p');price.className='mt-1 text-sm font-semibold';price.textContent=this.formatPrice(p.price);if(p.bfActive){const old=document.createElement('span');old.className='maelle-bf-old';old.textContent=this.formatPrice(p.basePrice);price.append(old);}
       button.append(picture,title,price);card.append(button);grid.append(card);
     }
   },
@@ -326,7 +329,7 @@ const Store = {
             <!-- Etiqueta / Tag -->
             <div class="absolute left-3 top-3 flex flex-col items-start gap-1">
               ${p.tag ? `<span class="etiqueta ${p.tag === 'Best-seller' ? 'etiqueta-oliva' : 'bg-tinta text-linho'}">${p.tag}</span>` : ''}
-              ${p.oldPrice && p.oldPrice > p.price ? `<span class="etiqueta etiqueta-ouro">OFERTA</span>` : ''}
+              ${p.bfActive ? `<span class="maelle-bf-tag">BLACK FRIDAY −20%</span>` : (p.oldPrice && p.oldPrice > p.price ? `<span class="etiqueta etiqueta-ouro">OFERTA</span>` : '')}
             </div>
 
             <!-- Botão Wishlist -->
@@ -361,7 +364,7 @@ const Store = {
             <h3 class="font-body text-sm font-normal text-tinta line-clamp-1 hover:text-oliva transition-colors">${p.title}</h3>
             <div class="flex items-center gap-2">
               <p class="text-sm font-semibold text-tinta">${this.formatPrice(p.price)}</p>
-              ${p.oldPrice && p.oldPrice > p.price ? `<p class="text-xs text-grafite line-through">${this.formatPrice(p.oldPrice)}</p>` : ''}
+              ${p.bfActive ? `<p class="maelle-bf-old">${this.formatPrice(p.basePrice)}</p>` : (p.oldPrice && p.oldPrice > p.price ? `<p class="text-xs text-grafite line-through">${this.formatPrice(p.oldPrice)}</p>` : '')}
             </div>
             <p class="text-[11px] text-grafite tracking-wide uppercase">${p.categoryFolder.replace(/-/g, ' ')}</p>
           </div>
@@ -558,8 +561,8 @@ const Store = {
     modalEl.querySelector('#pdp-price').textContent = this.formatPrice(product.price);
     
     const oldPriceEl = modalEl.querySelector('#pdp-old-price');
-    if (product.oldPrice && product.oldPrice > product.price) {
-      oldPriceEl.textContent = this.formatPrice(product.oldPrice);
+    if (product.bfActive || (product.oldPrice && product.oldPrice > product.price)) {
+      oldPriceEl.textContent = this.formatPrice(product.bfActive ? product.basePrice : product.oldPrice);
       oldPriceEl.style.display = 'inline';
     } else {
       oldPriceEl.style.display = 'none';
