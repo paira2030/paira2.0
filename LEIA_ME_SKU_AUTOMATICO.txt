@@ -1,0 +1,5 @@
+1. No Supabase > SQL Editor, execute SUPABASE_SKU_AUTOMATICO_MULTIADMIN.sql.
+2. Publique este ZIP no GitHub/Vercel como nas atualizações anteriores.
+3. Ao adicionar um produto, deixe o campo SKU vazio para geração automática.
+4. Se digitar um SKU manualmente, ele será respeitado desde que seja único.
+5. Produtos existentes mantêm seus códigos. Não remova a restrição de unicidade.
