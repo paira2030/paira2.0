@@ -14,7 +14,7 @@ const api = (path, opts = {}) =>
     ...opts,
     headers: {
       apikey: KEY,
-      Authorization: `Bearer ${KEY}`,
+      ...(KEY?.startsWith('sb_secret_') ? {} : { Authorization: `Bearer ${KEY}` }),
       'Content-Type': 'application/json',
       ...opts.headers
     }
