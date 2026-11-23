@@ -55,7 +55,7 @@ const Store = {
       const mode = product?.shippingMode ?? item.shippingMode ?? 'legacy';
       const price = Number(product?.shippingPrice ?? item.shippingPrice ?? 4.50);
       if (mode === 'free') return 0;
-      if (mode === 'paid') return Number.isFinite(price) && price >= 0 ? price : 4.50;
+      if (mode === 'paid') return Number.isFinite(price) && price > 0 ? price : 4.50;
       return subtotal >= this.freeShippingThreshold ? 0 : 4.50;
     });
     return Math.max(0, ...amounts);

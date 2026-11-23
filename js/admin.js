@@ -302,6 +302,8 @@ const Admin = {
   },
   toggleShippingPrice() {
     const paid = document.getElementById('prod-form-shipping-mode').value === 'paid';
+    const priceInput = document.getElementById('prod-form-shipping-price');
+    if (paid && !(Number(priceInput.value) > 0)) priceInput.value = '4.50';
     document.getElementById('prod-form-shipping-price-wrap').style.display = paid ? '' : 'none';
     document.getElementById('prod-form-shipping-price').required = paid;
   },
@@ -350,7 +352,7 @@ const Admin = {
     document.getElementById('prod-form-favorito-inverno').checked = !!p.isFavoritoInverno;
     document.getElementById('prod-form-stock').value = p.stock || 10;
     document.getElementById('prod-form-shipping-mode').value = p.shippingMode || 'paid';
-    document.getElementById('prod-form-shipping-price').value = p.shippingPrice ?? 4.50;
+    document.getElementById('prod-form-shipping-price').value = p.shippingMode === 'paid' && !(Number(p.shippingPrice) > 0) ? '4.50' : (p.shippingPrice ?? 4.50);
     this.toggleShippingPrice();
     document.getElementById('prod-form-tag').value = p.tag || '';
     document.getElementById('prod-form-image').value = p.localImage?.startsWith('data:') ? '' : (p.localImage || '');
@@ -398,7 +400,7 @@ const Admin = {
     };
 
     if(productData.isFavoritoInverno && !(idx>=0 && this.products[idx]?.isFavoritoInverno) && this.products.filter(p=>p.isFavoritoInverno).length>=4) {this.showAdminToast('Limite de 4 Favoritos de Inverno.');return;}
-    if (productData.shippingMode === 'paid' && (!Number.isFinite(productData.shippingPrice) || productData.shippingPrice < 0 || productData.shippingPrice > 9999.99)) { this.showAdminToast('Indique um valor válido para os portes.'); return; }
+    if (productData.shippingMode === 'paid' && (!Number.isFinite(productData.shippingPrice) || productData.shippingPrice <= 0 || productData.shippingPrice > 9999.99)) { this.showAdminToast('Indique um valor válido para os portes.'); return; }
     if (productData.isSaldo && !(productData.oldPrice > productData.price && productData.price > 0)) { this.showAdminToast('Para Saldos, o preço anterior deve ser maior que o promocional.'); return; }
     if (!productData.colors.length || !productData.sizes.length) { this.showAdminToast('Selecione pelo menos uma cor e um tamanho.'); return; }
     if (!productData.localImage) { this.showAdminToast('Escolha uma imagem para o produto.'); return; }

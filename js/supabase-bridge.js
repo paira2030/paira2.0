@@ -58,7 +58,7 @@ const MaelleDB = {
     if (!(await this.isAdmin())) throw new Error('Sem permissão de administrador.');
     const images=[];
     for (const src of p.images.length?p.images:[p.localImage]) if(src) images.push(await this.upload(src));
-    const row={nome:p.title,descricao:p.description,preco:p.price,estoque:p.stock,imagens:images,ativo:true,categoria:p.category,preco_anterior:p.oldPrice||null,em_saldos:!!p.isSaldo,em_inverno:!!p.isInverno,favorito_inverno:!!p.isFavoritoInverno,etiqueta:p.tag||null,codigo:p.dbId ? p.id : (String(p.id||'').trim() || null),cores:p.colors,tamanhos:p.sizes,cores_hex:p.colorHex||[],modo_envio:p.shippingMode||'paid',valor_portes:p.shippingMode==='free'?0:p.shippingPrice};
+    const row={nome:p.title,descricao:p.description,preco:p.price,estoque:p.stock,imagens:images,ativo:true,categoria:p.category,preco_anterior:p.oldPrice||null,em_saldos:!!p.isSaldo,em_inverno:!!p.isInverno,favorito_inverno:!!p.isFavoritoInverno,etiqueta:p.tag||null,codigo:p.dbId ? p.id : (String(p.id||'').trim() || null),cores:p.colors,tamanhos:p.sizes,cores_hex:p.colorHex||[],modo_envio:p.shippingMode||'paid',valor_portes:Number(p.shippingPrice)>0?Number(p.shippingPrice):4.50};
     let q;
     if (p.dbId) q=this.client.from('produtos').update(row).eq('id',p.dbId);
     else q=this.client.from('produtos').insert(row);
