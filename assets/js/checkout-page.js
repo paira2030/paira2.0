@@ -19,7 +19,18 @@ const MaelleCheckout={
    const total=document.createElement('strong');total.className='text-sm';total.textContent=this.eur(price*qty);
    info.append(name,variant,amount,total);line.append(pic,info);box.append(line);
   }
-  const shipping=subtotal>=49.90?0:4.50;
+  // Recalcular os portes a partir do catálogo atualizado, nunca do carrinho antigo.
+  // Mesma regra da API SumUp: maior valor entre os artigos com portes pagos.
+  const shipping=Math.max(0,...this.cart.map(item=>{
+   const product=this.liveCatalog.find(p=>p.id===item.id||p.dbId===item.id);
+   if(!product)return 0;
+   if(product.shippingMode==='free')return 0;
+   if(product.shippingMode==='paid'){
+    const amount=Number(product.shippingPrice);
+    return Number.isFinite(amount)&&amount>=0?amount:4.50;
+   }
+   return subtotal>=49.90?0:4.50;
+  }));
   document.getElementById('checkout-subtotal').textContent=this.eur(subtotal);
   document.getElementById('checkout-shipping').textContent=shipping?this.eur(shipping):'Grátis';
   document.getElementById('checkout-total').textContent=this.eur(subtotal+shipping);
