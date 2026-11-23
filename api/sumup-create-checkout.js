@@ -199,7 +199,7 @@ module.exports = async (req, res) => {
       if (rule.mode === 'free') return 0;
       if (rule.mode === 'paid') {
         if (!Number.isSafeInteger(rule.cents) || rule.cents < 0 || rule.cents > 999999) throw Error('Portes inválidos no catálogo.');
-        return rule.cents;
+        return rule.cents > 0 ? rule.cents : 450;
       }
       return subtotalCents >= freeShipping ? 0 : 450;
     }));

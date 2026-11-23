@@ -27,7 +27,7 @@ const MaelleCheckout={
    if(product.shippingMode==='free')return 0;
    if(product.shippingMode==='paid'){
     const amount=Number(product.shippingPrice);
-    return Number.isFinite(amount)&&amount>=0?amount:4.50;
+    return Number.isFinite(amount)&&amount>0?amount:4.50;
    }
    return subtotal>=49.90?0:4.50;
   }));
