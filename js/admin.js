@@ -147,15 +147,15 @@ const Admin = {
     if (tab === 'saldos' || tab === 'inverno' || tab === 'favoritos-inverno') this.renderCollectionTab(tab);
     document.getElementById('tab-sumup').style.display = tab === 'sumup' ? 'block' : 'none';
     document.getElementById('tab-encomendas').style.display = tab === 'encomendas' ? 'block' : 'none';
-    document.getElementById('tab-paginas').style.display = tab === 'paginas' ? 'block' : 'none';
+    document.getElementById('tab-seguranca').style.display = tab === 'seguranca' ? 'block' : 'none';
     if(tab==='encomendas') MaelleExtras.loadOrders();
-    if(tab==='paginas') MaelleExtras.loadPage();
   },
 
   renderCollectionTab(tab) {
     const el = document.getElementById('admin-'+tab+'-list');
     if (!el) return;
     el.replaceChildren();
+    if(tab==='inverno'||tab==='favoritos-inverno') return this.renderVisualCollection(tab,el);
     if(tab==='favoritos-inverno') { const counter=document.getElementById('admin-favoritos-count'); if(counter)counter.textContent=this.products.filter(p=>p.isFavoritoInverno).length+' de 4 produtos selecionados'; }
     this.products.forEach((p,index) => {
       const row = document.createElement('div');
@@ -178,6 +178,45 @@ const Admin = {
       el.appendChild(row);
     });
   },
+  renderVisualCollection(tab, el) {
+    const field=tab==='inverno'?'isInverno':'isFavoritoInverno';
+    const column=tab==='inverno'?'em_inverno':'favorito_inverno';
+    const limit=tab==='inverno'?Infinity:4;
+    const products=this.products.slice();
+    const selected=new Set(products.filter(p=>p[field]).map(p=>p.id));
+    const labels=new Map(Array.from(document.querySelectorAll('#prod-form-category option')).map(o=>[o.value,o.textContent]));
+    const make=(tag,cls,txt)=>{const e=document.createElement(tag);e.className=cls;if(txt!==undefined)e.textContent=txt;return e;};
+    const toolbar=make('div','collection-toolbar');
+    const search=make('input','collection-input');search.type='search';search.placeholder='Pesquisar nome ou SKU';search.setAttribute('aria-label','Pesquisar peças');
+    const category=make('select','collection-input');category.setAttribute('aria-label','Categoria');category.add(new Option('Todas as categorias',''));for(const c of new Set(products.map(p=>p.category).filter(Boolean)))category.add(new Option(labels.get(c)||c,c));
+    const filter=make('select','collection-input');filter.setAttribute('aria-label','Estado da seleção');for(const [v,l] of [['','Todas as peças'],['yes','Selecionadas'],['no','Não selecionadas']])filter.add(new Option(l,v));
+    const summary=make('div','collection-summary');const count=make('strong','');const status=make('span','text-sm');status.setAttribute('aria-live','polite');const save=make('button','collection-save','Guardar alterações');save.type='button';summary.append(count,status,save);
+    const grid=make('div','collection-grid');toolbar.append(search,category,filter);el.append(summary,toolbar,grid);
+    let busy=false;
+    const changes=()=>products.filter(p=>!!p[field]!==selected.has(p.id));
+    const refresh=()=>{
+      count.textContent=selected.size+(limit===4?' de 4':'')+' peças selecionadas';
+      const counter=document.getElementById('admin-favoritos-count');if(tab==='favoritos-inverno'&&counter)counter.textContent='';
+      save.disabled=busy||!changes().length;save.textContent=busy?'A guardar…':'Guardar alterações ('+changes().length+')';
+      search.disabled=category.disabled=filter.disabled=busy;
+      grid.replaceChildren();const q=search.value.trim().toLocaleLowerCase();
+      for(const p of products){const on=selected.has(p.id);if(q&&!`${p.title} ${p.id}`.toLocaleLowerCase().includes(q)||category.value&&p.category!==category.value||filter.value==='yes'&&!on||filter.value==='no'&&on)continue;
+        const card=make('article','collection-card'+(on?' selected':''));const photo=make('div','collection-photo');const src=p.images?.[0]||p.localImage;
+        if(src){const img=make('img','');img.src=src;img.alt=p.title;img.loading='lazy';img.onerror=()=>{photo.textContent='Sem imagem';};photo.append(img);}else photo.textContent='Sem imagem';
+        
+        const body=make('div','collection-body');body.append(make('strong','collection-name',p.title),make('span','collection-meta',`${p.id} · ${labels.get(p.category)||p.category||''}`),make('strong','',Number(p.price||0).toFixed(2)+' €'));
+        const toggle=make('input','collection-toggle');toggle.type='checkbox';toggle.checked=on;toggle.disabled=busy;toggle.setAttribute('aria-label','Incluir '+p.title);toggle.onchange=()=>{if(on)selected.delete(p.id);else if(selected.size>=limit){status.textContent='Limite de 4 favoritos. Retire uma peça primeiro.';toggle.checked=false;return;}else selected.add(p.id);status.textContent='Alterações por guardar';refresh();};card.append(photo,body,toggle);grid.append(card);
+      }if(!grid.children.length)grid.append(make('p','text-sm','Nenhuma peça encontrada.'));
+    };
+    search.oninput=category.onchange=filter.onchange=refresh;
+    save.onclick=async()=>{if(busy)return;busy=true;status.textContent='A guardar alterações…';refresh();try{
+      const pending=changes().sort((a,b)=>Number(selected.has(a.id))-Number(selected.has(b.id)));
+      if(MaelleDB.enabled){if(!await MaelleDB.isAdmin())throw Error('Sem permissão de administrador.');for(const p of pending){const value=selected.has(p.id);const {data,error}=await MaelleDB.client.from('produtos').update({[column]:value}).eq('id',p.dbId).select('id').single();if(error||!data)throw error||Error('Produto não atualizado');p[field]=value;}}
+      else {for(const p of pending)p[field]=selected.has(p.id);this.saveCatalog();}
+      status.textContent='Alterações guardadas.';this.renderProductsTable();
+    }catch(e){status.textContent='Erro ao guardar: '+e.message+'. Pode tentar novamente.';}finally{busy=false;refresh();}};
+    refresh();
+  },
   async saveCollectionItem(index,tab,checked,oldPrice,price) {
     const original=this.products[index]; if(!original)return;
     if(tab==='saldos' && checked && !(price>0 && oldPrice>price)) {
@@ -199,7 +238,14 @@ const Admin = {
 
     document.getElementById('admin-total-count').textContent = `${this.products.length} peças registadas`;
 
-    tbody.innerHTML = this.products.map((p, idx) => `
+    const select = document.getElementById('adm-category');
+    const labels = new Map(Array.from(document.querySelectorAll('#prod-form-category option')).map(o=>[o.value,o.textContent]));
+    if(select && select.options.length===1) document.querySelectorAll('#prod-form-category option').forEach(o=>select.add(new Option(o.textContent,o.value)));
+    const q=(document.getElementById('adm-search')?.value||'').trim().toLowerCase(), cat=select?.value||'', stock=document.getElementById('adm-stock')?.value||'';
+    const items=this.products.map((p,idx)=>({p,idx})).filter(({p})=>(!q||`${p.title} ${p.id}`.toLowerCase().includes(q))&&(!cat||p.category===cat)&&(!stock||(stock==='available'?Number(p.stock)>0:Number(p.stock)<=0)));
+    for(const [id,value] of Object.entries({total:this.products.length,stock:this.products.filter(p=>Number(p.stock)>0).length,empty:this.products.filter(p=>Number(p.stock)<=0).length,sale:this.products.filter(p=>p.isSaldo).length})) {const el=document.getElementById('adm-stat-'+id);if(el)el.textContent=value;}
+    document.getElementById('admin-total-count').textContent=`${items.length} de ${this.products.length} peças registadas`;
+    tbody.innerHTML = items.map(({p, idx}) => `
       <tr class="border-b border-costura hover:bg-papel/50 transition-colors">
         <td class="py-3 px-4 font-mono text-xs text-grafite">${p.id}</td>
         <td class="py-3 px-4">
@@ -208,9 +254,9 @@ const Admin = {
           </div>
         </td>
         <td class="py-3 px-4 font-medium text-xs text-tinta max-w-[200px] truncate">${p.title}</td>
-        <td class="py-3 px-4 text-xs text-grafite uppercase">${p.category}</td>
+        <td class="py-3 px-4 text-xs text-grafite uppercase">${labels.get(p.category)||p.category}</td>
         <td class="py-3 px-4 font-semibold text-xs text-tinta">${p.price.toFixed(2)} €</td>
-        <td class="py-3 px-4 text-xs text-tinta font-mono">${p.stock || 10} un</td>
+        <td class="py-3 px-4 text-xs text-tinta font-mono"><span class="adm-stock-pill ${Number(p.stock)>0?'in-stock':'out-stock'}">${p.stock ?? 0} un</span></td>
         <td class="py-3 px-4">
           <span class="etiqueta ${p.tag === 'Best-seller' ? 'etiqueta-oliva' : 'bg-papel text-tinta'}">${p.tag || 'Padrão'}</span>
         </td>
@@ -223,7 +269,7 @@ const Admin = {
           </button>
         </td>
       </tr>
-    `).join('');
+    `).join('') || '<tr><td colspan="8" class="p-8 text-center">Nenhuma peça encontrada.</td></tr>';
   },
 
   palette: [{name:'Preto',hex:'#202020'},{name:'Branco',hex:'#ffffff'},{name:'Creme',hex:'#e9dfc8'},{name:'Bege',hex:'#d5c3a8'},{name:'Azul',hex:'#58799d'},{name:'Vermelho',hex:'#b63e48'},{name:'Verde',hex:'#54765c'},{name:'Rosa',hex:'#d99da8'},{name:'Castanho',hex:'#785044'}],
@@ -502,6 +548,8 @@ const Admin = {
     });
   },
   setupListeners() {
+    for(const id of ['adm-search','adm-category','adm-stock']) document.getElementById(id)?.addEventListener(id==='adm-search'?'input':'change',()=>this.renderProductsTable());
+    document.getElementById('adm-clear')?.addEventListener('click',()=>{for(const id of ['adm-search','adm-category','adm-stock']) document.getElementById(id).value='';this.renderProductsTable();});
     document.querySelectorAll('.admin-nav-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         this.switchTab(btn.getAttribute('data-tab'));
