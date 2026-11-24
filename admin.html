@@ -34,6 +34,12 @@
 
   <link rel="stylesheet" href="assets/css/style.css" />
 <link rel="stylesheet" href="css/maelle-orders.css">
+<link rel="stylesheet" href="css/admin-visual.css?v=compact3">
+<style>
+.collection-toolbar,.collection-summary{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-bottom:16px}.collection-summary{background:white;border:1px solid #ddd;padding:14px;border-radius:10px}.collection-summary span{flex:1;min-width:120px}.collection-input{background:white;border:1px solid #ccc;border-radius:7px;padding:10px;min-width:0}.collection-toolbar input{flex:1;min-width:180px}.collection-save,.collection-toggle{padding:10px 14px;border-radius:7px;font-weight:600;font-size:13px;border:1px solid #222}.collection-save{background:#171717;color:white}.collection-save:disabled,.collection-toggle:disabled{opacity:.5;cursor:not-allowed}.collection-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px}.collection-card{border:1px solid #ddd;border-radius:10px;background:white;overflow:hidden;display:flex;flex-direction:column}.collection-card.selected{border:2px solid #47734d}.collection-photo{aspect-ratio:4/5;background:#eee;position:relative;display:grid;place-items:center;overflow:hidden}.collection-photo img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}.collection-mark{position:absolute;top:8px;left:8px;background:#315b39;color:white;padding:5px 8px;border-radius:5px;font-size:12px}.collection-body{padding:12px;display:flex;flex-direction:column;gap:8px;flex:1}.collection-name{font-size:14px;line-height:1.4}.collection-meta{font-size:11px;color:#666;overflow-wrap:anywhere}.collection-toggle{margin-top:auto;background:white}.selected .collection-toggle{background:#e6f1e7;color:#315b39;border-color:#47734d}@media(max-width:480px){.collection-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.collection-body{padding:8px}.collection-toolbar select{width:100%}}
+
+.collection-grid{display:flex;flex-direction:column;gap:0;border:1px solid #d6dbd2;border-radius:10px;overflow:hidden;background:white}.collection-card,.collection-card.selected{display:grid;grid-template-columns:48px minmax(0,1fr) 34px;align-items:center;gap:14px;padding:8px 14px;border:0;border-bottom:1px solid #e1e5df;border-radius:0;min-height:76px}.collection-card:last-child{border-bottom:0}.collection-card.selected{background:#edf4e9;box-shadow:inset 3px 0 #47734d}.collection-photo{width:44px;height:58px;aspect-ratio:auto;border-radius:4px;font-size:9px;text-align:center}.collection-body{display:grid;grid-template-columns:minmax(0,1fr) 100px;gap:3px 12px;padding:0;align-items:center}.collection-name{grid-column:1;font-size:13px;overflow-wrap:anywhere}.collection-meta{grid-column:1;grid-row:2}.collection-body>strong:last-child{grid-column:2;grid-row:1/span 2;font-size:13px;white-space:nowrap}.collection-toggle,.selected .collection-toggle{appearance:auto;width:19px;height:19px;accent-color:#47734d;margin:0;justify-self:center;cursor:pointer}.collection-summary{position:sticky;top:0;z-index:5}.collection-grid>p{padding:16px}@media(max-width:600px){.collection-card,.collection-card.selected{grid-template-columns:44px minmax(0,1fr) 25px;gap:8px;padding:8px}.collection-body{display:flex;align-items:flex-start;gap:3px}.collection-toolbar select{width:100%}}
+</style>
 </head>
 <body class="bg-linho text-tinta min-h-screen">
 
@@ -101,21 +107,21 @@
     </header>
 
     <!-- Sub-Header com Abas de Navegação -->
-    <div class="bg-white border-b border-costura">
-      <div class="mx-auto max-w-[1440px] px-6 flex items-center justify-between">
-        <nav class="flex gap-8 text-xs font-semibold uppercase tracking-wider">
+    <div class="adm-layout"><aside class="adm-sidebar">
+      <div class="adm-sidebar-inner">
+        <nav class="adm-nav" aria-label="Menu administrativo"><div class="adm-group">CATÁLOGO</div>
           <button data-tab="produtos" class="admin-nav-btn py-4 border-b-2 border-tinta text-tinta transition-all flex items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
             Catálogo de Produtos
           </button>
           
           
-          <button data-tab="saldos" class="admin-nav-btn py-4 text-grafite hover:text-tinta transition-all">Saldos</button>
+          <div class="adm-group">COLEÇÕES E CAMPANHAS</div><button data-tab="saldos" class="admin-nav-btn py-4 text-grafite hover:text-tinta transition-all">Saldos</button>
           <button data-tab="favoritos-inverno" class="admin-nav-btn py-4 text-grafite hover:text-tinta transition-all">Favoritos de Inverno</button>
           <button data-tab="inverno" class="admin-nav-btn py-4 text-grafite hover:text-tinta transition-all">Inverno</button>
-          <button data-tab="black-friday-nova" class="admin-nav-btn py-4 text-grafite hover:text-tinta transition-all">Black Friday</button><button data-tab="sumup" class="admin-nav-btn py-4 text-grafite hover:text-tinta transition-all">SumUp</button>
+          <button data-tab="black-friday-nova" class="admin-nav-btn py-4 text-grafite hover:text-tinta transition-all">Black Friday</button><div class="adm-group">VENDAS</div><button data-tab="sumup" class="admin-nav-btn py-4 text-grafite hover:text-tinta transition-all">SumUp</button>
           <button data-tab="encomendas" class="admin-nav-btn py-4 text-grafite hover:text-tinta transition-all">Encomendas</button>
-          <button data-tab="paginas" class="admin-nav-btn py-4 text-grafite hover:text-tinta transition-all">Páginas</button>
+          <div class="adm-group">CONFIGURAÇÕES</div>
           <button data-tab="seguranca" class="admin-nav-btn py-4 text-grafite hover:text-tinta transition-all flex items-center gap-2">Segurança</button>
         </nav>
 
@@ -129,7 +135,7 @@
           </button>
         </div>
       </div>
-    </div>
+    </aside>
 
     <!-- Conteúdo Principal -->
     <main class="mx-auto max-w-[1440px] px-6 py-8">
@@ -150,7 +156,6 @@
         <div id="orders-trash-heading" class="orders-trash-heading" hidden><h3>Encomendas na Lixeira</h3><p>Pedidos arquivados. Pode restaurar qualquer encomenda para a lista principal.</p></div><div class="orders-toolbar"><button type="button" id="orders-trash-toggle" class="orders-trash-toggle"><span id="orders-trash-toggle-label">Lixeira</span> (<span id="orders-trash-count">0</span>)</button><div class="orders-filters"><button data-order-filter="ALL" class="active">Todos</button><button data-order-filter="PAID">✓ PAID</button><button data-order-filter="PENDING">◷ PENDING</button><button data-order-filter="ERROR">✕ ERROR</button></div><input id="orders-search" type="search" placeholder="Pesquisar por nome, código MAE ou e-mail..." aria-label="Pesquisar encomendas"></div>
         <div class="orders-table-wrap"><div class="orders-table-header"><span>Encomenda</span><span>Cliente</span><span>Valor</span><span>Pagamento</span><span>Estado da Entrega</span><span>Ações</span></div><div id="orders-list" aria-live="polite">Clique em Atualizar lista para consultar as encomendas.</div></div>
       </section>
-      <div id="tab-paginas" class="hidden space-y-5 max-w-3xl"><h2 class="font-display text-3xl">Editar páginas institucionais</h2><label class="block text-sm">Página<select id="edit-page" class="block w-full p-3 border" onchange="MaelleExtras.loadPage()"><option value="sobre">Sobre a Maelle</option><option value="sustentabilidade">Sustentabilidade</option></select></label><label class="block text-sm">Título<input id="edit-title" class="block w-full p-3 border"></label><label class="block text-sm">Introdução<textarea id="edit-intro" class="block w-full p-3 border" rows="3"></textarea></label><p class="text-xs text-grafite">Cada secção tem um título e texto editável.</p><div id="edit-sections" class="space-y-3"></div><button class="btn-editorial-outline text-xs px-4 py-2" onclick="MaelleExtras.addSection()">Adicionar secção</button> <button class="btn-editorial text-xs px-4 py-2" onclick="MaelleExtras.savePage()">Guardar alterações</button><p id="page-message" role="status" class="text-xs"></p></div>
       <section id="tab-black-friday-nova" style="display:none" class="space-y-5 max-w-2xl">
         <h2 class="font-display text-3xl">Black Friday Maelle · Nova gestão</h2>
         <p class="text-sm text-grafite">Ative ou desative 20% nas peças elegíveis. Artigos em Saldos não recebem desconto adicional.</p>
@@ -171,6 +176,8 @@
           </div>
         </div>
 
+        <div class="adm-stats" aria-live="polite"><div>Total de peças<strong id="adm-stat-total">—</strong></div><div>Com stock<strong id="adm-stat-stock">—</strong></div><div>Sem stock<strong id="adm-stat-empty">—</strong></div><div>Em saldos<strong id="adm-stat-sale">—</strong></div></div>
+        <div class="adm-filter"><label>Pesquisar produto<input id="adm-search" type="search" placeholder="Nome ou referência SKU"></label><label>Categoria<select id="adm-category"><option value="">Todas as categorias</option></select></label><label>Disponibilidade<select id="adm-stock"><option value="">Todo o stock</option><option value="available">Com stock</option><option value="empty">Sem stock</option></select></label><button type="button" id="adm-clear">Limpar filtros</button></div>
         <!-- Tabela Responsiva de Produtos -->
         <div class="bg-white border border-costura overflow-x-auto shadow-sm">
           <table class="w-full text-left border-collapse">
@@ -204,7 +211,7 @@
       </section>
 
     </main>
-  </div>
+  </div></div>
 
   <!-- ==========================================
        MODAL DE ADICIONAR / EDITAR PRODUTO
@@ -332,7 +339,7 @@ window.__maelleRecoveryLink = /(?:[?#&])type=recovery(?:[&#]|$)/.test(window.loc
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="js/supabase-config.js"></script>
 <script src="js/supabase-bridge.js"></script>
-<script src="js/admin.js"></script>
+<script src="js/admin.js?v=compact3"></script>
 <script src="js/maelle-extras.js"></script>
 <script src="js/maelle-orders.js"></script><script src="assets/js/black-friday-nova-admin.js?v=bf3"></script>
 </body>
