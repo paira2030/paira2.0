@@ -30,14 +30,18 @@ const Store = {
     this.updateCartUI();
     this.updateWishlistBadges();
     this.setupEventListeners();
-    const productId = new URLSearchParams(location.search).get('produto');
+    this.updateCategoryCounts();
+    const params = new URLSearchParams(location.search);
+    const category = params.get('categoria');
+    if(category) this.filterCategory(category);
+    const productId = params.get('produto');
     if (productId && this.products.some(p => String(p.id) === productId)) this.openPDP(productId);
   },
 
   // Carregar Catálogo
   async loadProducts() {
     if (MaelleDB.enabled) {
-      try { this.products = await MaelleDB.list(); return; }
+      try { this.products = await MaelleDB.list(true); return; }
       catch(err) { console.error('Falha ao carregar catálogo online:',err); this.products=[]; return; }
     }
     try {
@@ -99,7 +103,9 @@ const Store = {
   },
 
   // Filtro por Opção / Subcategoria do Mega-Menu
+  updateCategoryCounts(){document.querySelectorAll('[data-count-group]').forEach(el=>{el.textContent='('+this.products.filter(p=>MaelleCategories.match(p,el.dataset.countGroup,el.dataset.countSub)).length+')';});},
   filterByOption(category, subcat, label) {
+    if(category==='acessorios'){location.href='acessorios.html'+(subcat?'?tipo='+encodeURIComponent(subcat):'');return;}
     this.currentCategory = category || 'all';
     this.filterSubcategory = subcat ? subcat.toLowerCase() : null;
     this.filterMaxPrice = null;
@@ -141,6 +147,7 @@ const Store = {
 
   // Filtro de Categoria Tradicional
   filterCategory(category) {
+    if(category==='acessorios'){location.href='acessorios.html';return;}
     this.currentCategory = category;
     this.filterSubcategory = null;
     this.filterMaxPrice = null;
@@ -252,11 +259,11 @@ const Store = {
     if (this.currentCategory === 'vestidos') {
       filtered = filtered.filter(p => p.category === 'vestidos');
     } else if (this.currentCategory === 'casacos') {
-      filtered = filtered.filter(p => p.category === 'casacos');
+      filtered = filtered.filter(p => MaelleCategories.parent(p.category) === 'casacos');
     } else if (this.currentCategory === 'tops' || this.currentCategory === 'roupa') {
-      filtered = filtered.filter(p => p.category === 'tops');
+      filtered = filtered.filter(p => MaelleCategories.parent(p.category) === 'tops');
     } else if (this.currentCategory === 'conjuntos') {
-      filtered = filtered.filter(p => p.category === 'conjuntos');
+      filtered = filtered.filter(p => MaelleCategories.parent(p.category) === 'conjuntos');
     } else if (this.currentCategory === 'novidades') {
       filtered = filtered.filter(p => p.tag === 'Novo' || p.tag === 'Best-seller');
     } else if (this.currentCategory === 'saldos') {
@@ -264,17 +271,15 @@ const Store = {
     } else if (this.currentCategory === 'inverno') {
       filtered = filtered.filter(p => p.isInverno);
     } else if (this.currentCategory === 'verao') {
-      filtered = filtered.filter(p => p.category === 'vestidos' || p.category === 'tops' || p.category === 'conjuntos');
+      filtered = filtered.filter(p => p.category === 'vestidos' || MaelleCategories.parent(p.category) === 'tops' || MaelleCategories.parent(p.category) === 'conjuntos');
     } else if (this.currentCategory === 'acessorios') {
-      filtered = filtered.filter(p => p.category === 'conjuntos' || p.category === 'tops');
+      filtered = filtered.filter(p => MaelleCategories.parent(p.category) === 'acessorios');
     }
 
     if (this.filterSubcategory) {
       const sub = this.filterSubcategory;
       filtered = filtered.filter(p => 
-        p.title.toLowerCase().includes(sub) || 
-        p.slug.toLowerCase().includes(sub) ||
-        p.description.toLowerCase().includes(sub)
+        (MaelleCategories.groups[this.currentCategory]?.[sub] ? MaelleCategories.match(p,this.currentCategory,sub) : MaelleCategories.norm([p.title,p.slug,p.description].join(' ')).includes(MaelleCategories.norm(sub)))
       );
     }
 
