@@ -35,7 +35,12 @@ const Store = {
     const category = params.get('categoria');
     if(category) this.filterCategory(category);
     const productId = params.get('produto');
-    if (productId && this.products.some(p => String(p.id) === productId)) this.openPDP(productId);
+    if (productId) {
+      const product = this.products.find(p => String(p.id) === productId);
+      const status = document.getElementById('maelle-direct-status');
+      if (product) { this.openPDP(product.id); if(status) status.textContent = product.title; }
+      else if(status) status.textContent = 'Artigo indisponível. Volte à coleção para escolher outro.';
+    }
   },
 
   // Carregar Catálogo
@@ -622,7 +627,7 @@ const Store = {
       const activeSize = modalEl.querySelector('.size-pill.selected')?.getAttribute('data-size') || selectedSize;
       const activeColor = modalEl.querySelector('#pdp-colors button.selected')?.getAttribute('data-color') || selectedColor;
       this.addToCart(product, activeSize, activeColor, 1);
-      this.closePDP();
+      this.closePDP(false);
       this.openCart();
       this.showToast(`"${product.title}" adicionado ao carrinho!`);
     };
@@ -686,7 +691,21 @@ const Store = {
     guide.setAttribute('aria-hidden', 'true');
   },
 
-  closePDP() {
+  returnFromProduct() {
+    try {
+      const previous = new URL(document.referrer);
+      if (previous.origin === location.origin && /\/(?:inverno|saldos|acessorios)\.html$/.test(previous.pathname)) {
+        if (history.length > 1) { history.back(); return; }
+        location.replace(previous.href); return;
+      }
+    } catch (_) {}
+    location.replace('index.html');
+  },
+
+  closePDP(returnToCollection = true) {
+    if (returnToCollection && document.documentElement.classList.contains('maelle-direct-product')) {
+      this.returnFromProduct(); return;
+    }
     this.closePhotoLightbox();
     const modalEl = document.getElementById('pdp-modal');
     if (modalEl) modalEl.classList.remove('active');
@@ -815,7 +834,11 @@ const Store = {
 
 // Auto-inicializar
 document.addEventListener('DOMContentLoaded', () => {
-  Store.init();
+  Store.init().catch(error => {
+    console.error(error);
+    const status = document.getElementById('maelle-direct-status');
+    if(status) status.textContent = 'Não foi possível carregar o artigo. Tente novamente ou volte à coleção.';
+  });
 });
 
 // Permitir abrir o guia a partir dos rodapes das paginas institucionais.
