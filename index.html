@@ -290,9 +290,9 @@
           <div>
             <p class="label-etiqueta mb-4 text-grafite">Pe&ccedil;as de baixo</p>
             <ul class="space-y-2.5">
-              <li><button onclick="Store.filterByOption('conjuntos', 'calcas', 'Calcas')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Cal&ccedil;as</button></li>
+              <li><button onclick="Store.filterCategory('calcas')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Cal&ccedil;as</button></li>
               <li><button onclick="Store.filterByOption('conjuntos', 'calcoes', 'Calcoes')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Cal&ccedil;&otilde;es</button></li>
-              <li><button onclick="Store.filterByOption('conjuntos', 'saia', 'Saias')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Saias</button></li>
+              <li><button onclick="Store.filterCategory('saias')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Saias</button></li>
               <li><button onclick="Store.filterByOption('conjuntos', 'macacao', 'Macacoes')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">Macac&otilde;es</button></li>
               <li><button onclick="Store.filterByOption('tops', 'praia', 'Intimo e Praia')" class="group/link inline-flex items-center gap-2 text-sm text-tinta transition-colors duration-200 hover:text-oliva">&Iacute;ntimo e praia</button></li>
             </ul>
@@ -629,6 +629,8 @@
         <button onclick="Store.filterCategory('casacos')" class="px-3.5 py-1.5 border border-costura bg-white text-tinta hover:border-tinta transition-all">Casacos</button>
         <button onclick="Store.filterCategory('tops')" class="px-3.5 py-1.5 border border-costura bg-white text-tinta hover:border-tinta transition-all">Tops</button>
         <button onclick="Store.filterCategory('conjuntos')" class="px-3.5 py-1.5 border border-costura bg-white text-tinta hover:border-tinta transition-all">Conjuntos</button>
+        <button onclick="Store.filterCategory('calcas')" class="px-3.5 py-1.5 border border-costura bg-white text-tinta hover:border-tinta transition-all">Calças</button>
+        <button onclick="Store.filterCategory('saias')" class="px-3.5 py-1.5 border border-costura bg-white text-tinta hover:border-tinta transition-all">Saias</button>
         <button onclick="Store.filterCategory('novidades')" class="px-3.5 py-1.5 border border-costura bg-white text-tinta hover:border-tinta transition-all">Novidades</button>
       </div>
     </div>
@@ -901,6 +903,8 @@
         <button onclick="Store.closeMobileMenu(); Store.filterCategory('tops');" class="block w-full text-left py-2.5 border-b border-costura hover:text-oliva">ROUPA</button>
         <button onclick="Store.closeMobileMenu(); Store.filterCategory('casacos');" class="block w-full text-left py-2.5 border-b border-costura hover:text-oliva">CASACOS</button>
         <button onclick="Store.closeMobileMenu(); Store.filterCategory('conjuntos');" class="block w-full text-left py-2.5 border-b border-costura hover:text-oliva">CONJUNTOS</button>
+        <button onclick="Store.closeMobileMenu(); Store.filterCategory('calcas');" class="block w-full text-left py-2.5 border-b border-costura hover:text-oliva">CALÇAS</button>
+        <button onclick="Store.closeMobileMenu(); Store.filterCategory('saias');" class="block w-full text-left py-2.5 border-b border-costura hover:text-oliva">SAIAS</button>
         <button onclick="Store.closeMobileMenu(); Store.filterCategory('acessorios');" class="block w-full text-left py-2.5 border-b border-costura hover:text-oliva">ACESS&Oacute;RIOS</button>
         <a href="saldos.html" class="block w-full text-left py-2.5 border-b border-costura text-promo hover:underline">SALDOS</a>
         <a href="admin.html" class="block w-full text-left py-2.5 text-oliva font-bold">Aba Restrita ADM</a>
@@ -1113,8 +1117,8 @@
   <!-- Scripts da Aplicação -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="assets/js/supabase-config.js"></script>
-  <script src="assets/js/supabase-bridge.js?v=20261122-favoritos-inverno-fix2"></script>
-  <script src="assets/js/black-friday.js?v=bf1"></script><script src="assets/js/categories.js"></script><script src="assets/js/store.js?v=20261124-categories"></script>
+  <script src="assets/js/supabase-bridge.js?v=acessorios-opcionais"></script>
+  <script src="assets/js/black-friday.js?v=bf1"></script><script src="assets/js/categories.js?v=20261125-calcas-saias"></script><script src="assets/js/store.js?v=acessorios-opcionais"></script>
   <script src="assets/js/checkout.js"></script>
 
   <div id="maelle-size-guide" class="maelle-size-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Guia de tamanhos" onclick="if(event.target===this)Store.closeSizeGuide()">
