@@ -276,7 +276,16 @@ const Admin = {
   colorChoices: [],
   sizeChoices: [],
   customPalette: [],
+  updateVariationLabels() {
+    const optional = /^acessorios(?:-|$)/.test(document.getElementById('prod-form-category').value);
+    for (const id of ['prod-color-label','prod-size-label']) {
+      const label = document.getElementById(id);
+      if (label) label.textContent = label.dataset.base + (optional ? ' (opcional)' : ' *');
+    }
+  },
+
   renderVariations() {
+    this.updateVariationLabels();
     const colors = document.getElementById('prod-form-colors');
     const sizes = document.getElementById('prod-form-sizes');
     const selectedList = document.getElementById('prod-selected-colors');
@@ -448,7 +457,7 @@ const Admin = {
     if(productData.isFavoritoInverno && !(idx>=0 && this.products[idx]?.isFavoritoInverno) && this.products.filter(p=>p.isFavoritoInverno).length>=4) {this.showAdminToast('Limite de 4 Favoritos de Inverno.');return;}
     if (productData.shippingMode === 'paid' && (!Number.isFinite(productData.shippingPrice) || productData.shippingPrice <= 0 || productData.shippingPrice > 9999.99)) { this.showAdminToast('Indique um valor válido para os portes.'); return; }
     if (productData.isSaldo && !(productData.oldPrice > productData.price && productData.price > 0)) { this.showAdminToast('Para Saldos, o preço anterior deve ser maior que o promocional.'); return; }
-    if (!productData.colors.length || !productData.sizes.length) { this.showAdminToast('Selecione pelo menos uma cor e um tamanho.'); return; }
+    if (!/^acessorios(?:-|$)/.test(productData.category) && (!productData.colors.length || !productData.sizes.length)) { this.showAdminToast('Selecione pelo menos uma cor e um tamanho.'); return; }
     if (!productData.localImage) { this.showAdminToast('Escolha uma imagem para o produto.'); return; }
     const previousProduct = idx >= 0 ? this.products[idx] : null;
     if (MaelleDB.enabled) {

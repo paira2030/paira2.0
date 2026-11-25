@@ -43,7 +43,7 @@ const MaelleDB = {
   async list(activeOnly=false) {
     let query=this.client.from('produtos').select('*');if(activeOnly)query=query.eq('ativo',true);const {data,error}=await query.order('criado_em',{ascending:false});
     if (error) throw error;
-    return data.map(p=>({id:p.codigo||p.id,dbId:p.id,title:p.nome,description:p.descricao||'',price:Number(p.preco),stock:p.estoque,images:p.imagens||[],localImage:p.imagens?.[0]||'',category:p.categoria||'vestidos',categoryFolder:p.categoria||'vestidos',shippingMode:p.modo_envio||'legacy',shippingPrice:Number(p.valor_portes??4.50),oldPrice:Number(p.preco_anterior||0),isSaldo:!!p.em_saldos,isInverno:!!p.em_inverno,isFavoritoInverno:!!p.favorito_inverno,tag:p.etiqueta||'',sizes:p.tamanhos||['XS','S','M','L'],colors:p.cores||['Creme','Preto'],colorHex:p.cores_hex||[],rating:5,reviewsCount:0}));
+    return data.map(p=>({id:p.codigo||p.id,dbId:p.id,title:p.nome,description:p.descricao||'',price:Number(p.preco),stock:p.estoque,images:p.imagens||[],localImage:p.imagens?.[0]||'',category:p.categoria||'vestidos',categoryFolder:p.categoria||'vestidos',shippingMode:p.modo_envio||'legacy',shippingPrice:Number(p.valor_portes??4.50),oldPrice:Number(p.preco_anterior||0),isSaldo:!!p.em_saldos,isInverno:!!p.em_inverno,isFavoritoInverno:!!p.favorito_inverno,tag:p.etiqueta||'',sizes:p.tamanhos||(/^acessorios(?:-|$)/.test(p.categoria||'')?[]:['XS','S','M','L']),colors:p.cores||(/^acessorios(?:-|$)/.test(p.categoria||'')?[]:['Creme','Preto']),colorHex:p.cores_hex||[],rating:5,reviewsCount:0}));
   },
   async upload(dataUrl) {
     if (!dataUrl.startsWith('data:image/')) return dataUrl;
