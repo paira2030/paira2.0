@@ -7,6 +7,15 @@
   <meta name="description" content="Moda feminina MAELLE: vestidos, casacos, tops e blusas com estilo editorial. Portes grátis a partir de 49,90 € e devoluções em 30 dias." />
   <link rel="icon" href="assets/images/branding/favicon.svg" type="image/svg+xml" />
 
+  <script>if(new URLSearchParams(location.search).has('produto'))document.documentElement.classList.add('maelle-direct-product');</script>
+  <style>
+    #maelle-direct-screen{display:none}
+    .maelle-direct-product body{background:#fafaf9}
+    .maelle-direct-product #maelle-direct-screen{position:fixed;inset:0;z-index:90;background:#fafaf9;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;color:#141414;font:14px system-ui,sans-serif}
+    .maelle-direct-product #pdp-modal{background:#fafaf9;backdrop-filter:none;transition:none}
+    .maelle-direct-product #pdp-modal .modal-content{transition:none}
+    .maelle-direct-product #maelle-direct-screen button{border:1px solid #aaa;padding:10px 18px;background:white;cursor:pointer}
+  </style>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -35,6 +44,7 @@
   <link rel="stylesheet" href="assets/css/style.css?v=20261115-guia-modal" />
 <link rel="stylesheet" href="assets/css/black-friday.css"></head>
 <body class="bg-linho text-tinta antialiased">
+  <div id="maelle-direct-screen"><span id="maelle-direct-status" role="status">A carregar artigo…</span><button type="button" onclick="Store.returnFromProduct()">Voltar à coleção</button></div>
 
   <!-- ==========================================
        BARRA DE ANÚNCIO (TOP BANNER)
@@ -1114,7 +1124,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="assets/js/supabase-config.js"></script>
   <script src="assets/js/supabase-bridge.js?v=20261122-favoritos-inverno-fix2"></script>
-  <script src="assets/js/black-friday.js?v=bf1"></script><script src="assets/js/categories.js"></script><script src="assets/js/store.js?v=20261124-categories"></script>
+  <script src="assets/js/black-friday.js?v=bf1"></script><script src="assets/js/categories.js"></script><script src="assets/js/store.js?v=20261125-direct-product"></script>
   <script src="assets/js/checkout.js"></script>
 
   <div id="maelle-size-guide" class="maelle-size-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Guia de tamanhos" onclick="if(event.target===this)Store.closeSizeGuide()">
