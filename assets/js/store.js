@@ -152,7 +152,7 @@ const Store = {
     this.filterSubcategory = null;
     this.filterMaxPrice = null;
     this.filterColor = null;
-    this.currentFilterLabel = category === 'all' ? 'Todas as Peças' : category.toUpperCase();
+    this.currentFilterLabel = category === 'all' ? 'Todas as Peças' : (window.MaelleCategories?.labels[category] || category).toUpperCase();
     this.closeMegaMenuImmediate();
     this.renderCatalog();
 
@@ -262,6 +262,8 @@ const Store = {
       filtered = filtered.filter(p => MaelleCategories.parent(p.category) === 'casacos');
     } else if (this.currentCategory === 'tops' || this.currentCategory === 'roupa') {
       filtered = filtered.filter(p => MaelleCategories.parent(p.category) === 'tops');
+    } else if (['calcas','saias'].includes(this.currentCategory)) {
+      filtered = filtered.filter(p => p.category === this.currentCategory);
     } else if (this.currentCategory === 'conjuntos') {
       filtered = filtered.filter(p => MaelleCategories.parent(p.category) === 'conjuntos');
     } else if (this.currentCategory === 'novidades') {
@@ -383,8 +385,8 @@ const Store = {
     const product = this.products.find(p => p.id === productId);
     if (!product) return;
 
-    const defaultSize = product.sizes && product.sizes.length ? product.sizes[0] : 'S';
-    const defaultColor = product.colors && product.colors.length ? product.colors[0] : 'Padrão';
+    const defaultSize = product.sizes && product.sizes.length ? product.sizes[0] : (/^acessorios(?:-|$)/.test(product.categoryFolder || product.category || '') ? '' : 'S');
+    const defaultColor = product.colors && product.colors.length ? product.colors[0] : (/^acessorios(?:-|$)/.test(product.categoryFolder || product.category || '') ? '' : 'Padrão');
 
     this.addToCart(product, defaultSize, defaultColor, 1);
     this.openCart();
@@ -515,7 +517,7 @@ const Store = {
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
               </button>
             </div>
-            <p class="text-xs text-grafite mt-0.5">Tam: ${item.size} • Cor: ${item.color}</p>
+            <p class="text-xs text-grafite mt-0.5">${[item.size && 'Tam: '+item.size, item.color && 'Cor: '+item.color].filter(Boolean).join(' • ')}</p>
             <p class="text-sm font-semibold text-tinta mt-1">${this.formatPrice(item.price)}</p>
           </div>
           <div class="flex items-center gap-3">
@@ -540,8 +542,8 @@ const Store = {
     const modalEl = document.getElementById('pdp-modal');
     if (!modalEl) return;
 
-    let selectedSize = product.sizes && product.sizes.length ? product.sizes[0] : 'S';
-    let selectedColor = product.colors && product.colors.length ? product.colors[0] : 'Creme';
+    let selectedSize = product.sizes && product.sizes.length ? product.sizes[0] : (/^acessorios(?:-|$)/.test(product.categoryFolder || product.category || '') ? '' : 'S');
+    let selectedColor = product.colors && product.colors.length ? product.colors[0] : (/^acessorios(?:-|$)/.test(product.categoryFolder || product.category || '') ? '' : 'Creme');
 
     const gallery = modalEl.querySelector('#pdp-gallery');
     const images = [...new Set((Array.isArray(product.images) ? product.images : []).concat(product.localImage || '').filter(src => typeof src === 'string' && src.trim()))];
@@ -616,6 +618,10 @@ const Store = {
       colorsContainer.appendChild(button);
     });
 
+    const optionalVariants = /^acessorios(?:-|$)/.test(product.categoryFolder || product.category || '');
+    for (const [container, values] of [[sizesContainer, product.sizes], [colorsContainer, product.colors]]) {
+      container.parentElement.style.display = optionalVariants && !values?.length ? 'none' : '';
+    }
     // Botão Adicionar
     const addBtn = modalEl.querySelector('#pdp-add-btn');
     addBtn.onclick = () => {

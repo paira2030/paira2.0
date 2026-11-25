@@ -13,7 +13,7 @@ const Checkout = {
     el.replaceChildren();
     for (const item of Store.cart) {
       const line=document.createElement('div'); line.className='flex justify-between text-xs py-2 border-b';
-      const name=document.createElement('span'); name.textContent=`${item.qty}x ${item.title} (${item.size||''})`;
+      const name=document.createElement('span'); name.textContent=`${item.qty}x ${item.title}${item.size ? ' ('+item.size+')' : ''}`;
       const price=document.createElement('span'); price.textContent=Store.formatPrice(item.price*item.qty);
       line.append(name,price); el.append(line);
     }
