@@ -305,6 +305,7 @@ module.exports = async (req, res) => {
     // GHL: checkout iniciado (recuperação de carrinho). Falha silenciosa.
     await ghl.checkoutIniciado({
       checkoutId: result.id,
+      pedido: id,
       parsed,
       snapshot,
       customer,

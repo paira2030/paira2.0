@@ -29,19 +29,19 @@ function phonePT(raw) {
 const eur = n => Number(n || 0).toFixed(2).replace('.', ',') + ' €';
 
 // Link que reconstrói o cesto noutro dispositivo. Só leva códigos, nunca preços.
-function retomarUrl(parsed) {
+function retomarUrl(parsed, pedido) {
   const param = Buffer.from(JSON.stringify(
     parsed.map(x => [x.code || x.id, x.qty, x.size || '', x.color || ''])
   )).toString('base64url');
-  return `${ORIGIN}/checkout.html?carrinho=${param}`;
+  return `${ORIGIN}/checkout.html?carrinho=${param}${pedido ? `&r=${pedido}` : ""}`;
 }
 
-function checkoutIniciado({ checkoutId, parsed, snapshot, customer, total }) {
+function checkoutIniciado({ checkoutId, pedido, parsed, snapshot, customer, total }) {
   const [firstName, ...rest] = String(customer.name || '').trim().split(/\s+/);
   return notifyGHL(process.env.GHL_WEBHOOK_CHECKOUT, {
     event: 'checkout_iniciado',
     checkout_id: checkoutId,
-    checkout_url: retomarUrl(parsed),
+    checkout_url: retomarUrl(parsed, pedido),
     created_at: new Date().toISOString(),
     customer: {
       first_name: firstName || '',
