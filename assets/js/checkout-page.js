@@ -6,6 +6,15 @@ const MaelleCheckout={
   try { await window.MaelleBlackFriday.load();const catalog=await MaelleDB.list();this.liveCatalog=catalog; } catch(e){document.querySelector('main').innerHTML='<p>Não foi possível confirmar os preços atuais. Atualize a página antes de pagar.</p>';return;}
   // Link de retoma (WhatsApp/e-mail): reconstrói o cesto a partir do catálogo atual. Preços nunca vêm do link.
   const rp=new URLSearchParams(location.search).get('carrinho');
+  const rPedido=new URLSearchParams(location.search).get('r');
+  if(rPedido&&/^[0-9a-f-]{36}$/i.test(rPedido)){
+   // Pré-preencher os dados de contacto da encomenda não concluída (só preenche campos vazios).
+   fetch('/api/retomar?pedido='+encodeURIComponent(rPedido),{cache:'no-store'}).then(r=>r.ok?r.json():null).then(d=>{
+    const c=d&&d.cliente;if(!c)return;
+    const map={'cust-name':c.name,'cust-email':c.email,'cust-phone':c.phone,'cust-address':c.address,'cust-postal':c.postalCode,'cust-city':c.city,'cust-nif':c.nif};
+    for(const [id,v] of Object.entries(map)){const el=document.getElementById(id);if(el&&!el.value&&typeof v==='string'&&v)el.value=v;}
+   }).catch(()=>{});
+  }
   if(rp){
    try{
     const arr=JSON.parse(decodeURIComponent(escape(atob(rp.replace(/-/g,'+').replace(/_/g,'/')))));
