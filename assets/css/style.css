@@ -464,3 +464,15 @@ body {
 .maelle-size-panel{border-radius:3px;box-shadow:0 18px 60px rgba(0,0,0,.2)}
 .maelle-size-close{border:0;background:transparent;cursor:pointer;padding:4px 8px}
 @media(max-width:540px){.maelle-size-panel{padding:24px 15px;max-height:85dvh}.maelle-size-panel table{font-size:11px}}
+
+/* Resultados da pesquisa Maelle */
+.maelle-search-results{max-width:1440px;margin:12px auto 0;border-top:1px solid #e4e1dd;color:#222;background:#faf9f7;text-align:left}
+.maelle-search-results[hidden]{display:none!important}
+.maelle-search-status{padding:12px 8px;font-size:12px;color:#666}
+.maelle-search-list{max-height:min(48vh,420px);overflow:auto;overscroll-behavior:contain}
+.maelle-search-item{display:flex;align-items:center;gap:14px;width:100%;padding:10px 8px;border:0;border-bottom:1px solid #e8e5e0;background:transparent;text-align:left;color:inherit;font:inherit;cursor:pointer}
+.maelle-search-item:hover,.maelle-search-item:focus-visible{background:#eeeae5}
+.maelle-search-item img{width:55px;height:72px;object-fit:cover;background:#eee;flex-shrink:0}
+.maelle-search-item span{display:block;font-size:13px;overflow-wrap:anywhere}.maelle-search-item strong{display:block;font-weight:500;margin-bottom:5px}
+.maelle-search-close{border:0;background:transparent;font-size:24px;cursor:pointer;margin-left:8px}
+@media(max-width:600px){.search-overlay{padding:12px 15px}.search-overlay input{min-width:0}.maelle-search-list{max-height:45vh}}

@@ -2,7 +2,7 @@
 Store.setupEventListeners();
 Store.filterCategory = () => {};
 function syncCollectionProducts() {
-  Store.products = products.map(p => ({...p, basePrice:p.price, price:MaelleBlackFriday.price(p), bfActive:MaelleBlackFriday.eligible(p)}));
+  Store.products = [...Store.products.filter(p => !products.some(x => x.id === p.id)), ...products.map(p => ({...p, basePrice:p.price, price:MaelleBlackFriday.price(p), bfActive:MaelleBlackFriday.eligible(p)}))];
   Store.updateCartUI();
 }
 document.getElementById('grid').addEventListener('click', event => {

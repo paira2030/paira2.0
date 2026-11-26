@@ -777,8 +777,7 @@ const Store = {
     const overlayInput = document.getElementById('overlay-search-input');
     if (overlayInput) {
       overlayInput.addEventListener('input', (e) => {
-        this.searchQuery = e.target.value;
-        this.renderCatalog();
+        // A pesquisa global apresenta resultados junto à barra.
       });
     }
 
