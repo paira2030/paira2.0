@@ -47,6 +47,8 @@ const MaelleCheckout={
   document.getElementById('checkout-subtotal').textContent=this.eur(subtotal);
   document.getElementById('checkout-shipping').textContent=shipping?this.eur(shipping):'Grátis';
   document.getElementById('checkout-total').textContent=this.eur(subtotal+shipping);
+  this.total=subtotal+shipping;
+  if(window.fbq)fbq('track','InitiateCheckout',{content_ids:this.cart.map(i=>String(i.id)),content_type:'product',num_items:this.cart.reduce((s,i)=>s+(Number(i.qty)||1),0),value:this.total,currency:'EUR'});
  },
  async pay(event){
   event.preventDefault();
@@ -65,6 +67,7 @@ const MaelleCheckout={
    if(!response.ok||!data.checkoutId||!data.pedido)throw Error(data.error||'Não foi possível iniciar o pagamento.');
    this.paymentPrepared=true;
    this.pedido=data.pedido;
+   try{sessionStorage.setItem('maelle_px_purchase',JSON.stringify({pedido:data.pedido,value:this.total,ids:this.cart.map(i=>String(i.id)),n:this.cart.reduce((s,i)=>s+(Number(i.qty)||1),0)}))}catch{}
    btn.hidden=true;
    status.textContent='Preencha os dados do pagamento no formulário seguro abaixo.';
    window.SumUpCard.mount({id:'sumup-card',checkoutId:data.checkoutId,email:customer.email,onResponse:async(type,body)=>{
