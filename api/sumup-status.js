@@ -1,3 +1,4 @@
+const ghl=require('./_ghl');
 const URL_BASE=process.env.SUPABASE_URL||process.env.MAELLE_SUPABASE_URL;
 const KEY=process.env.SUPABASE_SECRET_KEY;
 module.exports=async(req,res)=>{
@@ -17,7 +18,12 @@ module.exports=async(req,res)=>{
   const checkout=await payment.json();
   if(checkout.checkout_reference!==id||checkout.currency!=='EUR'||Math.round(checkout.amount*100)!==Math.round(order.total*100))throw Error('Divergência nos dados do pagamento.');
   const status=['PAID','PENDING','FAILED','EXPIRED'].includes(checkout.status)?checkout.status:'PENDING';
-  if(status!==order.estado_pagamento)await fetch(`${URL_BASE}/rest/v1/encomendas_sumup?id=eq.${id}`,{method:'PATCH',headers,body:JSON.stringify({estado_pagamento:status})});
+  if(status==='PAID'&&order.estado_pagamento!=='PAID'){
+   // Transição condicional: só uma das rotas (status ou webhook) marca PAID e notifica o GHL.
+   const up=await fetch(`${URL_BASE}/rest/v1/encomendas_sumup?id=eq.${id}&estado_pagamento=neq.PAID`,{method:'PATCH',headers:{...headers,Prefer:'return=representation'},body:JSON.stringify({estado_pagamento:'PAID'})});
+   const rows=up.ok?await up.json().catch(()=>[]):[];
+   if(Array.isArray(rows)&&rows.length===1)await ghl.pagamentoConfirmado(rows[0]);
+  }else if(status!==order.estado_pagamento)await fetch(`${URL_BASE}/rest/v1/encomendas_sumup?id=eq.${id}`,{method:'PATCH',headers,body:JSON.stringify({estado_pagamento:status})});
   return res.json(status==='PAID'?{status,codigo_rastreio:order.codigo_rastreio}:{status});
  }catch(e){console.error('SumUp status:',e.message);return res.status(502).json({error:'Não foi possível confirmar o pagamento. Tente novamente.'});}
 };

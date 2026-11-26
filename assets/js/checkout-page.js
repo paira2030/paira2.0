@@ -4,6 +4,19 @@ const MaelleCheckout={
  eur(v){return Number(v||0).toLocaleString('pt-PT',{style:'currency',currency:'EUR'})},
  async init(){
   try { await window.MaelleBlackFriday.load();const catalog=await MaelleDB.list();this.liveCatalog=catalog; } catch(e){document.querySelector('main').innerHTML='<p>Não foi possível confirmar os preços atuais. Atualize a página antes de pagar.</p>';return;}
+  // Link de retoma (WhatsApp/e-mail): reconstrói o cesto a partir do catálogo atual. Preços nunca vêm do link.
+  const rp=new URLSearchParams(location.search).get('carrinho');
+  if(rp){
+   try{
+    const arr=JSON.parse(decodeURIComponent(escape(atob(rp.replace(/-/g,'+').replace(/_/g,'/')))));
+    const rebuilt=(Array.isArray(arr)?arr:[]).slice(0,30).map(([id,qty,size,color])=>{
+     const p=this.liveCatalog.find(p=>String(p.id)===String(id)||String(p.dbId)===String(id));
+     return p&&{id:p.id,title:p.title,price:p.price,shippingMode:p.shippingMode||'legacy',shippingPrice:p.shippingPrice??4.50,image:p.localImage,size:String(size||''),color:String(color||''),qty:Math.max(1,Math.min(10,Number(qty)||1))};
+    }).filter(Boolean);
+    if(rebuilt.length)localStorage.setItem('maelle_cart',JSON.stringify(rebuilt));
+   }catch(e){console.warn('Link de retoma inválido',e)}
+   history.replaceState(null,'',location.pathname);
+  }
   try{const value=JSON.parse(localStorage.getItem('maelle_cart')||'[]');this.cart=Array.isArray(value)?value:[];this.cart=this.cart.map(i=>{const p=this.liveCatalog.find(p=>p.id===i.id);return p?{...i,price:window.MaelleBlackFriday.price(p)}:i})}catch{this.cart=[]}
   if(this.cart.some(i=>!this.liveCatalog.some(p=>p.id===i.id))){document.querySelector('main').textContent='Há artigos indisponíveis no cesto. Volte à loja.';return;}if(!this.cart.length){document.querySelector('main').innerHTML='<h1 class="font-display text-3xl my-8">O seu cesto está vazio</h1><a href="/" class="underline">Voltar à loja</a>';return}
   const box=document.getElementById('checkout-summary-items');box.replaceChildren();let subtotal=0;
