@@ -345,7 +345,7 @@ const Store = {
     if (!product) return;
 
     const defaultSize = product.sizes && product.sizes.length ? product.sizes[0] : (/^acessorios(?:-|$)/.test(product.categoryFolder || product.category || '') ? '' : 'S');
-    const defaultColor = product.colors && product.colors.length ? product.colors[0] : (/^acessorios(?:-|$)/.test(product.categoryFolder || product.category || '') ? '' : 'Padrão');
+    const defaultColor = product.colors?.[0] || '';
 
     this.addToCart(product, defaultSize, defaultColor, 1);
     this.openCart();
@@ -502,7 +502,7 @@ const Store = {
     if (!modalEl) return;
 
     let selectedSize = product.sizes && product.sizes.length ? product.sizes[0] : (/^acessorios(?:-|$)/.test(product.categoryFolder || product.category || '') ? '' : 'S');
-    let selectedColor = product.colors && product.colors.length ? product.colors[0] : (/^acessorios(?:-|$)/.test(product.categoryFolder || product.category || '') ? '' : 'Creme');
+    let selectedColor = product.colors?.[0] || '';
 
     const gallery = modalEl.querySelector('#pdp-gallery');
     const images = [...new Set((Array.isArray(product.images) ? product.images : []).concat(product.localImage || '').filter(src => typeof src === 'string' && src.trim()))];
@@ -571,7 +571,7 @@ const Store = {
 
     const optionalVariants = /^acessorios(?:-|$)/.test(product.categoryFolder || product.category || '');
     for (const [container, values] of [[sizesContainer, product.sizes], [colorsContainer, product.colors]]) {
-      container.parentElement.style.display = optionalVariants && !values?.length ? 'none' : '';
+      container.parentElement.style.display = (container === colorsContainer || optionalVariants) && !values?.length ? 'none' : '';
     }
     // Botão Adicionar
     const addBtn = modalEl.querySelector('#pdp-add-btn');

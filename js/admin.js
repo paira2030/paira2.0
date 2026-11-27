@@ -24,7 +24,7 @@ const Admin = {
     document.getElementById('auth-gate').style.display = this.authenticated ? 'none' : 'flex';
     document.getElementById('admin-dashboard').style.display = this.authenticated ? 'block' : 'none';
     if (this.authenticated) {
-      await this.loadCatalog(); this.renderProductsTable();
+      await this.loadCatalog(); this.renderProductsTable(); await this.loadColorPalette();
     }
   },
   async login() {
@@ -276,11 +276,42 @@ const Admin = {
   colorChoices: [],
   sizeChoices: [],
   customPalette: [],
+  sharedPalette: [],
+  paletteBusy: false,
+  mergedPalette() {
+    return [...new Map([...this.palette,...this.sharedPalette,...this.customPalette].map(c=>[c.name,c])).values()];
+  },
+  async loadColorPalette() {
+    if (!MaelleDB.enabled) return;
+    const {data,error}=await MaelleDB.client.from('maelle_color_palette').select('name,hex').order('name');
+    if(error) { this.showAdminToast('Paleta: execute o SQL da atualização. '+error.message); return; }
+    this.sharedPalette=data||[];
+    if(document.getElementById('product-edit-modal').classList.contains('active')) this.renderVariations();
+  },
+  async removePaletteColor(item) {
+    if(this.paletteBusy || !confirm('Retirar '+item.name+' da paleta geral? As peças existentes não serão alteradas.')) return;
+    this.paletteBusy=true;
+    try {
+      const {error}=await MaelleDB.client.from('maelle_color_palette').delete().eq('name',item.name);
+      if(error) throw error;
+      if(this.colorChoices.includes(item.name) && !this.customPalette.some(c=>c.name===item.name)) this.customPalette.push(item);
+      this.sharedPalette=this.sharedPalette.filter(c=>c.name!==item.name);
+      this.renderVariations();
+    } catch(e) {this.showAdminToast('Erro: '+e.message);} finally {this.paletteBusy=false;}
+  },
+  availableSizes() {
+    return /^(?:acessorios-)?sapatos(?:-|$)/.test(document.getElementById('prod-form-category').value) ? ['35','36','37','38','39','40','41','42','43'] : ['XXS','XS','S','M','L','XL','XXL','3XL'];
+  },
+  categoryChanged() {
+    this.sizeChoices = this.sizeChoices.filter(s => this.availableSizes().includes(s));
+    this.renderVariations();
+  },
   updateVariationLabels() {
-    const optional = /^acessorios(?:-|$)/.test(document.getElementById('prod-form-category').value);
+    const category = document.getElementById('prod-form-category').value;
+    const optional = /^acessorios(?:-|$)/.test(category) && category !== 'acessorios-sapatos';
     for (const id of ['prod-color-label','prod-size-label']) {
       const label = document.getElementById(id);
-      if (label) label.textContent = label.dataset.base + (optional ? ' (opcional)' : ' *');
+      if (label) label.textContent = label.dataset.base + (id === 'prod-color-label' || optional ? ' (opcional)' : ' *');
     }
   },
 
@@ -292,7 +323,7 @@ const Admin = {
     if (!colors || !sizes) return;
     colors.replaceChildren();
     if (selectedList) selectedList.replaceChildren();
-    const palette = [...this.palette, ...this.customPalette];
+    const palette = this.mergedPalette();
     const toggle = (name) => {
       this.colorChoices = this.colorChoices.includes(name)
         ? this.colorChoices.filter(x => x !== name)
@@ -307,10 +338,13 @@ const Admin = {
       btn.title = (selected ? 'Retirar ' : 'Adicionar ') + item.name;
       btn.setAttribute('aria-label', btn.title);
       btn.setAttribute('aria-pressed', String(selected));
-      btn.style.cssText = 'width:38px;height:38px;border-radius:50%;background:'+item.hex+';border:3px solid '+(selected?'#232323':'#dedede')+';outline:'+(selected?'2px solid #9b9b9b':'none')+';outline-offset:2px;cursor:pointer';
+      btn.style.cssText = 'width:24px;height:24px;border-radius:50%;background:'+item.hex+';border:2px solid '+(selected?'#232323':'#dedede')+';outline:'+(selected?'2px solid #9b9b9b':'none')+';outline-offset:2px;cursor:pointer';
       btn.onclick = () => toggle(item.name);
       const name = document.createElement('span'); name.className = 'text-[10px]'; name.textContent = item.name;
       wrapper.append(btn, name);
+      if(this.sharedPalette.some(c=>c.name===item.name)) {
+        const del=document.createElement('button');del.type='button';del.textContent='×';del.title='Retirar da paleta geral';del.setAttribute('aria-label',del.title+' '+item.name);del.className='text-xs text-red-600';del.onclick=()=>this.removePaletteColor(item);wrapper.append(del);
+      }
       colors.append(wrapper);
     }
     if (selectedList) {
@@ -336,7 +370,7 @@ const Admin = {
       }
     }
     sizes.replaceChildren();
-    for (const name of ['XXS','XS','S','M','L','XL','XXL','3XL']) {
+    for (const name of this.availableSizes()) {
       const selected = this.sizeChoices.includes(name);
       const btn = document.createElement('button');btn.type='button';btn.textContent=name;
       btn.className='border px-3 py-2 text-xs '+(selected?'bg-tinta text-white border-tinta':'border-costura bg-white text-tinta');
@@ -345,12 +379,21 @@ const Admin = {
       sizes.append(btn);
     }
   },
-  addCustomColor() {
+  async addCustomColor() {
     const input=document.getElementById('prod-new-color-name');
     const name=input.value.trim();const hex=document.getElementById('prod-new-color-hex').value;
     if(!name) return this.showAdminToast('Escreva o nome da cor.');
-    const existing=[...this.palette,...this.customPalette].find(c=>c.name.toLowerCase()===name.toLowerCase());
-    if(!existing) this.customPalette.push({name,hex});
+    if(this.paletteBusy) return;
+    const existing=[...this.palette,...this.sharedPalette].find(c=>c.name.toLowerCase()===name.toLowerCase());
+    if(!existing) {
+      this.paletteBusy=true;
+      try {
+        const {error}=await MaelleDB.client.from('maelle_color_palette').insert({name,hex});
+        if(error) throw error;
+        this.sharedPalette.push({name,hex});
+        this.customPalette=this.customPalette.filter(c=>c.name!==name);
+      } catch(e) {this.showAdminToast('Não foi possível guardar a cor: '+e.message);return;} finally {this.paletteBusy=false;}
+    }
     const chosen=existing?.name||name;
     if(!this.colorChoices.includes(chosen)) this.colorChoices.push(chosen);
     input.value='';this.renderVariations();
@@ -387,6 +430,7 @@ const Admin = {
     document.getElementById('prod-form-files').value = '';
     document.getElementById('prod-form-desc').value = 'Peça confecionada com materiais de alta qualidade e corte editorial contemporâneo.';
     document.getElementById('product-edit-modal').classList.add('active');
+    this.loadColorPalette();
   },
 
   openEditProductModal(index) {
@@ -411,15 +455,16 @@ const Admin = {
     this.toggleShippingPrice();
     document.getElementById('prod-form-tag').value = p.tag || '';
     document.getElementById('prod-form-image').value = p.localImage?.startsWith('data:') ? '' : (p.localImage || '');
-    this.colorChoices = [...(p.colors || [])]; this.sizeChoices = [...(p.sizes || [])];
+    this.colorChoices = [...(p.colors || [])]; this.sizeChoices = (p.sizes || []).map(String).filter(s => this.availableSizes().includes(s));
     this.customPalette = (p.colorHex || []).filter(c=>!this.palette.some(x=>x.name===c.name));
-    for (const name of this.colorChoices) if (![...this.palette,...this.customPalette].some(c=>c.name===name)) this.customPalette.push({name,hex:'#999999'});
+    for (const name of this.colorChoices) if (!this.mergedPalette().some(c=>c.name===name)) this.customPalette.push({name,hex:'#999999'});
     this.renderVariations();
     this.editingImages = Array.isArray(p.images) ? [...p.images] : (p.localImage ? [p.localImage] : []);
     this.renderImagePreviews();
     document.getElementById('prod-form-files').value = '';
     document.getElementById('prod-form-desc').value = p.description || '';
     document.getElementById('product-edit-modal').classList.add('active');
+    this.loadColorPalette();
   },
 
   closeProductEditModal() {
@@ -449,7 +494,7 @@ const Admin = {
       description: document.getElementById('prod-form-desc').value,
       sizes: [...this.sizeChoices],
       colors: [...this.colorChoices],
-      colorHex: [...this.palette,...this.customPalette].filter(c=>this.colorChoices.includes(c.name)),
+      colorHex: this.mergedPalette().filter(c=>this.colorChoices.includes(c.name)),
       rating: 5.0,
       reviewsCount: 12
     };
@@ -457,7 +502,7 @@ const Admin = {
     if(productData.isFavoritoInverno && !(idx>=0 && this.products[idx]?.isFavoritoInverno) && this.products.filter(p=>p.isFavoritoInverno).length>=4) {this.showAdminToast('Limite de 4 Favoritos de Inverno.');return;}
     if (productData.shippingMode === 'paid' && (!Number.isFinite(productData.shippingPrice) || productData.shippingPrice <= 0 || productData.shippingPrice > 9999.99)) { this.showAdminToast('Indique um valor válido para os portes.'); return; }
     if (productData.isSaldo && !(productData.oldPrice > productData.price && productData.price > 0)) { this.showAdminToast('Para Saldos, o preço anterior deve ser maior que o promocional.'); return; }
-    if (!/^acessorios(?:-|$)/.test(productData.category) && (!productData.colors.length || !productData.sizes.length)) { this.showAdminToast('Selecione pelo menos uma cor e um tamanho.'); return; }
+    if ((!/^acessorios(?:-|$)/.test(productData.category) || productData.category === 'acessorios-sapatos') && !productData.sizes.length) { this.showAdminToast('Selecione pelo menos um tamanho.'); return; }
     if (!productData.localImage) { this.showAdminToast('Escolha uma imagem para o produto.'); return; }
     const previousProduct = idx >= 0 ? this.products[idx] : null;
     if (MaelleDB.enabled) {
