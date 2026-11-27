@@ -238,7 +238,7 @@
 
           <div>
             <label class="block font-medium text-grafite mb-1">Categoria *</label>
-            <select id="prod-form-category" onchange="Admin.updateVariationLabels()" class="w-full bg-papel border border-costura p-2.5 focus:border-tinta outline-none"><option value="vestidos">Vestidos</option><option value="calcas">Calças</option><option value="saias">Saias</option><optgroup label="Casacos"><option value="casacos">Casacos — Geral</option><option value="casacos-blazer">Blazers</option><option value="casacos-jaqueta">Jaquetas e blusões</option><option value="casacos-sobretudo">Sobretudos e compridos</option><option value="casacos-kimono">Clássicos</option><option value="casacos-gabardina">Gabardina</option><option value="casacos-trench">Trench</option><option value="casacos-colete">Colete</option><option value="casacos-scarlett">Scarlett</option></optgroup><optgroup label="Conjuntos"><option value="conjuntos">Conjuntos — Geral</option><option value="conjuntos-saia">Com saia</option><option value="conjuntos-calcoes">Com calções</option><option value="conjuntos-calcas">Com calças</option><option value="conjuntos-coordenado">Coordenados</option></optgroup><optgroup label="Acessórios"><option value="acessorios">Acessórios — Geral</option><option value="acessorios-mala">Malas de mão</option><option value="acessorios-carteira">Carteiras</option><option value="acessorios-sapatos">Sapatos</option><option value="acessorios-oculos">Óculos de sol</option><option value="acessorios-chapeu">Chapéus</option></optgroup><optgroup label="Tops &amp; Blusas"><option value="tops">Tops &amp; Blusas — Geral</option><option value="tops-camisola">Camisola</option></optgroup></select>
+            <select id="prod-form-category" onchange="Admin.categoryChanged()" class="w-full bg-papel border border-costura p-2.5 focus:border-tinta outline-none"><option value="vestidos">Vestidos</option><option value="calcas">Calças</option><option value="saias">Saias</option><optgroup label="Casacos"><option value="casacos">Casacos — Geral</option><option value="casacos-blazer">Blazers</option><option value="casacos-jaqueta">Jaquetas e blusões</option><option value="casacos-sobretudo">Sobretudos e compridos</option><option value="casacos-kimono">Clássicos</option><option value="casacos-gabardina">Gabardina</option><option value="casacos-trench">Trench</option><option value="casacos-colete">Colete</option><option value="casacos-scarlett">Scarlett</option></optgroup><optgroup label="Conjuntos"><option value="conjuntos">Conjuntos — Geral</option><option value="conjuntos-saia">Com saia</option><option value="conjuntos-calcoes">Com calções</option><option value="conjuntos-calcas">Com calças</option><option value="conjuntos-coordenado">Coordenados</option></optgroup><optgroup label="Acessórios"><option value="acessorios">Acessórios — Geral</option><option value="acessorios-mala">Malas de mão</option><option value="acessorios-carteira">Carteiras</option><option value="acessorios-sapatos">Sapatos</option><option value="acessorios-oculos">Óculos de sol</option><option value="acessorios-chapeu">Chapéus</option></optgroup><optgroup label="Tops &amp; Blusas"><option value="tops">Tops &amp; Blusas — Geral</option><option value="tops-camisola">Camisola</option></optgroup></select>
           </div>
 
           <div class="sm:col-span-2">
@@ -284,8 +284,8 @@
             <label class="flex gap-2 items-center"><input type="checkbox" id="prod-form-favorito-inverno"/> Destacar em Os Favoritos de Inverno (máx. 4)</label>
           </div>
           <div class="sm:col-span-2 border-t border-costura pt-4">
-            <label id="prod-color-label" data-base="Cores disponíveis — marque apenas as cores da peça" class="block font-medium text-grafite mb-2">Cores disponíveis — marque apenas as cores da peça *</label>
-            <div id="prod-form-colors" class="flex flex-wrap gap-3"></div>
+            <label id="prod-color-label" data-base="Cores disponíveis — marque apenas as cores da peça" class="block font-medium text-grafite mb-2">Cores disponíveis — marque apenas as cores da peça (opcional)</label>
+            <div id="prod-form-colors" class="flex flex-wrap gap-2"></div>
             <p class="text-xs mt-4 mb-2 font-semibold">Cores selecionadas nesta peça — clique no × para retirar:</p>
             <div id="prod-selected-colors" class="flex flex-wrap gap-2 mb-2" aria-live="polite"></div>
             <div class="flex gap-2 mt-3 items-center"><input id="prod-new-color-name" type="text" placeholder="Nova cor (ex.: Bordô)" class="bg-papel border border-costura p-2 text-xs flex-1"/><input id="prod-new-color-hex" type="color" value="#785044" aria-label="Escolher tonalidade" class="w-10 h-9"/><button type="button" onclick="Admin.addCustomColor()" class="border border-costura px-3 py-2 text-xs">Adicionar cor</button></div>
@@ -338,8 +338,8 @@ window.__maelleRecoveryLink = /(?:[?#&])type=recovery(?:[&#]|$)/.test(window.loc
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="js/supabase-config.js"></script>
-<script src="js/supabase-bridge.js?v=acessorios-opcionais"></script>
-<script src="js/admin.js?v=acessorios-opcionais"></script>
+<script src="js/supabase-bridge.js?v=variacoes-2"></script>
+<script src="js/admin.js?v=paleta-3"></script>
 <script src="js/maelle-extras.js"></script>
 <script src="js/maelle-orders.js"></script><script src="assets/js/black-friday-nova-admin.js?v=bf3"></script>
 </body>

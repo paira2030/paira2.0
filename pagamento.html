@@ -24,23 +24,6 @@
     }
     a { color: #485a3e; }
   </style>
-<!-- Meta Pixel Code -->
-<script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '1470237175291303');
-fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=1470237175291303&ev=PageView&noscript=1"
-/></noscript>
-<!-- End Meta Pixel Code -->
 </head>
 <body>
   <main class="card">
@@ -79,7 +62,6 @@ src="https://www.facebook.com/tr?id=1470237175291303&ev=PageView&noscript=1"
 
           if (d.status === 'PAID') {
             title.textContent = 'Pagamento confirmado';
-            try{const k='maelle_px_done_'+id;if(window.fbq&&!localStorage.getItem(k)){const c=JSON.parse(sessionStorage.getItem('maelle_px_purchase')||'null');if(c&&c.pedido===id){fbq('track','Purchase',{value:Number(c.value)||0,currency:'EUR',content_ids:c.ids,content_type:'product',num_items:c.n},{eventID:id});localStorage.setItem(k,'1');}}}catch(e){}
             details.textContent =
               'A SumUp confirmou o pagamento. Obrigado pela sua encomenda!';
             if(d.codigo_rastreio){const p=document.createElement('p');p.textContent='Código de acompanhamento: '+d.codigo_rastreio;const a=document.createElement('a');a.href='/localizar.html';a.textContent=' Acompanhar encomenda';p.append(document.createElement('br'),a);details.after(p);}
