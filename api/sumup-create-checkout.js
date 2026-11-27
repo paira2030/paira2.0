@@ -1,5 +1,6 @@
 
 const { randomUUID, randomBytes } = require('node:crypto');
+const ghl = require('./_ghl');
 
 const URL_BASE =
   process.env.SUPABASE_URL ||
@@ -300,6 +301,16 @@ module.exports = async (req, res) => {
         'Não foi possível associar o pagamento à encomenda.'
       );
     }
+
+    // GHL: checkout iniciado (recuperação de carrinho). Falha silenciosa.
+    await ghl.checkoutIniciado({
+      checkoutId: result.id,
+      pedido: id,
+      parsed,
+      snapshot,
+      customer,
+      total
+    });
 
     if (embedded) {
       return res.status(200).json({ checkoutId: result.id, pedido: id });
