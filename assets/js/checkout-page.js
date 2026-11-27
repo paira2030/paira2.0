@@ -4,28 +4,6 @@ const MaelleCheckout={
  eur(v){return Number(v||0).toLocaleString('pt-PT',{style:'currency',currency:'EUR'})},
  async init(){
   try { await window.MaelleBlackFriday.load();const catalog=await MaelleDB.list();this.liveCatalog=catalog; } catch(e){document.querySelector('main').innerHTML='<p>Não foi possível confirmar os preços atuais. Atualize a página antes de pagar.</p>';return;}
-  // Link de retoma (WhatsApp/e-mail): reconstrói o cesto a partir do catálogo atual. Preços nunca vêm do link.
-  const rp=new URLSearchParams(location.search).get('carrinho');
-  const rPedido=new URLSearchParams(location.search).get('r');
-  if(rPedido&&/^[0-9a-f-]{36}$/i.test(rPedido)){
-   // Pré-preencher os dados de contacto da encomenda não concluída (só preenche campos vazios).
-   fetch('/api/retomar?pedido='+encodeURIComponent(rPedido),{cache:'no-store'}).then(r=>r.ok?r.json():null).then(d=>{
-    const c=d&&d.cliente;if(!c)return;
-    const map={'cust-name':c.name,'cust-email':c.email,'cust-phone':c.phone,'cust-address':c.address,'cust-postal':c.postalCode,'cust-city':c.city,'cust-nif':c.nif};
-    for(const [id,v] of Object.entries(map)){const el=document.getElementById(id);if(el&&!el.value&&typeof v==='string'&&v)el.value=v;}
-   }).catch(()=>{});
-  }
-  if(rp){
-   try{
-    const arr=JSON.parse(decodeURIComponent(escape(atob(rp.replace(/-/g,'+').replace(/_/g,'/')))));
-    const rebuilt=(Array.isArray(arr)?arr:[]).slice(0,30).map(([id,qty,size,color])=>{
-     const p=this.liveCatalog.find(p=>String(p.id)===String(id)||String(p.dbId)===String(id));
-     return p&&{id:p.id,title:p.title,price:p.price,shippingMode:p.shippingMode||'legacy',shippingPrice:p.shippingPrice??4.50,image:p.localImage,size:String(size||''),color:String(color||''),qty:Math.max(1,Math.min(10,Number(qty)||1))};
-    }).filter(Boolean);
-    if(rebuilt.length)localStorage.setItem('maelle_cart',JSON.stringify(rebuilt));
-   }catch(e){console.warn('Link de retoma inválido',e)}
-   history.replaceState(null,'',location.pathname);
-  }
   try{const value=JSON.parse(localStorage.getItem('maelle_cart')||'[]');this.cart=Array.isArray(value)?value:[];this.cart=this.cart.map(i=>{const p=this.liveCatalog.find(p=>p.id===i.id);return p?{...i,price:window.MaelleBlackFriday.price(p)}:i})}catch{this.cart=[]}
   if(this.cart.some(i=>!this.liveCatalog.some(p=>p.id===i.id))){document.querySelector('main').textContent='Há artigos indisponíveis no cesto. Volte à loja.';return;}if(!this.cart.length){document.querySelector('main').innerHTML='<h1 class="font-display text-3xl my-8">O seu cesto está vazio</h1><a href="/" class="underline">Voltar à loja</a>';return}
   const box=document.getElementById('checkout-summary-items');box.replaceChildren();let subtotal=0;
@@ -56,8 +34,6 @@ const MaelleCheckout={
   document.getElementById('checkout-subtotal').textContent=this.eur(subtotal);
   document.getElementById('checkout-shipping').textContent=shipping?this.eur(shipping):'Grátis';
   document.getElementById('checkout-total').textContent=this.eur(subtotal+shipping);
-  this.total=subtotal+shipping;
-  if(window.fbq)fbq('track','InitiateCheckout',{content_ids:this.cart.map(i=>String(i.id)),content_type:'product',num_items:this.cart.reduce((s,i)=>s+(Number(i.qty)||1),0),value:this.total,currency:'EUR'});
  },
  async pay(event){
   event.preventDefault();
@@ -76,7 +52,6 @@ const MaelleCheckout={
    if(!response.ok||!data.checkoutId||!data.pedido)throw Error(data.error||'Não foi possível iniciar o pagamento.');
    this.paymentPrepared=true;
    this.pedido=data.pedido;
-   try{sessionStorage.setItem('maelle_px_purchase',JSON.stringify({pedido:data.pedido,value:this.total,ids:this.cart.map(i=>String(i.id)),n:this.cart.reduce((s,i)=>s+(Number(i.qty)||1),0)}))}catch{}
    btn.hidden=true;
    status.textContent='Preencha os dados do pagamento no formulário seguro abaixo.';
    window.SumUpCard.mount({id:'sumup-card',checkoutId:data.checkoutId,email:customer.email,onResponse:async(type,body)=>{
