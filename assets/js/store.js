@@ -395,7 +395,6 @@ const Store = {
 
   // Adicionar ao Carrinho
   addToCart(product, size, color, qty = 1) {
-    if (window.fbq) fbq('track', 'AddToCart', { content_ids: [String(product.id)], content_name: product.title, content_type: 'product', value: (Number(product.price) || 0) * qty, currency: 'EUR' });
     const existingIndex = this.cart.findIndex(item => 
       item.id === product.id && item.size === size && item.color === color
     );
@@ -540,7 +539,6 @@ const Store = {
     if (!product) return;
 
     this.activeProductModal = product;
-    if (window.fbq) fbq('track', 'ViewContent', { content_ids: [String(product.id)], content_name: product.title, content_type: 'product', value: Number(product.price) || 0, currency: 'EUR' });
     const modalEl = document.getElementById('pdp-modal');
     if (!modalEl) return;
 

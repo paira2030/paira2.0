@@ -57,7 +57,6 @@ const MaelleCheckout={
   document.getElementById('checkout-shipping').textContent=shipping?this.eur(shipping):'Grátis';
   document.getElementById('checkout-total').textContent=this.eur(subtotal+shipping);
   this.total=subtotal+shipping;
-  if(window.fbq)fbq('track','InitiateCheckout',{content_ids:this.cart.map(i=>String(i.id)),content_type:'product',num_items:this.cart.reduce((s,i)=>s+(Number(i.qty)||1),0),value:this.total,currency:'EUR'});
  },
  async pay(event){
   event.preventDefault();
