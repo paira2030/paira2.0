@@ -24,7 +24,6 @@
     }
     a { color: #485a3e; }
   </style>
-<script src="https://cdn.utmify.com.br/scripts/utms/latest.js" data-utmify-prevent-xcod-sck data-utmify-prevent-subids async defer></script>
 </head>
 <body>
   <main class="card">
@@ -63,7 +62,6 @@
 
           if (d.status === 'PAID') {
             title.textContent = 'Pagamento confirmado';
-            try{const k='maelle_px_done_'+id;if(window.fbq&&!localStorage.getItem(k)){const c=JSON.parse(sessionStorage.getItem('maelle_px_purchase')||'null');if(c&&c.pedido===id){fbq('track','Purchase',{value:Number(c.value)||0,currency:'EUR',content_ids:c.ids,content_type:'product',num_items:c.n},{eventID:id});localStorage.setItem(k,'1');}}}catch(e){}
             details.textContent =
               'A SumUp confirmou o pagamento. Obrigado pela sua encomenda!';
             if(d.codigo_rastreio){const p=document.createElement('p');p.textContent='Código de acompanhamento: '+d.codigo_rastreio;const a=document.createElement('a');a.href='/localizar.html';a.textContent=' Acompanhar encomenda';p.append(document.createElement('br'),a);details.after(p);}
@@ -98,6 +96,5 @@
         'Volte a esta página mais tarde para consultar o estado.';
     })();
   </script>
-<script>window.pixelId="6b0974075ed7f81dd7721aad";var a=document.createElement("script");a.setAttribute("async","");a.setAttribute("defer","");a.setAttribute("src","https://cdn.utmify.com.br/scripts/pixel/pixel.js");document.head.appendChild(a);</script>
 </body>
 </html>
