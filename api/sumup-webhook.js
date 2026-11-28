@@ -1,4 +1,3 @@
-const ghl = require('./_ghl');
 
 const URL_BASE =
   process.env.SUPABASE_URL ||
@@ -155,11 +154,6 @@ module.exports = async (req, res) => {
 
     if (!Array.isArray(rows)) {
       throw new Error('Resposta inválida do Supabase');
-    }
-
-    // GHL: só quando ESTA chamada fez a transição para PAID (1 linha devolvida).
-    if (rows.length === 1) {
-      await ghl.pagamentoConfirmado(rows[0]);
     }
 
     console.log('SumUp: pagamento processado');
